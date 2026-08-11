@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mainframe</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://db.onlinewebfonts.com/c/5ac3fe7c6abd2f62067f266d89671492?family=HelveticaNowDisplay-Medium">
+    <link rel="stylesheet" href="https://db.onlinewebfonts.com/c/1aa3377e489837a26d019bba501e779d?family=HelveticaNowDisplayW01-Rg">
+    <style>
+        :root {
+            --font-heading: 'HelveticaNowDisplay-Medium', system-ui, sans-serif;
+            --font-body: 'HelveticaNowDisplayW01-Rg', system-ui, sans-serif;
+        }
+        body { font-family: var(--font-body); }
+        .font-heading { font-family: var(--font-heading); }
+
+        .video-bg {
+            position: fixed;
+            inset: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: 70% center;
+            z-index: 0;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .cursor { animation: blink 1s step-end infinite; }
+
+        .pill {
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .pill:hover {
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body class="bg-black text-black overflow-hidden min-h-screen">
+    <!-- Background Video -->
+    <video id="bgVideo" class="video-bg" muted playsinline preload="auto">
+        <source src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260530_042513_df96a13b-6155-4f6e-8b93-c9dee66fba08.mp4" type="video/mp4">
+    </video>
+
+    <!-- Navbar -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-black/10 px-6 py-5 flex items-center justify-between">
+        <div class="flex items-center gap-3">
+            <div class="font-heading text-2xl tracking-tight">Mainframe<span class="text-xs align-super">®</span></div>
+            <div class="text-3xl">✳︎</div>
+        </div>
+
+        <div class="hidden md:flex items-center gap-8 text-xl">
+            <a href="#" class="hover:opacity-60 transition">Labs</a><span>,</span>
+            <a href="#" class="hover:opacity-60 transition">Studio</a><span>,</span>
+            <a href="#" class="hover:opacity-60 transition">Openings</a><span>,</span>
+            <a href="#" class="hover:opacity-60 transition">Shop</a>
+        </div>
+
+        <a href="#" class="hidden md:block text-xl underline underline-offset-2 hover:opacity-60 transition">Get in touch</a>
+
+        <!-- Hamburger -->
+        <button id="hamburger" class="md:hidden flex flex-col gap-1.5">
+            <div class="bar w-6 h-0.5 bg-black transition-all"></div>
+            <div class="bar w-6 h-0.5 bg-black transition-all"></div>
+            <div class="bar w-6 h-0.5 bg-black transition-all"></div>
+        </button>
+    </nav>
+
+    <!-- Hero Content -->
+    <div class="relative z-10 min-h-screen flex items-end md:items-center px-6 md:px-12 pb-16 pt-24">
+        <div class="max-w-2xl">
+            <!-- Blurred Label -->
+            <div class="mb-6 text-lg md:text-2xl leading-tight" style="filter: blur(4px);">
+                Hey there, meet A.R.I.A,<br>
+                Mainframe's Adaptive Response Interface Agent
+            </div>
+
+            <!-- Typewriter -->
+            <div id="typewriter" class="text-2xl md:text-3xl leading-tight min-h-[120px] mb-8"></div>
+
+            <!-- Buttons -->
+            <div class="flex flex-wrap gap-3">
+                <button onclick="alert('Idea received!')" 
+                        class="pill px-6 py-3 bg-white border border-black/20 rounded-full text-sm hover:bg-black hover:text-white transition">
+                    Pitch us an idea
+                </button>
+                <button onclick="alert('Join the crew!')" 
+                        class="pill px-6 py-3 bg-white border border-black/20 rounded-full text-sm hover:bg-black hover:text-white transition">
+                    Come work here
+                </button>
+                <button onclick="alert('Hello!')" 
+                        class="pill px-6 py-3 bg-white border border-black/20 rounded-full text-sm hover:bg-black hover:text-white transition">
+                    Send a brief hello
+                </button>
+                <button onclick="alert('Exploring...')" 
+                        class="pill px-6 py-3 bg-white border border-black/20 rounded-full text-sm hover:bg-black hover:text-white transition">
+                    See how we operate
+                </button>
+
+                <button onclick="copyEmail()" 
+                        class="pill flex items-center gap-2 px-6 py-3 bg-transparent border border-white text-white rounded-full text-sm hover:bg-white hover:text-black transition">
+                    Reach us: <span class="underline">hello@mainframe.co</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16v-4m4 4v4m4-8v8m4-4v-4m-16 4h16" />
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mouse-controlled video scrub
+        const video = document.getElementById('bgVideo');
+        let prevX = 0;
+        let isSeeking = false;
+
+        video.addEventListener('loadedmetadata', () => {
+            console.log('Video loaded - move mouse to scrub');
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!video.duration) return;
+            
+            const delta = e.clientX - prevX;
+            prevX = e.clientX;
+
+            const sensitivity = 0.8;
+            let newTime = video.currentTime + (delta / window.innerWidth) * sensitivity * video.duration;
+            newTime = Math.max(0, Math.min(newTime, video.duration));
+            
+            if (!isSeeking) {
+                isSeeking = true;
+                video.currentTime = newTime;
+                setTimeout(() => isSeeking = false, 50);
+            }
+        });
+
+        // Typewriter Effect
+        const text = "Glad you stopped in. Good taste tends to find us. Now, what are we building?";
+        let i = 0;
+        const typewriterEl = document.getElementById('typewriter');
+
+        function type() {
+            if (i < text.length) {
+                typewriterEl.innerHTML = text.substring(0, i + 1) + 
+                    `<span class="cursor inline-block w-[3px] h-[1.1em] bg-black align-middle ml-0.5"></span>`;
+                i++;
+                setTimeout(type, 38);
+            } else {
+                typewriterEl.innerHTML = text;
+            }
+        }
+
+        // Start typewriter after a small delay
+        setTimeout(type, 800);
+
+        // Copy email
+        function copyEmail() {
+            navigator.clipboard.writeText('hello@mainframe.co').then(() => {
+                alert('✅ Email copied: hello@mainframe.co');
+            });
+        }
+
+        // Hamburger animation (demo)
+        document.getElementById('hamburger').addEventListener('click', function() {
+            alert("Mobile menu would open here in full version");
+        });
+
+        // Keyboard hint
+        console.log("%cMainframe Hero Landing Page loaded successfully!\nMove your mouse left/right to scrub the video.", "color:#000;font-family:monospace");
+    </script>
+</body>
+</html>
