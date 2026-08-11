@@ -9,6 +9,7 @@ import {
   MapPin,
   Phone,
   Send,
+  Github,
   Sparkles,
 } from "lucide-react";
 
@@ -265,7 +266,31 @@ export default function Contact() {
                     </span>
                   </span>
                 </a>
+                {/* GitHub */}
+<a
+  href={personal.github}
+  target="_blank"
+  rel="noopener noreferrer"
+  data-cursor="interactive"
+  className="group flex items-center gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.018] p-4 transition-all duration-300 hover:border-signal-400/20 hover:bg-signal-400/[0.025]"
+>
+  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-signal-400/15 bg-signal-400/[0.05] text-signal-300 transition-all duration-300 group-hover:border-signal-400/30 group-hover:bg-signal-400/[0.08]">
+    <Github
+      size={18}
+      aria-hidden="true"
+    />
+  </span>
 
+  <span>
+    <span className="block font-mono text-[10px] uppercase tracking-[0.16em] text-mist-500">
+      GitHub
+    </span>
+
+    <span className="mt-1 block text-sm text-mist-200 transition-colors group-hover:text-white">
+      Explore my code and projects
+    </span>
+  </span>
+</a>
                 {/* Location */}
                 <div className="flex items-center gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.018] p-4">
                   <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.025] text-mist-300">

@@ -30,7 +30,7 @@ export const personal = {
   linkedin:
     "https://www.linkedin.com/in/ashish-pawar-71222a16b/",
 
-  github: "",
+  github: "https://github.com/AgentInProgress7797",
   twitter: "",
 
   resumeUrl: "/resume.pdf",

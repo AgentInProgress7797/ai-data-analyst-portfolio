@@ -28,7 +28,15 @@ export default function Footer() {
           >
             Email
           </a>
-
+          <a
+  href={personal.github}
+  target="_blank"
+  rel="noopener noreferrer"
+  data-cursor="interactive"
+  className="transition-colors hover:text-signal-400"
+>
+  GitHub
+</a>
           <a
             href="#top"
             className="transition-colors hover:text-signal-400"
