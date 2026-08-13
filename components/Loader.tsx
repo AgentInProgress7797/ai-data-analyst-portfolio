@@ -1,12 +1,19 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
-import { AnimatePresence, motion } from "framer-motion";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react";
+
+import {
+  AnimatePresence,
+  motion,
+} from "framer-motion";
 
 /* =========================================================
    BOOT SEQUENCE
-
-   Each message appears according to the current progress.
 ========================================================= */
 
 const bootSteps = [
@@ -33,176 +40,1384 @@ const bootSteps = [
 ] as const;
 
 /* =========================================================
-   STATUS HELPER
+   STATUS
 ========================================================= */
 
 function getBootStatus(progress: number): string {
   const currentStep =
-    bootSteps.find((step) => progress <= step.max) ??
+    bootSteps.find(
+      (step) => progress <= step.max,
+    ) ??
     bootSteps[bootSteps.length - 1];
 
   return currentStep.label;
 }
 
 /* =========================================================
-   LOADER COMPONENT
+   MATRIX TYPES
 ========================================================= */
 
-export default function Loader() {
-  const [visible, setVisible] = useState(true);
-  const [pct, setPct] = useState(0);
+type MatrixStream = {
+  x: number;
+  y: number;
 
-  const bootStatus = useMemo(
-    () => getBootStatus(pct),
-    [pct]
-  );
+  speed: number;
 
-  const isReady = pct >= 100;
+  fontSize: number;
+
+  length: number;
+
+  opacity: number;
+
+  bright: boolean;
+
+  seed: number;
+
+  drift: number;
+
+  active: boolean;
+
+  phase: number;
+};
+
+/* =========================================================
+   MATRIX / CODE RAIN
+========================================================= */
+
+function MatrixRain() {
+  const canvasRef =
+    useRef<HTMLCanvasElement>(null);
 
   useEffect(() => {
-    let hideTimer: number | undefined;
+    const canvas =
+      canvasRef.current;
 
-    const interval = window.setInterval(() => {
-      setPct((current) => {
-        if (current >= 100) {
-          window.clearInterval(interval);
+    if (!canvas) {
+      return;
+    }
 
-          hideTimer = window.setTimeout(() => {
-  setVisible(false);
+    const context =
+      canvas.getContext("2d");
 
-  window.dispatchEvent(
-    new Event("portfolio-ready")
-  );
-}, 500);
+    if (!context) {
+      return;
+    }
 
-          return 100;
+    const reducedMotion =
+      window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+
+    let width =
+      window.innerWidth;
+
+    let height =
+      window.innerHeight;
+
+    let streams: MatrixStream[] = [];
+
+    let animationFrameId = 0;
+
+    let previousTime = 0;
+
+    const isMobile = () =>
+      window.innerWidth < 768;
+
+    /*
+     * Programming / AI-style Matrix alphabet.
+     *
+     * Numbers
+     * Letters
+     * Brackets
+     * Operators
+     * Programming symbols
+     */
+
+    const characters =
+      "01{}[]<>/\\();:=+-_*#@$%&|!?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz23456789";
+
+    /* =====================================================
+       CREATE MATRIX STREAMS
+    ===================================================== */
+
+    const createStreams = () => {
+      const mobile =
+        isMobile();
+
+      /*
+       * Instead of placing every stream randomly,
+       * divide the screen into columns.
+       *
+       * This prevents large empty areas.
+       */
+
+      const columnSpacing =
+        mobile ? 13 : 10;
+
+      const streamCount =
+        Math.ceil(
+          width / columnSpacing,
+        );
+
+      streams = Array.from(
+        {
+          length: streamCount,
+        },
+
+        (_, index) => {
+          /*
+           * Approximately every 11th stream
+           * becomes a brighter signal stream.
+           */
+
+          const bright =
+            index % 11 === 0;
+
+          /*
+           * Leave some controlled gaps.
+           *
+           * This keeps the Matrix premium
+           * rather than turning it into
+           * a solid wall of characters.
+           */
+
+          const active =
+            Math.random() >
+            (mobile ? 0.2 : 0.14);
+
+          /*
+           * Small horizontal randomness
+           * prevents perfect grid appearance.
+           */
+
+          const jitter =
+            (Math.random() - 0.5) *
+            (mobile ? 5 : 6);
+
+          return {
+            x:
+              index *
+                columnSpacing +
+              jitter,
+
+            /*
+             * Important:
+             *
+             * Streams start throughout the
+             * viewport immediately.
+             *
+             * Matrix is therefore visible
+             * from 0%.
+             */
+
+            y:
+              Math.random() *
+                (height + 300) -
+              150,
+
+            /*
+             * Bright streams move faster.
+             */
+
+            speed: bright
+              ? Math.random() *
+                  0.4 +
+                0.5
+              : Math.random() *
+                  0.28 +
+                0.24,
+
+            /*
+             * Keep characters relatively
+             * small because we now have
+             * many more columns.
+             */
+
+            fontSize: mobile
+              ? Math.random() *
+                  2.5 +
+                7.5
+              : Math.random() *
+                  3 +
+                8,
+
+            /*
+             * Longer trails than before.
+             */
+
+            length: bright
+              ? Math.floor(
+                  Math.random() *
+                    14,
+                ) + 18
+              : Math.floor(
+                  Math.random() *
+                    13,
+                ) + 12,
+
+            /*
+             * More streams =
+             * slightly lower opacity.
+             */
+
+            opacity: active
+              ? bright
+                ? Math.random() *
+                    0.12 +
+                  0.22
+                : Math.random() *
+                    0.065 +
+                  0.045
+              : 0,
+
+            bright,
+
+            seed:
+              Math.random() *
+              5000,
+
+            /*
+             * Extremely subtle horizontal drift.
+             */
+
+            drift:
+              (Math.random() -
+                0.5) *
+              0.012,
+
+            active,
+
+            /*
+             * Individual flicker timing.
+             */
+
+            phase:
+              Math.random() *
+              Math.PI *
+              2,
+          };
+        },
+      );
+    };
+
+    /* =====================================================
+       RESIZE
+    ===================================================== */
+
+    const resize = () => {
+      width =
+        window.innerWidth;
+
+      height =
+        window.innerHeight;
+
+      const pixelRatio =
+        Math.min(
+          window.devicePixelRatio ||
+            1,
+          2,
+        );
+
+      canvas.width =
+        Math.floor(
+          width * pixelRatio,
+        );
+
+      canvas.height =
+        Math.floor(
+          height * pixelRatio,
+        );
+
+      canvas.style.width =
+        `${width}px`;
+
+      canvas.style.height =
+        `${height}px`;
+
+      context.setTransform(
+        pixelRatio,
+        0,
+        0,
+        pixelRatio,
+        0,
+        0,
+      );
+
+      createStreams();
+    };
+
+    /* =====================================================
+       DRAW MATRIX STREAM
+    ===================================================== */
+
+    const drawStream = (
+      stream: MatrixStream,
+      time: number,
+    ) => {
+      if (
+        !stream.active ||
+        stream.opacity <= 0
+      ) {
+        return;
+      }
+
+      const lineHeight =
+        stream.fontSize * 1.35;
+
+      context.font =
+        `${stream.fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
+
+      context.textAlign =
+        "center";
+
+      context.textBaseline =
+        "middle";
+
+      /*
+       * Very subtle brightness breathing.
+       */
+
+      const breathing =
+        0.88 +
+        Math.sin(
+          time * 0.001 +
+            stream.phase,
+        ) *
+          0.12;
+
+      for (
+        let index = 0;
+        index < stream.length;
+        index += 1
+      ) {
+        /*
+         * Character changes slowly
+         * while falling.
+         */
+
+        const characterIndex =
+          Math.abs(
+            Math.floor(
+              stream.seed +
+                index * 7 +
+                time * 0.002,
+            ),
+          ) %
+          characters.length;
+
+        const character =
+          characters[
+            characterIndex
+          ];
+
+        const y =
+          stream.y -
+          index * lineHeight;
+
+        /*
+         * Skip characters outside
+         * visible region.
+         */
+
+        if (
+          y < -40 ||
+          y > height + 40
+        ) {
+          continue;
         }
 
         /*
-         * Progress moves faster at the beginning and slows
-         * near completion for a controlled boot experience.
+         * Fade toward trail end.
          */
-        let increment = 1;
 
-        if (current < 25) {
-          increment =
-            Math.floor(Math.random() * 5) + 4;
-        } else if (current < 70) {
-          increment =
-            Math.floor(Math.random() * 4) + 2;
-        } else if (current < 92) {
-          increment =
-            Math.floor(Math.random() * 3) + 1;
+        const trailRatio =
+          1 -
+          index /
+            stream.length;
+
+        const trailFade =
+          Math.pow(
+            trailRatio,
+            1.35,
+          );
+
+        let opacity =
+          stream.opacity *
+          trailFade *
+          breathing;
+
+        /*
+         * Signal head gets brighter.
+         */
+
+        if (index === 0) {
+          opacity *=
+            stream.bright
+              ? 2.7
+              : 1.55;
         }
 
-        return Math.min(current + increment, 100);
-      });
-    }, 85);
+        /* ===============================================
+           BRIGHT SIGNAL HEAD
+        =============================================== */
+
+        if (
+          stream.bright &&
+          index === 0
+        ) {
+          context.fillStyle =
+            `rgba(
+              204,
+              255,
+              248,
+              ${Math.min(
+                opacity,
+                0.72,
+              )}
+            )`;
+        }
+
+        /* ===============================================
+           BRIGHT STREAM BODY
+        =============================================== */
+
+        else if (
+          stream.bright
+        ) {
+          context.fillStyle =
+            `rgba(
+              94,
+              234,
+              212,
+              ${Math.min(
+                opacity,
+                0.30,
+              )}
+            )`;
+        }
+
+        /* ===============================================
+           NORMAL STREAM
+        =============================================== */
+
+        else {
+          context.fillStyle =
+            `rgba(
+              45,
+              212,
+              191,
+              ${Math.min(
+                opacity,
+                0.16,
+              )}
+            )`;
+        }
+
+        context.fillText(
+          character,
+          stream.x,
+          y,
+        );
+
+        /* ===============================================
+           SIGNAL HEAD GLOW
+        =============================================== */
+
+        if (
+          stream.bright &&
+          index === 0
+        ) {
+          const glow =
+            context.createRadialGradient(
+              stream.x,
+              y,
+              0,
+              stream.x,
+              y,
+              18,
+            );
+
+          glow.addColorStop(
+            0,
+            "rgba(204,255,248,0.30)",
+          );
+
+          glow.addColorStop(
+            0.25,
+            "rgba(94,234,212,0.16)",
+          );
+
+          glow.addColorStop(
+            0.6,
+            "rgba(45,212,191,0.05)",
+          );
+
+          glow.addColorStop(
+            1,
+            "rgba(45,212,191,0)",
+          );
+
+          context.beginPath();
+
+          context.arc(
+            stream.x,
+            y,
+            18,
+            0,
+            Math.PI * 2,
+          );
+
+          context.fillStyle =
+            glow;
+
+          context.fill();
+        }
+      }
+    };
+
+    /* =====================================================
+       UPDATE MATRIX STREAM
+    ===================================================== */
+
+    const updateStream = (
+      stream: MatrixStream,
+      deltaMultiplier: number,
+    ) => {
+      if (reducedMotion) {
+        return;
+      }
+
+      if (!stream.active) {
+        return;
+      }
+
+      /*
+       * Downward motion.
+       */
+
+      stream.y +=
+        stream.speed *
+        deltaMultiplier;
+
+      /*
+       * Tiny horizontal movement.
+       */
+
+      stream.x +=
+        stream.drift *
+        deltaMultiplier;
+
+      /*
+       * Horizontal wrap.
+       */
+
+      if (
+        stream.x < -20
+      ) {
+        stream.x =
+          width + 20;
+      }
+
+      if (
+        stream.x >
+        width + 20
+      ) {
+        stream.x = -20;
+      }
+
+      const streamHeight =
+        stream.length *
+        stream.fontSize *
+        1.35;
+
+      /*
+       * Respawn after leaving
+       * bottom of screen.
+       */
+
+      if (
+        stream.y -
+          streamHeight >
+        height + 50
+      ) {
+        /*
+         * Respawn slightly above viewport.
+         */
+
+        stream.y =
+          -Math.random() *
+            180 -
+          30;
+
+        /*
+         * Keep approximate column position,
+         * but add tiny variation.
+         */
+
+        stream.x +=
+          (Math.random() -
+            0.5) *
+          8;
+
+        stream.seed =
+          Math.random() *
+          5000;
+
+        stream.phase =
+          Math.random() *
+          Math.PI *
+          2;
+
+        /*
+         * Occasionally change trail length.
+         */
+
+        stream.length =
+          stream.bright
+            ? Math.floor(
+                Math.random() *
+                  14,
+              ) + 18
+            : Math.floor(
+                Math.random() *
+                  13,
+              ) + 12;
+
+        /*
+         * Slight speed variation
+         * every time it respawns.
+         */
+
+        stream.speed =
+          stream.bright
+            ? Math.random() *
+                0.4 +
+              0.5
+            : Math.random() *
+                0.28 +
+              0.24;
+      }
+    };
+
+    /* =====================================================
+       RENDER LOOP
+    ===================================================== */
+
+    const render = (
+      time: number,
+    ) => {
+      const delta =
+        previousTime === 0
+          ? 16.67
+          : Math.min(
+              time -
+                previousTime,
+              34,
+            );
+
+      previousTime = time;
+
+      const deltaMultiplier =
+        delta / 16.67;
+
+      context.clearRect(
+        0,
+        0,
+        width,
+        height,
+      );
+
+      streams.forEach(
+        (stream) => {
+          updateStream(
+            stream,
+            deltaMultiplier,
+          );
+
+          drawStream(
+            stream,
+            time,
+          );
+        },
+      );
+
+      if (!reducedMotion) {
+        animationFrameId =
+          window.requestAnimationFrame(
+            render,
+          );
+      }
+    };
+
+    /* =====================================================
+       INITIALIZE
+    ===================================================== */
+
+    resize();
+
+    /*
+     * Immediate first render.
+     *
+     * Matrix is visible from
+     * beginning of loader.
+     */
+
+    render(0);
+
+    if (!reducedMotion) {
+      animationFrameId =
+        window.requestAnimationFrame(
+          render,
+        );
+    }
+
+    window.addEventListener(
+      "resize",
+      resize,
+    );
 
     return () => {
-      window.clearInterval(interval);
+      window.cancelAnimationFrame(
+        animationFrameId,
+      );
 
-      if (hideTimer !== undefined) {
-        window.clearTimeout(hideTimer);
+      window.removeEventListener(
+        "resize",
+        resize,
+      );
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      aria-hidden="true"
+      className="
+        pointer-events-none
+        absolute
+        inset-0
+        z-[1]
+        h-full
+        w-full
+      "
+    />
+  );
+}
+
+/* =========================================================
+   CIRCUIT OVERLAY
+========================================================= */
+
+function CircuitOverlay() {
+  return (
+    <div
+      aria-hidden="true"
+      className="
+        pointer-events-none
+        absolute
+        inset-0
+        z-[2]
+        overflow-hidden
+      "
+    >
+      {/* LEFT CIRCUIT */}
+
+      <svg
+        viewBox="0 0 600 900"
+        fill="none"
+        className="
+          absolute
+          -left-[190px]
+          top-0
+          h-full
+          w-[540px]
+          opacity-[0.12]
+
+          sm:-left-[120px]
+          sm:w-[660px]
+
+          lg:-left-[70px]
+          lg:w-[760px]
+        "
+      >
+        <motion.path
+          d="
+            M70 0
+            V120
+            L150 200
+            V325
+            L225 400
+            H320
+            L380 460
+            V580
+          "
+          stroke="rgba(94,234,212,0.55)"
+          strokeWidth="1"
+          vectorEffect="non-scaling-stroke"
+          initial={{
+            pathLength: 0,
+            opacity: 0,
+          }}
+          animate={{
+            pathLength: 1,
+
+            opacity: [
+              0.12,
+              0.4,
+              0.12,
+            ],
+          }}
+          transition={{
+            pathLength: {
+              duration: 2,
+              ease:
+                "easeInOut",
+            },
+
+            opacity: {
+              duration: 4,
+              repeat:
+                Infinity,
+              ease:
+                "easeInOut",
+            },
+          }}
+        />
+
+        <motion.path
+          d="
+            M180 0
+            V90
+            L250 160
+            V255
+            L315 320
+            V390
+            L420 495
+          "
+          stroke="rgba(45,212,191,0.34)"
+          strokeWidth="0.8"
+          vectorEffect="non-scaling-stroke"
+          strokeDasharray="5 8"
+          animate={{
+            strokeDashoffset: [
+              0,
+              -120,
+            ],
+          }}
+          transition={{
+            duration: 9,
+            repeat:
+              Infinity,
+            ease: "linear",
+          }}
+        />
+
+        <motion.path
+          d="
+            M0 370
+            H110
+            L175 435
+            H280
+            L335 490
+          "
+          stroke="rgba(103,232,249,0.32)"
+          strokeWidth="0.8"
+          vectorEffect="non-scaling-stroke"
+          animate={{
+            opacity: [
+              0.06,
+              0.3,
+              0.06,
+            ],
+          }}
+          transition={{
+            duration: 4.5,
+            repeat:
+              Infinity,
+          }}
+        />
+      </svg>
+
+      {/* RIGHT CIRCUIT */}
+
+      <svg
+        viewBox="0 0 600 900"
+        fill="none"
+        className="
+          absolute
+          -right-[190px]
+          top-[4%]
+          h-full
+          w-[540px]
+          scale-x-[-1]
+          opacity-[0.10]
+
+          sm:-right-[120px]
+          sm:w-[660px]
+
+          lg:-right-[70px]
+          lg:w-[760px]
+        "
+      >
+        <motion.path
+          d="
+            M70 0
+            V120
+            L150 200
+            V325
+            L225 400
+            H320
+            L380 460
+            V580
+          "
+          stroke="rgba(94,234,212,0.48)"
+          strokeWidth="1"
+          vectorEffect="non-scaling-stroke"
+          initial={{
+            pathLength: 0,
+          }}
+          animate={{
+            pathLength: 1,
+          }}
+          transition={{
+            duration: 2.3,
+            delay: 0.3,
+          }}
+        />
+
+        <motion.path
+          d="
+            M180 0
+            V90
+            L250 160
+            V255
+            L315 320
+            V390
+            L420 495
+          "
+          stroke="rgba(45,212,191,0.30)"
+          strokeWidth="0.8"
+          vectorEffect="non-scaling-stroke"
+          strokeDasharray="4 9"
+          animate={{
+            strokeDashoffset: [
+              0,
+              -110,
+            ],
+          }}
+          transition={{
+            duration: 10,
+            repeat:
+              Infinity,
+            ease: "linear",
+          }}
+        />
+      </svg>
+    </div>
+  );
+}
+
+/* =========================================================
+   LOADER
+========================================================= */
+
+export default function Loader() {
+  const [
+    visible,
+    setVisible,
+  ] =
+    useState(true);
+
+  const [
+    pct,
+    setPct,
+  ] =
+    useState(0);
+
+  const [
+    systemOnline,
+    setSystemOnline,
+  ] =
+    useState(false);
+
+  const bootStatus =
+    useMemo(
+      () =>
+        getBootStatus(
+          pct,
+        ),
+      [pct],
+    );
+
+  const isReady =
+    pct >= 100;
+
+  /* =========================================================
+     PROGRESS
+  ========================================================= */
+
+  useEffect(() => {
+    let timer:
+      | number
+      | undefined;
+
+    const tick = () => {
+      timer =
+        window.setTimeout(
+          () => {
+            setPct(
+              (
+                current,
+              ) => {
+                if (
+                  current >=
+                  100
+                ) {
+                  return 100;
+                }
+
+                let increment =
+                  1;
+
+                if (
+                  current < 22
+                ) {
+                  increment =
+                    Math.floor(
+                      Math.random() *
+                        5,
+                    ) + 4;
+                } else if (
+                  current < 52
+                ) {
+                  increment =
+                    Math.floor(
+                      Math.random() *
+                        4,
+                    ) + 2;
+                } else if (
+                  current < 78
+                ) {
+                  increment =
+                    Math.floor(
+                      Math.random() *
+                        3,
+                    ) + 2;
+                } else if (
+                  current < 94
+                ) {
+                  increment =
+                    Math.floor(
+                      Math.random() *
+                        2,
+                    ) + 1;
+                }
+
+                return Math.min(
+                  current +
+                    increment,
+                  100,
+                );
+              },
+            );
+
+            tick();
+          },
+
+          getProgressDelay(
+            pct,
+          ),
+        );
+    };
+
+    tick();
+
+    return () => {
+      if (
+        timer !==
+        undefined
+      ) {
+        window.clearTimeout(
+          timer,
+        );
       }
     };
   }, []);
+
+  /* =========================================================
+     SYSTEM ONLINE
+  ========================================================= */
+
+  useEffect(() => {
+    if (!isReady) {
+      return;
+    }
+
+    const onlineTimer =
+      window.setTimeout(
+        () => {
+          setSystemOnline(
+            true,
+          );
+        },
+        260,
+      );
+
+    const hideTimer =
+      window.setTimeout(
+        () => {
+          setVisible(
+            false,
+          );
+
+          window.dispatchEvent(
+            new Event(
+              "portfolio-ready",
+            ),
+          );
+        },
+        1350,
+      );
+
+    return () => {
+      window.clearTimeout(
+        onlineTimer,
+      );
+
+      window.clearTimeout(
+        hideTimer,
+      );
+    };
+  }, [isReady]);
 
   return (
     <AnimatePresence mode="wait">
       {visible && (
         <motion.div
-          key="portfolio-loader"
-          className="loader-screen"
+          key="loader"
+          className="
+            loader-screen
+            overflow-hidden
+          "
           initial={{
             opacity: 1,
           }}
           exit={{
             opacity: 0,
-            scale: 1.015,
-            filter: "blur(8px)",
+            scale: 1.02,
+            filter:
+              "blur(10px)",
           }}
           transition={{
-            duration: 0.65,
-            ease: [0.25, 0, 0, 1],
+            duration: 0.8,
+
+            ease: [
+              0.25,
+              0,
+              0,
+              1,
+            ],
           }}
         >
+          {/* MATRIX */}
+
+          <MatrixRain />
+
+          {/* CIRCUITS */}
+
+          <CircuitOverlay />
+
           {/* =================================================
-              BACKGROUND EFFECTS
+              CENTER READABILITY MASK
+
+              Keeps Matrix visible around the screen,
+              but slightly reduces interference directly
+              behind the important loader information.
           ================================================== */}
 
-          {/* Central ambient glow */}
-          <motion.div
+          <div
             aria-hidden="true"
-            className="pointer-events-none absolute left-1/2 top-1/2 h-[390px] w-[390px] -translate-x-1/2 -translate-y-1/2 rounded-full bg-signal-400/[0.055] blur-[115px]"
-            animate={{
-              opacity: [0.3, 0.65, 0.3],
-              scale: [0.96, 1.06, 0.96],
-            }}
-            transition={{
-              duration: 3.8,
-              repeat: Infinity,
-              ease: "easeInOut",
-            }}
-          />
-
-          {/* Subtle horizontal intelligence line */}
-          <motion.div
-            aria-hidden="true"
-            initial={{
-              opacity: 0,
-              scaleX: 0.2,
-            }}
-            animate={{
-              opacity: [0.08, 0.22, 0.08],
-              scaleX: 1,
-            }}
-            transition={{
-              opacity: {
-                duration: 3,
-                repeat: Infinity,
-                ease: "easeInOut",
-              },
-
-              scaleX: {
-                duration: 1.1,
-                ease: [0.25, 0, 0, 1],
-              },
-            }}
-            className="pointer-events-none absolute left-1/2 top-1/2 h-px w-[70vw] max-w-[1100px] -translate-x-1/2 bg-gradient-to-r from-transparent via-signal-400/30 to-transparent"
+            className="
+              pointer-events-none
+              absolute
+              inset-0
+              z-[3]
+              bg-[radial-gradient(ellipse_at_center,rgba(2,6,8,0.46)_0%,rgba(2,6,8,0.30)_24%,rgba(2,6,8,0.10)_52%,rgba(2,6,8,0.02)_78%,transparent_100%)]
+            "
           />
 
           {/* =================================================
-              LOADER CONTENT
+              EDGE VIGNETTE
           ================================================== */}
 
-          <div className="relative z-10 w-full max-w-[760px] px-6 text-center">
-            {/* Name */}
+          <div
+            aria-hidden="true"
+            className="
+              pointer-events-none
+              absolute
+              inset-0
+              z-[3]
+              bg-[radial-gradient(ellipse_at_center,transparent_45%,rgba(0,0,0,0.12)_72%,rgba(0,0,0,0.32)_100%)]
+            "
+          />
+
+          {/* =================================================
+              CENTER AMBIENT GLOW
+          ================================================== */}
+
+          <motion.div
+            aria-hidden="true"
+            animate={{
+              opacity:
+                systemOnline
+                  ? [
+                      0.14,
+                      0.55,
+                      0,
+                    ]
+                  : [
+                      0.06,
+                      0.14,
+                      0.06,
+                    ],
+
+              scale:
+                systemOnline
+                  ? [
+                      1,
+                      1.6,
+                      2.1,
+                    ]
+                  : [
+                      0.95,
+                      1.08,
+                      0.95,
+                    ],
+            }}
+            transition={{
+              duration:
+                systemOnline
+                  ? 0.8
+                  : 4,
+
+              repeat:
+                systemOnline
+                  ? 0
+                  : Infinity,
+
+              ease:
+                "easeInOut",
+            }}
+            className="
+              pointer-events-none
+              absolute
+              left-1/2
+              top-1/2
+              z-[4]
+              h-[480px]
+              w-[480px]
+              -translate-x-1/2
+              -translate-y-1/2
+              rounded-full
+              bg-signal-400/[0.035]
+              blur-[120px]
+            "
+          />
+
+          {/* =================================================
+              SCANNING LINE
+          ================================================== */}
+
+          {!systemOnline && (
+            <motion.div
+              aria-hidden="true"
+              initial={{
+                left: "-10%",
+              }}
+              animate={{
+                left: "110%",
+              }}
+              transition={{
+                duration: 7,
+                repeat:
+                  Infinity,
+                ease:
+                  "linear",
+              }}
+              className="
+                pointer-events-none
+                absolute
+                inset-y-0
+                z-[5]
+                w-px
+                bg-gradient-to-b
+                from-transparent
+                via-signal-200/[0.05]
+                to-transparent
+              "
+            />
+          )}
+
+          {/* =================================================
+              MAIN CONTENT
+          ================================================== */}
+
+          <div
+            className="
+              relative
+              z-10
+              w-full
+              max-w-[800px]
+              px-5
+              text-center
+              sm:px-6
+            "
+          >
+            {/* NAME */}
+
             <motion.h1
               initial={{
                 opacity: 0,
-                y: 20,
-                letterSpacing: "0.14em",
+                y: 18,
+                letterSpacing:
+                  "0.13em",
               }}
               animate={{
                 opacity: 1,
                 y: 0,
-                letterSpacing: "0.22em",
+                letterSpacing:
+                  "0.22em",
               }}
               transition={{
                 duration: 0.7,
-                ease: [0.25, 0, 0, 1],
+
+                ease: [
+                  0.25,
+                  0,
+                  0,
+                  1,
+                ],
               }}
-              className="font-display text-3xl font-medium text-white sm:text-4xl lg:text-[42px]"
+              className="
+                font-display
+                text-[28px]
+                font-medium
+                text-white
+                sm:text-4xl
+                lg:text-[42px]
+              "
             >
               ASHISH PAWAR
             </motion.h1>
 
-            {/* Premium positioning statement */}
+            {/* =================================================
+                POSITIONING LINE
+            ================================================== */}
+
             <motion.div
               initial={{
                 opacity: 0,
-                y: 10,
+                y: 8,
               }}
               animate={{
                 opacity: 1,
@@ -212,31 +1427,57 @@ export default function Loader() {
                 delay: 0.18,
                 duration: 0.6,
               }}
-              className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-2 font-mono text-[10px] uppercase tracking-[0.3em] text-signal-400 sm:text-xs lg:text-[13px]"
+              className="
+                mt-5
+                flex
+                flex-wrap
+                items-center
+                justify-center
+                gap-x-3
+                gap-y-2
+                font-mono
+                text-[9px]
+                uppercase
+                tracking-[0.26em]
+                text-signal-400
+                sm:mt-6
+                sm:text-xs
+                lg:text-[13px]
+              "
             >
-              <span>Enterprise AI</span>
+              <span>
+                Enterprise AI
+              </span>
 
               <span
-                className="text-signal-400/45"
                 aria-hidden="true"
+                className="
+                  text-signal-400/40
+                "
               >
                 •
               </span>
 
-              <span>Data Intelligence</span>
+              <span>
+                Data Intelligence
+              </span>
 
               <span
-                className="text-signal-400/45"
                 aria-hidden="true"
+                className="
+                  text-signal-400/40
+                "
               >
                 •
               </span>
 
-              <span>Agentic Automation</span>
+              <span>
+                Agentic Automation
+              </span>
             </motion.div>
 
             {/* =================================================
-                SYSTEM LABEL AND PREMIUM PERCENTAGE
+                PROGRESS HEADER
             ================================================== */}
 
             <motion.div
@@ -250,30 +1491,35 @@ export default function Loader() {
                 delay: 0.34,
                 duration: 0.55,
               }}
-              className="mt-14 flex items-center justify-between gap-5 font-mono text-[10px] uppercase tracking-[0.18em] text-mist-500 sm:text-xs"
+              className="
+                mt-12
+                flex
+                items-center
+                justify-between
+                gap-4
+                font-mono
+                text-[9px]
+                uppercase
+                tracking-[0.16em]
+                text-mist-500
+                sm:mt-14
+                sm:text-xs
+              "
             >
               <span className="text-left">
                 Enterprise Intelligence System
               </span>
 
-              <motion.span
+              <span
                 aria-live="polite"
                 aria-label={`${pct} percent loaded`}
-                animate={{
-                  scale: isReady ? [1, 1.08, 1] : 1,
-                  textShadow: isReady
-                    ? [
-                        "0 0 0 rgba(94,234,212,0)",
-                        "0 0 18px rgba(94,234,212,0.65)",
-                        "0 0 8px rgba(94,234,212,0.25)",
-                      ]
-                    : "0 0 0 rgba(94,234,212,0)",
-                }}
-                transition={{
-                  duration: 0.6,
-                  ease: "easeOut",
-                }}
-                className="inline-flex min-w-[58px] items-baseline justify-end tabular-nums"
+                className="
+                  inline-flex
+                  min-w-[55px]
+                  items-baseline
+                  justify-end
+                  tabular-nums
+                "
               >
                 <span
                   className={
@@ -287,144 +1533,345 @@ export default function Loader() {
 
                 <span
                   aria-hidden="true"
-                  className={
-                    isReady
-                      ? "ml-[2px] text-signal-300"
-                      : "ml-[2px] text-signal-400/70"
-                  }
+                  className="
+                    ml-[2px]
+                    text-signal-400/70
+                  "
                 >
                   %
                 </span>
-              </motion.span>
+              </span>
             </motion.div>
 
             {/* =================================================
                 PROGRESS TRACK
             ================================================== */}
 
-            <motion.div
-              initial={{
-                opacity: 0,
-                scaleX: 0.96,
-              }}
-              animate={{
-                opacity: 1,
-                scaleX: 1,
-              }}
-              transition={{
-                delay: 0.4,
-                duration: 0.5,
-              }}
-              className="relative mt-4 h-[3px] w-full overflow-hidden rounded-full bg-white/[0.07]"
+            <div
+              className="
+                relative
+                mt-4
+                h-[3px]
+                w-full
+                overflow-visible
+                rounded-full
+                bg-white/[0.07]
+              "
             >
-              {/* Actual progress */}
+              {/* COMPLETED BAR */}
+
               <motion.div
-                className="absolute inset-y-0 left-0 rounded-full bg-gradient-to-r from-signal-500 via-cyan-300 to-signal-400 shadow-[0_0_18px_rgba(45,212,191,0.42)]"
                 animate={{
-                  width: `${pct}%`,
+                  width:
+                    `${pct}%`,
                 }}
                 transition={{
-                  duration: 0.18,
-                  ease: "easeOut",
+                  duration: 0.2,
+                  ease:
+                    "easeOut",
                 }}
+                className="
+                  absolute
+                  inset-y-0
+                  left-0
+                  rounded-full
+                  bg-gradient-to-r
+                  from-signal-500
+                  via-cyan-300
+                  to-signal-400
+                  shadow-[0_0_16px_rgba(45,212,191,0.34)]
+                "
               />
 
-              {/* Progress highlight */}
-              {!isReady && (
+              {/* =================================================
+                  SIGNAL HEAD
+              ================================================== */}
+
+              <motion.div
+                aria-hidden="true"
+                className="
+                  pointer-events-none
+                  absolute
+                  top-1/2
+                "
+                animate={{
+                  left:
+                    `${pct}%`,
+                }}
+                transition={{
+                  duration: 0.2,
+                  ease:
+                    "easeOut",
+                }}
+                style={{
+                  transform:
+                    "translate(-50%, -50%)",
+                }}
+              >
                 <motion.div
-                  aria-hidden="true"
-                  className="absolute inset-y-0 w-20 bg-gradient-to-r from-transparent via-white/30 to-transparent blur-sm"
                   animate={{
-                    x: ["-120%", "920%"],
+                    scale:
+                      isReady
+                        ? [
+                            1,
+                            1.7,
+                            1,
+                          ]
+                        : [
+                            0.92,
+                            1.16,
+                            0.92,
+                          ],
                   }}
                   transition={{
-                    duration: 1.45,
-                    repeat: Infinity,
-                    ease: "linear",
+                    duration:
+                      isReady
+                        ? 0.6
+                        : 1.4,
+
+                    repeat:
+                      isReady
+                        ? 0
+                        : Infinity,
+
+                    ease:
+                      "easeInOut",
                   }}
-                />
-              )}
-            </motion.div>
+                  className="
+                    relative
+                    h-2
+                    w-2
+                    rounded-full
+                    bg-signal-100
+                  "
+                >
+                  <span
+                    className="
+                      absolute
+                      left-1/2
+                      top-1/2
+                      h-5
+                      w-5
+                      -translate-x-1/2
+                      -translate-y-1/2
+                      rounded-full
+                      bg-signal-300/[0.11]
+                      blur-[5px]
+                    "
+                  />
+
+                  <span
+                    className="
+                      absolute
+                      left-1/2
+                      top-1/2
+                      h-3
+                      w-3
+                      -translate-x-1/2
+                      -translate-y-1/2
+                      rounded-full
+                      shadow-[0_0_12px_rgba(153,246,228,0.8),0_0_24px_rgba(45,212,191,0.45)]
+                    "
+                  />
+                </motion.div>
+              </motion.div>
+            </div>
 
             {/* =================================================
                 BOOT STATUS
             ================================================== */}
 
-            <motion.div
-              layout
-              className="mt-7 flex min-h-8 items-center justify-center gap-2 font-mono text-xs sm:text-sm"
+            <div
+              className="
+                mt-7
+                flex
+                min-h-8
+                items-center
+                justify-center
+                gap-2
+                font-mono
+                text-[11px]
+                sm:text-sm
+              "
             >
               <AnimatePresence mode="wait">
                 <motion.span
-                  key={bootStatus}
+                  key={
+                    systemOnline
+                      ? "online"
+                      : bootStatus
+                  }
                   initial={{
                     opacity: 0,
-                    y: 8,
-                    filter: "blur(4px)",
+                    y: 7,
+                    filter:
+                      "blur(4px)",
                   }}
                   animate={{
                     opacity: 1,
                     y: 0,
-                    filter: "blur(0px)",
+                    filter:
+                      "blur(0px)",
                   }}
                   exit={{
                     opacity: 0,
-                    y: -8,
-                    filter: "blur(4px)",
+                    y: -7,
+                    filter:
+                      "blur(4px)",
                   }}
                   transition={{
-                    duration: 0.25,
+                    duration: 0.24,
                   }}
                   className={
-                    isReady
-                      ? "text-signal-300"
-                      : "text-mist-500"
+                    systemOnline
+                      ? "font-medium uppercase tracking-[0.18em] text-signal-200"
+                      : isReady
+                        ? "text-signal-300"
+                        : "text-mist-600"
                   }
                 >
-                  {isReady ? "✓ " : "> "}
-                  {bootStatus}
+                  {systemOnline
+                    ? "SYSTEM ONLINE"
+                    : `${isReady ? "✓ " : "> "}${bootStatus}`}
                 </motion.span>
               </AnimatePresence>
 
-              {/* Terminal cursor */}
               {!isReady && (
                 <motion.span
                   aria-hidden="true"
                   animate={{
-                    opacity: [0, 1, 0],
+                    opacity: [
+                      0,
+                      1,
+                      0,
+                    ],
                   }}
                   transition={{
                     duration: 0.8,
-                    repeat: Infinity,
+                    repeat:
+                      Infinity,
                   }}
-                  className="inline-block h-4 w-[7px] bg-signal-400/70"
+                  className="
+                    inline-block
+                    h-4
+                    w-[6px]
+                    bg-signal-400/45
+                  "
                 />
               )}
-            </motion.div>
+            </div>
 
-            {/* =================================================
-                FINAL BRAND FOOTER
-            ================================================== */}
-
-            <motion.p
-              initial={{
-                opacity: 0,
-                y: 6,
-              }}
-              animate={{
-                opacity: pct > 70 ? 1 : 0,
-                y: pct > 70 ? 0 : 6,
-              }}
-              transition={{
-                duration: 0.45,
-              }}
-              className="mt-10 font-mono text-[9px] uppercase tracking-[0.25em] text-mist-700 sm:text-[10px]"
-            >
-              Enterprise AI • Analytics • Intelligent Systems
-            </motion.p>
+            {/*
+             * AI CORE // DATA ENGINE // AGENT LAYER
+             *
+             * REMOVED intentionally.
+             *
+             * It was competing visually
+             * with the Matrix background.
+             */}
           </div>
+
+          {/* =================================================
+              SYSTEM ONLINE PULSE
+          ================================================== */}
+
+          <AnimatePresence>
+            {systemOnline && (
+              <motion.div
+                aria-hidden="true"
+                initial={{
+                  opacity: 0.5,
+                  scale: 0.08,
+                }}
+                animate={{
+                  opacity: [
+                    0.5,
+                    0.14,
+                    0,
+                  ],
+
+                  scale: [
+                    0.08,
+                    1.3,
+                    2.1,
+                  ],
+                }}
+                transition={{
+                  duration: 0.95,
+
+                  ease: [
+                    0.22,
+                    1,
+                    0.36,
+                    1,
+                  ],
+                }}
+                className="
+                  pointer-events-none
+                  absolute
+                  left-1/2
+                  top-1/2
+                  z-[9]
+                  h-[480px]
+                  w-[480px]
+                  -translate-x-1/2
+                  -translate-y-1/2
+                  rounded-full
+                  border
+                  border-signal-300/20
+                  shadow-[0_0_70px_rgba(45,212,191,0.1)]
+                "
+              />
+            )}
+          </AnimatePresence>
         </motion.div>
       )}
     </AnimatePresence>
   );
+}
+
+/* =========================================================
+   PROGRESS DELAY
+========================================================= */
+
+function getProgressDelay(
+  progress: number,
+) {
+  if (
+    progress >= 18 &&
+    progress <= 22
+  ) {
+    return 170;
+  }
+
+  if (
+    progress >= 39 &&
+    progress <= 43
+  ) {
+    return 190;
+  }
+
+  if (
+    progress >= 63 &&
+    progress <= 67
+  ) {
+    return 200;
+  }
+
+  if (
+    progress >= 89 &&
+    progress <= 94
+  ) {
+    return 170;
+  }
+
+  if (progress < 25) {
+    return 72;
+  }
+
+  if (progress < 70) {
+    return 88;
+  }
+
+  return 105;
 }
