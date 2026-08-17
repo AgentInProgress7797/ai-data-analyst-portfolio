@@ -91,6 +91,17 @@ export const metadata: Metadata = {
 
   creator: personal.name,
 
+
+  /* =======================================================
+   GOOGLE SEARCH CONSOLE VERIFICATION
+======================================================== */
+
+verification: {
+  google: "L5k31aY9Xa4aOehMNBvRMXCoeZ9LiNmc2KL0du7s4NE",
+},
+
+
+
   /* =======================================================
      OPEN GRAPH
   ======================================================== */
