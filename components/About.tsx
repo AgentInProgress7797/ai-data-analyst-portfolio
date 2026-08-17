@@ -46,9 +46,10 @@ export default function About() {
 
       <Reveal delay={0.1}>
         <p className="mt-5 max-w-3xl text-base leading-7 text-mist-400 sm:text-lg">
-          My work combines business understanding, data analytics and applied
-          AI. I focus on building solutions that reduce complexity, improve
-          visibility and help teams make better decisions.
+          My work sits between business, data and technology. I focus on
+          understanding what actually needs to improve, then using the right
+          combination of analytics, AI and automation to make the solution
+          useful in day-to-day work.
         </p>
       </Reveal>
 
@@ -58,7 +59,7 @@ export default function About() {
 
       <div className="mt-14 grid gap-8 lg:grid-cols-[1.15fr_0.85fr]">
         {/* ===================================================
-            PROFESSIONAL STORY
+            HOW I WORK
         ==================================================== */}
 
         <Reveal
@@ -66,12 +67,13 @@ export default function About() {
           className="h-full"
         >
           <PremiumCard
-            ariaLabel="Professional journey and career story"
+            ariaLabel="How I approach business and technology problems"
             enableTilt
             tiltAmount={1.4}
             className="h-full rounded-3xl p-7 sm:p-8 lg:p-9"
           >
             {/* Decorative top-left glow */}
+
             <motion.div
               aria-hidden="true"
               animate={{
@@ -93,6 +95,7 @@ export default function About() {
             />
 
             {/* Secondary lower glow */}
+
             <div
               aria-hidden="true"
               className="
@@ -106,45 +109,42 @@ export default function About() {
 
             <div className="relative">
               <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-signal-400/75">
-                Professional Journey
+                How I Work
               </p>
 
               <h3 className="mt-4 max-w-2xl font-display text-2xl font-semibold leading-tight text-white transition-colors duration-300 group-hover:text-signal-100">
-                From operational analytics to enterprise AI.
+                I start with the problem, not the technology.
               </h3>
 
               <div className="mt-6 space-y-5 text-base leading-[1.85] text-mist-300">
                 <p>
-                  My career began in operational analytics and business
-                  reporting, where I learned that good decisions depend on
-                  reliable information, clear reporting and a practical
-                  understanding of how teams work.
+                  My background is in data, reporting and business operations,
+                  which shaped how I approach technology today. I usually start
+                  by understanding where information is unclear, where work is
+                  repetitive or where an existing process is creating friction.
                 </p>
 
                 <p>
-                  Over the years, I have worked with CRM, Salesforce, SAP ERP,
-                  SQL, Python, Power BI, Tableau and Advanced Excel to prepare
-                  dashboards, management reports and business insights from
-                  complex data.
+                  Over time, that work has expanded into enterprise AI and
+                  automation. I now work across AI models, internal
+                  applications, analytics and business workflows, with a focus
+                  on making these technologies useful in real working
+                  environments.
                 </p>
 
                 <p>
-                  Today, my work extends into enterprise AI, Generative AI and
-                  intelligent automation. I contribute to solutions that
-                  connect AI models with internal workflows, business systems
-                  and employee-facing applications.
-                </p>
-
-                <p>
-                  I enjoy working between business and technology teams:
-                  understanding the actual problem, designing the workflow,
-                  validating the output and presenting the result in a way
-                  stakeholders can confidently use.
+                  I enjoy the point where business and technology meet:
+                  understanding how people actually work, deciding what should
+                  be improved, building or configuring the solution and then
+                  checking whether it works reliably in practice.
                 </p>
               </div>
 
-              {/* Professional statement */}
-              <motion.blockquote
+              {/* =================================================
+                  WORKING PRINCIPLE
+              ================================================== */}
+
+              <motion.div
                 whileHover={{
                   x: 4,
                 }}
@@ -172,16 +172,20 @@ export default function About() {
                   "
                 />
 
-                <p className="relative text-base italic leading-7 text-mist-200">
-                  “The best AI solution is not the most complicated one. It is
-                  the one that solves a real business problem clearly,
-                  securely and reliably.”
+                <p className="relative font-mono text-[10px] uppercase tracking-[0.2em] text-signal-400/70">
+                  Working Principle
                 </p>
 
-                <footer className="relative mt-3 font-mono text-[11px] uppercase tracking-[0.2em] text-signal-400/70">
-                  {personal.name}
-                </footer>
-              </motion.blockquote>
+                <p className="relative mt-3 text-base leading-7 text-mist-200">
+                  Understand the problem
+                  <span className="mx-2 text-signal-400/45">→</span>
+                  simplify the workflow
+                  <span className="mx-2 text-signal-400/45">→</span>
+                  choose the right technology
+                  <span className="mx-2 text-signal-400/45">→</span>
+                  validate the result.
+                </p>
+              </motion.div>
             </div>
           </PremiumCard>
         </Reveal>
@@ -226,7 +230,7 @@ export default function About() {
                 <p className="eyebrow">Current Focus</p>
 
                 <h3 className="mt-3 font-display text-xl font-semibold text-white transition-colors duration-300 group-hover:text-signal-100">
-                  Where I am building deeper expertise.
+                  Areas where I&apos;m building deeper experience.
                 </h3>
 
                 <div className="mt-5 flex flex-wrap gap-2">
