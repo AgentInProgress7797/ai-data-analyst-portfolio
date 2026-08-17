@@ -46,12 +46,22 @@ export const metadata: Metadata = {
 
   keywords: [
     "AI Data Analyst",
+    "Applied AI",
+    "AI Engineering",
+    "Enterprise AI",
+    "Generative AI",
+    "Agentic AI",
+    "AI Agents",
+    "AI Automation",
+    "Intelligent Automation",
     "Data Analytics",
     "Business Intelligence",
     "Power BI",
     "Tableau",
-    "Generative AI",
-    "Agentic AI",
+    "Python",
+    "SQL",
+    "LLM Applications",
+    "Enterprise Automation",
     personal.name,
   ],
 
@@ -61,23 +71,52 @@ export const metadata: Metadata = {
     },
   ],
 
+  creator: personal.name,
+
   openGraph: {
     title: seo.title,
+
     description: seo.description,
+
     url: seo.url,
-    siteName: seo.title,
+
+    siteName: `${personal.name} | AI Data Analyst`,
+
     type: "website",
+
+    locale: "en_IN",
+
+    images: [
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: `${personal.name} — AI, Data, Agents and Automation`,
+      },
+    ],
   },
 
   twitter: {
     card: "summary_large_image",
+
     title: seo.title,
+
     description: seo.description,
+
+    images: ["/og-image.png"],
   },
 
   robots: {
     index: true,
     follow: true,
+
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
 };
 
@@ -105,6 +144,7 @@ export default function RootLayout({
         <CustomCursor />
         <ScrollProgress />
         <CommandPalette />
+
         {children}
       </body>
     </html>

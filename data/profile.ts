@@ -547,5 +547,5 @@ export const seo = {
   description:
     "Portfolio of Ashish Pawar, an AI Data Analyst working across enterprise AI, Generative AI, data analytics, dashboards, business intelligence and workflow automation.",
 
-  url: "https://your-domain.vercel.app",
+  url: "https://ai-data-analyst-portfolio.vercel.app",
 };
