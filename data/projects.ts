@@ -15,6 +15,12 @@ export type ProjectStory = {
   result: string;
 };
 
+export type EngineeringDecision = {
+  title: string;
+  decision: string;
+  reason: string;
+};
+
 export type PortfolioProject = {
   id: string;
   name: string;
@@ -29,6 +35,7 @@ export type PortfolioProject = {
   impact: string[];
   responsibilities: string[];
   story: ProjectStory;
+  engineeringDecisions: EngineeringDecision[];
   sourceUrl?: string;
   liveUrl?: string;
 };
@@ -150,6 +157,27 @@ export const portfolioProjects: PortfolioProject[] = [
       result:
         "Magic AI is now used across multiple departments for document drafting, business queries and routine productivity tasks, with access managed through departmental workspaces and internal controls.",
     },
+
+    engineeringDecisions: [
+      {
+        title: "Model resilience",
+        decision: "Primary + fallback model strategy",
+        reason:
+          "Reduce dependency on a single AI model configuration and support continuity when the primary model is unavailable.",
+      },
+      {
+        title: "Access isolation",
+        decision: "Department-based workspaces",
+        reason:
+          "Separate departmental documents and user content while applying workspace-level access controls.",
+      },
+      {
+        title: "Enterprise operation",
+        decision: "Controlled internal access",
+        reason:
+          "Keep the assistant aligned with internal access requirements while supporting employees across multiple business teams.",
+      },
+    ],
   },
 
   {
@@ -266,6 +294,27 @@ export const portfolioProjects: PortfolioProject[] = [
       result:
         "The current prototype defines a clearer recruitment workflow and provides a practical foundation for candidate discovery, comparison and internal deployment. The project is still under development.",
     },
+
+    engineeringDecisions: [
+      {
+        title: "Human in the loop",
+        decision: "AI recommends; recruiters decide",
+        reason:
+          "Keep final shortlisting and hiring decisions with recruiters rather than automatically acting on AI-generated recommendations.",
+      },
+      {
+        title: "Structured matching",
+        decision: "JD → criteria → profile comparison",
+        reason:
+          "Convert job requirements into structured criteria before comparing candidate information and generating recommendations.",
+      },
+      {
+        title: "Deployment direction",
+        decision: "Internal deployment model",
+        reason:
+          "Design the application so candidate workflows and supporting data can operate within an internal environment.",
+      },
+    ],
   },
 
   {
@@ -382,5 +431,26 @@ export const portfolioProjects: PortfolioProject[] = [
       result:
         "The finished portfolio presents my work as connected projects and systems rather than a simple list of skills. It also demonstrates my frontend development, interaction design and technical communication abilities.",
     },
+
+    engineeringDecisions: [
+      {
+        title: "Custom system",
+        decision: "Purpose-built UI instead of a template",
+        reason:
+          "Create a portfolio experience capable of representing AI, analytics, automation and technical project stories within one consistent product.",
+      },
+      {
+        title: "Component architecture",
+        decision: "Reusable React components",
+        reason:
+          "Keep the application maintainable while allowing sections, interactions and project content to evolve independently.",
+      },
+      {
+        title: "Responsive interaction",
+        decision: "Adaptive desktop + mobile experience",
+        reason:
+          "Preserve content readability and interaction quality across different screen sizes while retaining the portfolio's visual identity.",
+      },
+    ],
   },
 ];

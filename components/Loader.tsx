@@ -152,7 +152,7 @@ function MatrixRain() {
        */
 
       const columnSpacing =
-        mobile ? 13 : 10;
+        mobile ? 10 : 7;
 
       const streamCount =
         Math.ceil(
@@ -171,7 +171,7 @@ function MatrixRain() {
            */
 
           const bright =
-            index % 11 === 0;
+            index % 8 === 0;
 
           /*
            * Leave some controlled gaps.
@@ -183,7 +183,7 @@ function MatrixRain() {
 
           const active =
             Math.random() >
-            (mobile ? 0.2 : 0.14);
+            (mobile ? 0.08 : 0.04);
 
           /*
            * Small horizontal randomness
@@ -221,11 +221,11 @@ function MatrixRain() {
 
             speed: bright
               ? Math.random() *
-                  0.4 +
-                0.5
+                  0.65 +
+                1.15
               : Math.random() *
-                  0.28 +
-                0.24,
+                  0.45 +
+                0.65,
 
             /*
              * Keep characters relatively
@@ -248,12 +248,12 @@ function MatrixRain() {
             length: bright
               ? Math.floor(
                   Math.random() *
-                    14,
-                ) + 18
+                    18,
+                ) + 26
               : Math.floor(
                   Math.random() *
-                    13,
-                ) + 12,
+                    17,
+                ) + 20,
 
             /*
              * More streams =
@@ -263,11 +263,11 @@ function MatrixRain() {
             opacity: active
               ? bright
                 ? Math.random() *
-                    0.12 +
-                  0.22
+                    0.16 +
+                  0.28
                 : Math.random() *
-                    0.065 +
-                  0.045
+                    0.09 +
+                  0.08
               : 0,
 
             bright,
@@ -362,7 +362,7 @@ function MatrixRain() {
       }
 
       const lineHeight =
-        stream.fontSize * 1.35;
+        stream.fontSize * 1.12;
 
       context.font =
         `${stream.fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
@@ -400,7 +400,7 @@ function MatrixRain() {
             Math.floor(
               stream.seed +
                 index * 7 +
-                time * 0.002,
+                time * 0.0035,
             ),
           ) %
           characters.length;
@@ -676,12 +676,12 @@ function MatrixRain() {
           stream.bright
             ? Math.floor(
                 Math.random() *
-                  14,
-              ) + 18
+                  18,
+              ) + 26
             : Math.floor(
                 Math.random() *
-                  13,
-              ) + 12;
+                  17,
+              ) + 20;
 
         /*
          * Slight speed variation
@@ -691,11 +691,11 @@ function MatrixRain() {
         stream.speed =
           stream.bright
             ? Math.random() *
-                0.4 +
-              0.5
+                0.65 +
+              1.15
             : Math.random() *
-                0.28 +
-              0.24;
+                0.45 +
+              0.65;
       }
     };
 
@@ -1242,7 +1242,7 @@ export default function Loader() {
               absolute
               inset-0
               z-[3]
-              bg-[radial-gradient(ellipse_at_center,rgba(2,6,8,0.46)_0%,rgba(2,6,8,0.30)_24%,rgba(2,6,8,0.10)_52%,rgba(2,6,8,0.02)_78%,transparent_100%)]
+              bg-[radial-gradient(ellipse_at_center,rgba(2,6,8,0.34)_0%,rgba(2,6,8,0.22)_24%,rgba(2,6,8,0.07)_52%,rgba(2,6,8,0.01)_78%,transparent_100%)]
             "
           />
 
