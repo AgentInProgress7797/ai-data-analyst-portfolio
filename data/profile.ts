@@ -229,54 +229,168 @@ export type Project = {
   title: string;
   subtitle: string;
   description: string;
+
   challenge: string;
+  solution?: string;
+
   contributions: string[];
   outcome: string;
+
+  architecture?: {
+    label: string;
+    description: string;
+  }[];
+
+  capabilities?: string[];
+
+  highlights?: {
+    label: string;
+    value: string;
+  }[];
+
+  learnings?: string[];
+
+  confidential?: boolean;
+
   tags: string[];
+
   category: "AI" | "Analytics" | "Automation";
+
   status?: "Live" | "Completed" | "In Development";
+
   link?: string;
   repo?: string;
 };
 
 export const projects: Project[] = [
   {
-    title: "Magic AI",
-    subtitle: "Enterprise Generative AI Assistant",
+  title: "Magic AI",
 
-    description:
-      "An internal AI platform designed to provide employees with controlled access to Generative AI through department-specific sessions, authentication and enterprise-focused workflows.",
+  subtitle:
+    "Enterprise Generative AI & Agentic Assistant",
 
-    challenge:
-      "Business teams needed a practical way to use Generative AI while maintaining separate departmental experiences, internal access controls and reliable connectivity with multiple AI models.",
+  description:
+    "An internal enterprise AI platform designed to give employees controlled access to Generative AI, AI agents and intelligent workflows through department-specific sessions, authentication, model routing and enterprise integrations.",
 
-    contributions: [
-      "Supported the design of department-based AI sessions for HR, Finance, Legal, Taxation, IT and other internal functions.",
+  challenge:
+    "Business teams needed a practical and controlled way to use Generative AI across different functions while maintaining department-specific experiences, internal access controls, reliable connectivity, session management and flexibility across multiple AI models.",
 
-      "Configured OpenClaw agents and integrated models through OpenRouter and Anthropic Claude.",
+  solution:
+    "Designed and evolved a multi-user enterprise AI environment built around OpenClaw, where department-specific agents and sessions can connect users with AI models, internal resources and business workflows. The platform supports authentication, model routing, fallback behaviour, session controls and integration with internal applications.",
 
-      "Worked on authentication, WebSocket connectivity, model routing and automatic fallback behaviour.",
+  architecture: [
+    {
+      label: "Employee Access",
+      description:
+        "Authenticated employee access through the internal AI interface.",
+    },
+    {
+      label: "Enterprise AI Gateway",
+      description:
+        "OpenClaw coordinates sessions, agents, model access and AI workflows.",
+    },
+    {
+      label: "Department Agents",
+      description:
+        "Dedicated AI experiences for functions such as HR, Finance, Legal, Taxation and IT.",
+    },
+    {
+      label: "Model Routing",
+      description:
+        "Requests are routed across configured AI providers with fallback behaviour for resilience.",
+    },
+    {
+      label: "Tools & Enterprise Workflows",
+      description:
+        "Agents interact with approved files, tools, applications and workflow resources according to configured access controls.",
+    },
+    {
+      label: "AI Response",
+      description:
+        "Users receive contextual AI assistance through a consistent internal experience.",
+    },
+  ],
 
-      "Contributed to token-usage optimisation, session management and internal deployment requirements.",
+  capabilities: [
+    "Enterprise AI Assistants",
+    "Agentic AI",
+    "Multi-Agent Workflows",
+    "LLM Integration",
+    "Model Routing",
+    "Automatic Fallback",
+    "Authentication",
+    "Session Management",
+    "Tool Integration",
+    "Enterprise Deployment",
+  ],
 
-      "Supported integration of the AI assistant with internal applications and a WordPress-based employee portal.",
-    ],
+  contributions: [
+    "Supported the architecture and implementation of department-based AI sessions for HR, Finance, Legal, Taxation, IT and other internal business functions.",
 
-    outcome:
-      "Established a scalable foundation for introducing Generative AI across internal business functions through a consistent and controlled employee experience.",
+    "Configured OpenClaw agents and integrated multiple AI models and providers for enterprise use cases.",
 
-    tags: [
-      "OpenClaw",
-      "OpenRouter",
-      "Anthropic Claude",
-      "Next.js",
-      "WebSocket",
-      "Enterprise AI",
-    ],
+    "Worked on authentication, WebSocket connectivity, model routing and automatic fallback behaviour to improve service reliability.",
 
-    category: "AI",
-    status: "In Development",
-  },
+    "Implemented and refined agent access controls, session configuration and workspace permissions for different users and business functions.",
+
+    "Worked on token-usage optimisation, session management and AI model configuration to improve operational efficiency.",
+
+    "Supported integration of the AI assistant with internal applications and a WordPress-based employee portal.",
+
+    "Troubleshot production issues involving model connectivity, authentication, origins, permissions, gateway configuration and provider availability.",
+  ],
+
+  outcome:
+    "Established an extensible foundation for applying Generative AI and agent-based workflows across internal business functions through a controlled, configurable and employee-focused AI environment.",
+
+  highlights: [
+    {
+      label: "Architecture",
+      value: "Multi-Agent",
+    },
+    {
+      label: "Environment",
+      value: "Enterprise",
+    },
+    {
+      label: "Model Strategy",
+      value: "Multi-Model",
+    },
+    {
+      label: "Deployment",
+      value: "Internal",
+    },
+  ],
+
+  learnings: [
+    "Enterprise AI requires more than connecting an LLM; authentication, permissions, model reliability, session behaviour and infrastructure become equally important.",
+
+    "Model fallback and routing are important for maintaining availability when individual AI providers experience limits or service issues.",
+
+    "Agent access should be designed around the minimum resources required for each business function rather than providing unrestricted workspace access.",
+
+    "AI systems need continuous monitoring and configuration refinement after deployment as usage patterns and operational requirements evolve.",
+  ],
+
+  confidential: true,
+
+  tags: [
+    "OpenClaw",
+    "Anthropic Claude",
+    "OpenRouter",
+    "LLMs",
+    "AI Agents",
+    "Agentic AI",
+    "Model Routing",
+    "WebSocket",
+    "Enterprise AI",
+    "Workflow Automation",
+  ],
+
+  category: "AI",
+
+  status: "In Development",
+},
   {
     title: "Enterprise KPI & MIS Reporting",
     subtitle: "Business Intelligence and Management Reporting",

@@ -1,682 +1,1259 @@
 "use client";
 
-import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import {
   ArrowUpRight,
-  Bot,
-  ChartNoAxesCombined,
   Check,
+  ChevronDown,
+  Code2,
   ExternalLink,
   Github,
-  Workflow,
+  Layers3,
+  LockKeyhole,
+  Network,
+  Sparkles,
+  Target,
+  UserRound,
+  X,
+  Zap,
 } from "lucide-react";
+import { useEffect, useMemo, useState } from "react";
 
-import { projects, type Project } from "@/data/profile";
-import PremiumCard from "@/components/PremiumCard";
-import Reveal from "@/components/Reveal";
+import {
+  portfolioProjects,
+  type PortfolioProject,
+} from "@/data/projects";
 
-/* =========================================================
-   PROJECT FILTER CATEGORIES
-========================================================= */
+/* -------------------------------------------------------------------------- */
+/*                                   TYPES                                    */
+/* -------------------------------------------------------------------------- */
 
-const categories = [
-  "All",
-  "AI",
-  "Analytics",
-  "Automation",
-] as const;
+type ProjectStatus = PortfolioProject["status"];
 
-type CategoryFilter = (typeof categories)[number];
+/* -------------------------------------------------------------------------- */
+/*                                  HELPERS                                   */
+/* -------------------------------------------------------------------------- */
 
-/* =========================================================
-   CATEGORY CONFIGURATION
-========================================================= */
-
-const categoryMeta: Record<
-  Project["category"],
-  {
-    label: string;
-    icon: typeof Bot;
+function statusLabel(status: ProjectStatus) {
+  switch (status) {
+    case "Operational":
+      return "Operational";
+    case "In Development":
+      return "In Development";
+    case "Completed":
+      return "Completed";
+    default:
+      return status;
   }
-> = {
-  AI: {
-    label: "Enterprise AI",
-    icon: Bot,
-  },
+}
 
-  Analytics: {
-    label: "Data Analytics",
-    icon: ChartNoAxesCombined,
-  },
+function statusDot(status: ProjectStatus) {
+  if (status === "Operational") {
+    return "bg-emerald-400";
+  }
 
-  Automation: {
-    label: "Automation",
-    icon: Workflow,
-  },
-};
+  if (status === "In Development") {
+    return "bg-amber-400";
+  }
 
-/* =========================================================
-   PROJECTS SECTION
-========================================================= */
+  return "bg-signal-400";
+}
 
-export default function Projects() {
-  const [activeCategory, setActiveCategory] =
-    useState<CategoryFilter>("All");
+/* -------------------------------------------------------------------------- */
+/*                               SECTION LABEL                                */
+/* -------------------------------------------------------------------------- */
 
-  const filteredProjects =
-    activeCategory === "All"
-      ? projects
-      : projects.filter(
-          (project) =>
-            project.category === activeCategory
-        );
-
+function SectionLabel({
+  number,
+  children,
+}: {
+  number: string;
+  children: React.ReactNode;
+}) {
   return (
-    <section
-      id="projects"
-      className="section relative z-10"
-    >
-      {/* =====================================================
-          SECTION INTRODUCTION
-      ====================================================== */}
+    <div className="mb-5 flex items-center gap-3">
+      <span className="font-mono text-[10px] tracking-[0.2em] text-signal-400">
+        {number}
+      </span>
 
-      <Reveal>
-        <p className="eyebrow">
-          Selected Case Studies
-        </p>
-      </Reveal>
+      <span className="text-xs font-semibold uppercase tracking-[0.22em] text-white/55">
+        {children}
+      </span>
 
-      <Reveal delay={0.05}>
-        <h2 className="mt-3 max-w-4xl text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">
-          Building practical solutions across AI,
-          analytics and automation.
-        </h2>
-      </Reveal>
-
-      <Reveal delay={0.1}>
-        <p className="mt-5 max-w-3xl text-base leading-7 text-mist-400 sm:text-lg">
-          A selection of projects that show how I
-          approach business requirements, design
-          workflows, implement solutions and communicate
-          their value to stakeholders.
-        </p>
-      </Reveal>
-
-      {/* =====================================================
-          CATEGORY FILTERS
-      ====================================================== */}
-
-      <Reveal delay={0.14}>
-        <div className="mt-8 flex flex-wrap gap-2">
-          {categories.map((category) => {
-            const isActive =
-              activeCategory === category;
-
-            return (
-              <motion.button
-                key={category}
-                type="button"
-                onClick={() =>
-                  setActiveCategory(category)
-                }
-                aria-pressed={isActive}
-                data-cursor="interactive"
-                whileHover={{
-                  y: -2,
-                  scale: 1.025,
-                }}
-                whileTap={{
-                  scale: 0.97,
-                }}
-                transition={{
-                  duration: 0.2,
-                  ease: [0.25, 0, 0, 1],
-                }}
-                className={`
-                  rounded-full px-4 py-2
-                  font-mono text-xs uppercase tracking-wide
-                  transition-colors duration-300
-                  ${
-                    isActive
-                      ? "border border-signal-400/40 bg-signal-500 text-ink-950 shadow-[0_0_20px_rgba(45,212,191,0.35)]"
-                      : "border border-white/10 bg-white/[0.01] text-mist-500 hover:border-signal-500/30 hover:bg-signal-400/[0.035] hover:text-signal-400"
-                  }
-                `}
-              >
-                {category}
-              </motion.button>
-            );
-          })}
-        </div>
-      </Reveal>
-
-      {/* =====================================================
-          PROJECT CASE STUDIES
-      ====================================================== */}
-
-      <motion.div
-        layout
-        className="mt-12 space-y-8"
-      >
-        <AnimatePresence mode="popLayout">
-          {filteredProjects.map(
-            (project, index) => (
-              <ProjectCaseStudy
-                key={project.title}
-                project={project}
-                index={index}
-              />
-            )
-          )}
-        </AnimatePresence>
-      </motion.div>
-    </section>
+      <div className="h-px flex-1 bg-gradient-to-r from-white/10 to-transparent" />
+    </div>
   );
 }
 
-/* =========================================================
-   PROJECT CASE STUDY TYPES
-========================================================= */
+/* -------------------------------------------------------------------------- */
+/*                              PROJECT METRICS                               */
+/* -------------------------------------------------------------------------- */
 
-type ProjectCaseStudyProps = {
-  project: Project;
-  index: number;
-};
-
-/* =========================================================
-   PROJECT CASE STUDY
-========================================================= */
-
-function ProjectCaseStudy({
+function ProjectMetrics({
   project,
-  index,
-}: ProjectCaseStudyProps) {
-  const meta = categoryMeta[project.category];
-  const CategoryIcon = meta.icon;
-
+}: {
+  project: PortfolioProject;
+}) {
   return (
-    <motion.article
-      layout
-      initial={{
-        opacity: 0,
-        y: 24,
-        scale: 0.985,
-        filter: "blur(5px)",
-      }}
-      animate={{
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        filter: "blur(0px)",
-      }}
-      exit={{
-        opacity: 0,
-        y: 14,
-        scale: 0.985,
-        filter: "blur(5px)",
-      }}
-      transition={{
-        duration: 0.42,
-        ease: [0.25, 0, 0, 1],
-      }}
-      className="relative"
-    >
-      <PremiumCard
-        ariaLabel={`${project.title} project case study`}
-        enableTilt
-        tiltAmount={2.4}
-        className="
-          group rounded-3xl
-          p-6 sm:p-8 lg:p-10
-        "
-      >
-        {/* ===================================================
-            BACKGROUND DECORATION
-        ==================================================== */}
-
-        <motion.div
-          aria-hidden="true"
-          className="
-            pointer-events-none absolute -right-24 -top-24
-            h-64 w-64 rounded-full
-            bg-signal-400/[0.07] blur-3xl
-          "
-          animate={{
-            scale: [1, 1.08, 1],
-            opacity: [0.45, 0.8, 0.45],
-          }}
-          transition={{
-            duration: 5.5,
-            repeat: Infinity,
-            ease: "easeInOut",
-          }}
-        />
-
-        {/* Subtle lower atmospheric glow */}
+    <div className="grid grid-cols-2 gap-2 sm:grid-cols-4">
+      {project.metrics.map((metric) => (
         <div
-          aria-hidden="true"
+          key={`${project.id}-${metric.label}`}
           className="
-            pointer-events-none absolute -bottom-32 left-1/4
-            h-72 w-72 rounded-full
-            bg-cyan-400/[0.025] blur-[100px]
-          "
-        />
-
-        {/* Decorative project number */}
-        <motion.span
-          aria-hidden="true"
-          initial={{
-            opacity: 0.025,
-            y: 0,
-          }}
-          whileHover={{
-            opacity: 0.08,
-            y: -5,
-          }}
-          transition={{
-            duration: 0.4,
-          }}
-          className="
-            pointer-events-none absolute right-6 top-4
-            font-mono text-[5rem] font-semibold leading-none
-            text-white
-            sm:right-9 sm:text-[7rem]
+            relative overflow-hidden rounded-2xl
+            border border-white/[0.07]
+            bg-white/[0.025]
+            px-4 py-4
           "
         >
-          {String(index + 1).padStart(2, "0")}
-        </motion.span>
+          <div
+            className="
+              pointer-events-none absolute inset-x-0 top-0
+              h-px bg-gradient-to-r
+              from-transparent via-signal-400/35 to-transparent
+            "
+          />
 
-        {/* ===================================================
-            MAIN CARD CONTENT
-        ==================================================== */}
+          <p
+            className="
+              font-display text-xl font-semibold
+              tracking-tight text-white
+              sm:text-2xl
+            "
+          >
+            {metric.value}
+          </p>
 
-        <div className="relative">
-          {/* =================================================
-              PROJECT HEADER
-          ================================================== */}
+          <p
+            className="
+              mt-1 text-[10px] uppercase
+              tracking-[0.16em] text-white/35
+            "
+          >
+            {metric.label}
+          </p>
+        </div>
+      ))}
+    </div>
+  );
+}
 
-          <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
-            <div className="max-w-3xl">
-              <div className="flex flex-wrap items-center gap-3">
-                {/* Category badge */}
-                <motion.span
-                  whileHover={{
-                    y: -2,
-                    scale: 1.025,
-                  }}
-                  transition={{
-                    duration: 0.2,
-                  }}
+/* -------------------------------------------------------------------------- */
+/*                          ARCHITECTURE FLOW                                 */
+/* -------------------------------------------------------------------------- */
+
+function ArchitectureFlow({
+  project,
+}: {
+  project: PortfolioProject;
+}) {
+  return (
+    <div className="relative">
+      {/* Desktop horizontal signal line */}
+      <div
+        className="
+          pointer-events-none absolute
+          left-[8%] right-[8%] top-[43px]
+          hidden h-px overflow-hidden
+          bg-white/[0.08]
+          lg:block
+        "
+      >
+        <motion.div
+          className="
+            absolute inset-y-0 w-24
+            bg-gradient-to-r
+            from-transparent via-signal-400 to-transparent
+          "
+          animate={{
+            x: ["-100%", "900%"],
+          }}
+          transition={{
+            duration: 4.5,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+        />
+      </div>
+
+      <div
+        className="
+          grid gap-3
+          lg:grid-cols-5
+        "
+      >
+        {project.architecture.map((node, index) => (
+          <motion.div
+            key={`${project.id}-${node.title}`}
+            initial={{
+              opacity: 0,
+              y: 14,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+              amount: 0.25,
+            }}
+            transition={{
+              duration: 0.45,
+              delay: index * 0.07,
+            }}
+            className="relative"
+          >
+            <div
+              className="
+                group relative h-full overflow-hidden
+                rounded-2xl border border-white/[0.08]
+                bg-[#08111d]/80 p-4
+                transition duration-300
+                hover:-translate-y-1
+                hover:border-signal-400/25
+                hover:bg-[#0a1624]/90
+              "
+            >
+              <div className="mb-4 flex items-center justify-between">
+                <div
                   className="
-                    inline-flex items-center gap-2 rounded-full
-                    border border-signal-400/15
-                    bg-signal-400/[0.05]
-                    px-3 py-1.5
-                    font-mono text-[10px] uppercase
-                    tracking-[0.17em] text-signal-300
-                    shadow-[0_0_20px_rgba(45,212,191,0.035)]
+                    flex h-9 w-9 items-center justify-center
+                    rounded-xl border border-signal-400/20
+                    bg-signal-400/[0.06]
                   "
                 >
-                  <CategoryIcon
-                    size={13}
-                    aria-hidden="true"
-                  />
+                  <span className="font-mono text-xs text-signal-400">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </div>
 
-                  {meta.label}
-                </motion.span>
+                <motion.div
+                  className="
+                    h-2 w-2 rounded-full
+                    bg-signal-400
+                    shadow-[0_0_12px_rgba(45,212,191,0.9)]
+                  "
+                  animate={{
+                    opacity: [0.25, 1, 0.25],
+                    scale: [0.8, 1.25, 0.8],
+                  }}
+                  transition={{
+                    duration: 2.2,
+                    repeat: Infinity,
+                    delay: index * 0.25,
+                  }}
+                />
+              </div>
 
-                {/* Project status */}
-                {project.status && (
-                  <motion.span
-                    whileHover={{
-                      y: -2,
-                    }}
-                    transition={{
-                      duration: 0.2,
-                    }}
+              <h4 className="text-sm font-semibold text-white">
+                {node.title}
+              </h4>
+
+              <p className="mt-1 text-xs leading-relaxed text-signal-400/70">
+                {node.subtitle}
+              </p>
+
+              <ul className="mt-4 space-y-2">
+                {node.details.map((detail) => (
+                  <li
+                    key={detail}
                     className="
-                      inline-flex items-center gap-2 rounded-full
-                      border border-white/[0.07]
-                      bg-white/[0.025]
-                      px-3 py-1.5
-                      font-mono text-[10px] uppercase
-                      tracking-[0.15em] text-mist-400
+                      flex gap-2 text-[11px]
+                      leading-relaxed text-white/42
                     "
                   >
-                    <span
-                      className={`
-                        h-1.5 w-1.5 rounded-full
-                        ${
-                          project.status ===
-                          "In Development"
-                            ? "animate-pulse bg-amber-300 shadow-[0_0_8px_rgba(252,211,77,0.65)]"
-                            : project.status === "Live"
-                              ? "animate-pulse bg-signal-400 shadow-[0_0_8px_rgba(45,212,191,0.75)]"
-                              : "bg-signal-400 shadow-[0_0_8px_rgba(45,212,191,0.55)]"
-                        }
-                      `}
-                      aria-hidden="true"
-                    />
+                    <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-white/25" />
+                    <span>{detail}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
 
-                    {project.status}
-                  </motion.span>
+            {/* Mobile connector */}
+            {index < project.architecture.length - 1 && (
+              <div className="flex h-7 justify-center lg:hidden">
+                <div className="relative h-full w-px bg-white/10">
+                  <motion.div
+                    className="
+                      absolute left-1/2 top-0
+                      h-2 w-2 -translate-x-1/2
+                      rounded-full bg-signal-400
+                      shadow-[0_0_12px_rgba(45,212,191,0.85)]
+                    "
+                    animate={{
+                      y: [0, 20, 0],
+                      opacity: [0, 1, 0],
+                    }}
+                    transition={{
+                      duration: 1.8,
+                      repeat: Infinity,
+                      delay: index * 0.18,
+                    }}
+                  />
+                </div>
+              </div>
+            )}
+          </motion.div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                            STORY COLUMN                                    */
+/* -------------------------------------------------------------------------- */
+
+function StoryItem({
+  label,
+  children,
+  icon,
+}: {
+  label: string;
+  children: React.ReactNode;
+  icon: React.ReactNode;
+}) {
+  return (
+    <div
+      className="
+        rounded-2xl border border-white/[0.07]
+        bg-white/[0.025] p-5
+      "
+    >
+      <div className="mb-3 flex items-center gap-2">
+        <span className="text-signal-400">{icon}</span>
+
+        <p
+          className="
+            text-[10px] font-semibold uppercase
+            tracking-[0.18em] text-white/40
+          "
+        >
+          {label}
+        </p>
+      </div>
+
+      <p className="text-sm leading-7 text-white/62">
+        {children}
+      </p>
+    </div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                            CASE STUDY MODAL                                */
+/* -------------------------------------------------------------------------- */
+
+function CaseStudyModal({
+  project,
+  onClose,
+}: {
+  project: PortfolioProject;
+  onClose: () => void;
+}) {
+  useEffect(() => {
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        onClose();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+
+    return () => {
+      document.body.style.overflow = previousOverflow;
+      window.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [onClose]);
+
+  return (
+    <motion.div
+      className="
+        fixed inset-0 z-[100]
+        flex items-end justify-center
+        bg-black/70 backdrop-blur-md
+        sm:items-center sm:p-5
+      "
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      onMouseDown={(event) => {
+        if (event.target === event.currentTarget) {
+          onClose();
+        }
+      }}
+    >
+      <motion.div
+        role="dialog"
+        aria-modal="true"
+        aria-label={`${project.name} case study`}
+        initial={{
+          opacity: 0,
+          y: 45,
+          scale: 0.985,
+        }}
+        animate={{
+          opacity: 1,
+          y: 0,
+          scale: 1,
+        }}
+        exit={{
+          opacity: 0,
+          y: 30,
+          scale: 0.99,
+        }}
+        transition={{
+          duration: 0.35,
+          ease: [0.22, 1, 0.36, 1],
+        }}
+        className="
+          relative max-h-[94vh] w-full
+          max-w-7xl overflow-y-auto
+          rounded-t-[28px]
+          border border-white/[0.08]
+          bg-[#050b13]
+          shadow-2xl
+          sm:rounded-[28px]
+        "
+      >
+        {/* Top ambient glow */}
+        <div
+          className="
+            pointer-events-none absolute
+            left-1/2 top-0 h-[280px] w-[70%]
+            -translate-x-1/2
+            rounded-full
+            bg-signal-400/[0.05]
+            blur-[100px]
+          "
+        />
+
+        {/* Header */}
+        <div
+          className="
+            sticky top-0 z-20
+            border-b border-white/[0.07]
+            bg-[#050b13]/90
+            px-5 py-4
+            backdrop-blur-xl
+            sm:px-7
+          "
+        >
+          <div className="flex items-center justify-between gap-4">
+            <div className="min-w-0">
+              <p
+                className="
+                  truncate font-mono text-[10px]
+                  uppercase tracking-[0.18em]
+                  text-signal-400/70
+                "
+              >
+                Case Study / {project.shortName}
+              </p>
+
+              <p className="mt-1 truncate text-sm font-medium text-white/75">
+                {project.category}
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={onClose}
+              aria-label="Close case study"
+              className="
+                flex h-10 w-10 shrink-0
+                items-center justify-center
+                rounded-full border border-white/10
+                bg-white/[0.035]
+                text-white/60
+                transition
+                hover:border-white/20
+                hover:bg-white/[0.07]
+                hover:text-white
+              "
+            >
+              <X size={17} />
+            </button>
+          </div>
+        </div>
+
+        <div className="relative px-5 py-8 sm:px-8 sm:py-10 lg:px-10">
+          {/* Hero */}
+          <div
+            className="
+              grid gap-8
+              lg:grid-cols-[1.15fr_0.85fr]
+              lg:items-end
+            "
+          >
+            <div>
+              <div className="mb-5 flex flex-wrap items-center gap-3">
+                <div
+                  className="
+                    inline-flex items-center gap-2
+                    rounded-full border border-white/10
+                    bg-white/[0.035]
+                    px-3 py-1.5
+                  "
+                >
+                  <span
+                    className={`h-1.5 w-1.5 rounded-full ${statusDot(
+                      project.status,
+                    )}`}
+                  />
+
+                  <span
+                    className="
+                      text-[10px] font-semibold
+                      uppercase tracking-[0.14em]
+                      text-white/55
+                    "
+                  >
+                    {statusLabel(project.status)}
+                  </span>
+                </div>
+
+                <span className="font-mono text-xs text-white/30">
+                  {project.year}
+                </span>
+
+                {project.id === "magic-ai" && (
+                  <div
+                    className="
+                      inline-flex items-center gap-1.5
+                      rounded-full border border-white/[0.08]
+                      px-3 py-1.5
+                      text-[10px] uppercase
+                      tracking-[0.14em] text-white/35
+                    "
+                  >
+                    <LockKeyhole size={11} />
+                    Internal system
+                  </div>
                 )}
               </div>
 
-              {/* Project title */}
-              <h3 className="mt-5 max-w-2xl font-display text-2xl font-semibold leading-tight text-white transition-colors duration-300 group-hover:text-signal-100 sm:text-3xl">
-                {project.title}
-              </h3>
+              <h2
+                className="
+                  max-w-4xl font-display
+                  text-4xl font-semibold
+                  tracking-[-0.04em] text-white
+                  sm:text-5xl lg:text-6xl
+                "
+              >
+                {project.name}
+              </h2>
 
-              {/* Project subtitle */}
-              <p className="mt-2 font-mono text-xs uppercase tracking-[0.18em] text-signal-400/70">
-                {project.subtitle}
+              <p
+                className="
+                  mt-3 text-sm font-medium
+                  uppercase tracking-[0.16em]
+                  text-signal-400/75
+                "
+              >
+                {project.category}
               </p>
 
-              {/* Project description */}
-              <p className="mt-5 max-w-3xl text-base leading-7 text-mist-300">
+              <p
+                className="
+                  mt-6 max-w-3xl
+                  text-base leading-8
+                  text-white/55
+                "
+              >
                 {project.description}
               </p>
             </div>
 
-            {/* ===============================================
-                OPTIONAL PROJECT LINKS
-            ================================================ */}
-
-            {(project.link || project.repo) && (
-              <div className="flex shrink-0 flex-wrap gap-2">
-                {project.link && (
-                  <motion.a
-                    href={project.link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-cursor="open"
-                    data-cursor-label="OPEN"
-                    whileHover={{
-                      y: -3,
-                      scale: 1.025,
-                    }}
-                    whileTap={{
-                      scale: 0.97,
-                    }}
-                    transition={{
-                      duration: 0.2,
-                    }}
-                    className="
-                      inline-flex items-center gap-2 rounded-full
-                      border border-white/[0.08]
-                      bg-white/[0.025]
-                      px-4 py-2
-                      font-mono text-xs text-mist-300
-                      transition-colors duration-300
-                      hover:border-signal-400/30
-                      hover:bg-signal-400/[0.045]
-                      hover:text-signal-300
-                      hover:shadow-[0_0_22px_rgba(45,212,191,0.08)]
-                    "
-                  >
-                    <ExternalLink
-                      size={14}
-                      aria-hidden="true"
-                    />
-
-                    <span>Live Project</span>
-                  </motion.a>
-                )}
-
-                {project.repo && (
-                  <motion.a
-                    href={project.repo}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    data-cursor="open"
-                    data-cursor-label="CODE"
-                    whileHover={{
-                      y: -3,
-                      scale: 1.025,
-                    }}
-                    whileTap={{
-                      scale: 0.97,
-                    }}
-                    transition={{
-                      duration: 0.2,
-                    }}
-                    className="
-                      inline-flex items-center gap-2 rounded-full
-                      border border-white/[0.08]
-                      bg-white/[0.025]
-                      px-4 py-2
-                      font-mono text-xs text-mist-300
-                      transition-colors duration-300
-                      hover:border-signal-400/30
-                      hover:bg-signal-400/[0.045]
-                      hover:text-signal-300
-                      hover:shadow-[0_0_22px_rgba(45,212,191,0.08)]
-                    "
-                  >
-                    <Github
-                      size={14}
-                      aria-hidden="true"
-                    />
-
-                    <span>Repository</span>
-                  </motion.a>
-                )}
-              </div>
-            )}
+            <ProjectMetrics project={project} />
           </div>
 
-          {/* =================================================
-              BUSINESS CHALLENGE AND OUTCOME
-          ================================================== */}
+          {/* Story */}
+          <section className="mt-14">
+            <SectionLabel number="01">Project Story</SectionLabel>
 
-          <div className="mt-9 grid gap-5 lg:grid-cols-2">
-            {/* Business challenge */}
-            <motion.div
-              whileHover={{
-                y: -4,
-                scale: 1.008,
-              }}
-              transition={{
-                duration: 0.25,
-                ease: [0.25, 0, 0, 1],
-              }}
-              className="
-                relative overflow-hidden rounded-2xl
-                border border-white/[0.06]
-                bg-white/[0.018]
-                p-5 sm:p-6
-                transition-colors duration-300
-                hover:border-white/[0.11]
-                hover:bg-white/[0.025]
-              "
-            >
+            <div className="grid gap-3 lg:grid-cols-3">
+              <StoryItem
+                label="Challenge"
+                icon={<Target size={15} />}
+              >
+                {project.story.challenge}
+              </StoryItem>
+
+              <StoryItem
+                label="Approach"
+                icon={<Layers3 size={15} />}
+              >
+                {project.story.approach}
+              </StoryItem>
+
+              <StoryItem
+                label="Result"
+                icon={<Zap size={15} />}
+              >
+                {project.story.result}
+              </StoryItem>
+            </div>
+          </section>
+
+          {/* Architecture */}
+          <section className="mt-14">
+            <SectionLabel number="02">
+              System Architecture
+            </SectionLabel>
+
+            <ArchitectureFlow project={project} />
+          </section>
+
+          {/* Role / Impact */}
+          <section className="mt-14">
+            <SectionLabel number="03">
+              Contribution & Impact
+            </SectionLabel>
+
+            <div className="grid gap-4 lg:grid-cols-2">
               <div
-                aria-hidden="true"
                 className="
-                  pointer-events-none absolute -right-16 -top-16
-                  h-32 w-32 rounded-full
-                  bg-white/[0.025] blur-3xl
+                  rounded-2xl border border-white/[0.07]
+                  bg-white/[0.025] p-5 sm:p-6
                 "
-              />
-
-              <p className="relative font-mono text-[10px] uppercase tracking-[0.2em] text-mist-500">
-                Business Challenge
-              </p>
-
-              <p className="relative mt-4 text-sm leading-7 text-mist-300">
-                {project.challenge}
-              </p>
-            </motion.div>
-
-            {/* Business outcome */}
-            <motion.div
-              whileHover={{
-                y: -4,
-                scale: 1.008,
-              }}
-              transition={{
-                duration: 0.25,
-                ease: [0.25, 0, 0, 1],
-              }}
-              className="
-                relative overflow-hidden rounded-2xl
-                border border-signal-400/10
-                bg-signal-400/[0.025]
-                p-5 sm:p-6
-                transition-all duration-300
-                hover:border-signal-400/20
-                hover:bg-signal-400/[0.04]
-                hover:shadow-[0_0_28px_rgba(45,212,191,0.045)]
-              "
-            >
-              <div
-                aria-hidden="true"
-                className="
-                  pointer-events-none absolute -right-16 -top-16
-                  h-36 w-36 rounded-full
-                  bg-signal-400/[0.06] blur-3xl
-                "
-              />
-
-              <div className="relative flex items-center gap-2">
-                <motion.span
-                  whileHover={{
-                    x: 3,
-                    y: -3,
-                  }}
-                >
-                  <ArrowUpRight
+              >
+                <div className="mb-5 flex items-center gap-2">
+                  <UserRound
                     size={16}
-                    className="text-signal-300"
-                    aria-hidden="true"
+                    className="text-signal-400"
                   />
-                </motion.span>
 
-                <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-mist-500">
-                  Business Outcome
+                  <h3
+                    className="
+                      text-xs font-semibold uppercase
+                      tracking-[0.16em] text-white/55
+                    "
+                  >
+                    My Role
+                  </h3>
+                </div>
+
+                <div className="space-y-3">
+                  {project.responsibilities.map((item) => (
+                    <div
+                      key={item}
+                      className="flex gap-3"
+                    >
+                      <div
+                        className="
+                          mt-0.5 flex h-5 w-5
+                          shrink-0 items-center justify-center
+                          rounded-full
+                          border border-signal-400/20
+                          bg-signal-400/[0.06]
+                        "
+                      >
+                        <Check
+                          size={11}
+                          className="text-signal-400"
+                        />
+                      </div>
+
+                      <p className="text-sm leading-6 text-white/55">
+                        {item}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              <div
+                className="
+                  rounded-2xl border border-white/[0.07]
+                  bg-white/[0.025] p-5 sm:p-6
+                "
+              >
+                <div className="mb-5 flex items-center gap-2">
+                  <Sparkles
+                    size={16}
+                    className="text-signal-400"
+                  />
+
+                  <h3
+                    className="
+                      text-xs font-semibold uppercase
+                      tracking-[0.16em] text-white/55
+                    "
+                  >
+                    Impact
+                  </h3>
+                </div>
+
+                <div className="space-y-3">
+                  {project.impact.map((item) => (
+                    <div
+                      key={item}
+                      className="flex gap-3"
+                    >
+                      <div
+                        className="
+                          mt-2 h-1.5 w-1.5
+                          shrink-0 rounded-full
+                          bg-signal-400
+                          shadow-[0_0_8px_rgba(45,212,191,0.7)]
+                        "
+                      />
+
+                      <p className="text-sm leading-6 text-white/55">
+                        {item}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Technologies */}
+          <section className="mt-14">
+            <SectionLabel number="04">
+              Technology & Capabilities
+            </SectionLabel>
+
+            <div className="flex flex-wrap gap-2">
+              {project.technologies.map((technology) => (
+                <span
+                  key={technology}
+                  className="
+                    rounded-full border border-white/[0.08]
+                    bg-white/[0.025]
+                    px-3.5 py-2
+                    font-mono text-[10px]
+                    uppercase tracking-[0.12em]
+                    text-white/45
+                    transition
+                    hover:border-signal-400/25
+                    hover:bg-signal-400/[0.05]
+                    hover:text-signal-300
+                  "
+                >
+                  {technology}
+                </span>
+              ))}
+            </div>
+          </section>
+
+          {/* External links */}
+          {(project.liveUrl || project.sourceUrl) && (
+            <section className="mt-12 flex flex-wrap gap-3">
+              {project.liveUrl && (
+                <a
+                  href={project.liveUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="
+                    inline-flex items-center gap-2
+                    rounded-xl border border-signal-400/20
+                    bg-signal-400/[0.07]
+                    px-4 py-3 text-xs font-medium
+                    text-signal-300 transition
+                    hover:border-signal-400/35
+                    hover:bg-signal-400/[0.1]
+                  "
+                >
+                  <ExternalLink size={14} />
+                  Live Project
+                </a>
+              )}
+
+              {project.sourceUrl && (
+                <a
+                  href={project.sourceUrl}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="
+                    inline-flex items-center gap-2
+                    rounded-xl border border-white/10
+                    bg-white/[0.03]
+                    px-4 py-3 text-xs font-medium
+                    text-white/60 transition
+                    hover:border-white/20
+                    hover:bg-white/[0.06]
+                    hover:text-white
+                  "
+                >
+                  <Github size={14} />
+                  Repository
+                </a>
+              )}
+            </section>
+          )}
+
+          {project.id === "magic-ai" && (
+            <div
+              className="
+                mt-12 flex items-start gap-3
+                rounded-2xl border border-white/[0.06]
+                bg-white/[0.02] p-4
+              "
+            >
+              <LockKeyhole
+                size={15}
+                className="mt-0.5 shrink-0 text-white/30"
+              />
+
+              <p className="text-xs leading-6 text-white/35">
+                This case study presents a high-level view of an internal
+                enterprise system. Sensitive infrastructure, credentials,
+                internal addresses and confidential implementation details
+                are intentionally excluded.
+              </p>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                               PROJECT CARD                                 */
+/* -------------------------------------------------------------------------- */
+
+function ProjectCard({
+  project,
+  index,
+  onOpen,
+}: {
+  project: PortfolioProject;
+  index: number;
+  onOpen: () => void;
+}) {
+  return (
+    <motion.article
+      initial={{
+        opacity: 0,
+        y: 26,
+      }}
+      whileInView={{
+        opacity: 1,
+        y: 0,
+      }}
+      viewport={{
+        once: true,
+        amount: 0.18,
+      }}
+      transition={{
+        duration: 0.55,
+        delay: index * 0.06,
+      }}
+      className="
+        group relative overflow-hidden
+        rounded-[26px]
+        border border-white/[0.075]
+        bg-[#07101a]/75
+        backdrop-blur-xl
+        transition duration-500
+        hover:-translate-y-1
+        hover:border-signal-400/20
+      "
+    >
+      {/* Ambient card glow */}
+      <div
+        className="
+          pointer-events-none absolute
+          -right-20 -top-20
+          h-52 w-52 rounded-full
+          bg-signal-400/[0.035]
+          blur-[70px]
+          transition duration-500
+          group-hover:bg-signal-400/[0.06]
+        "
+      />
+
+      <div className="relative p-5 sm:p-7">
+        {/* Meta */}
+        <div className="flex items-start justify-between gap-4">
+          <div className="flex flex-wrap items-center gap-2">
+            <div
+              className="
+                inline-flex items-center gap-2
+                rounded-full border border-white/[0.08]
+                bg-white/[0.025]
+                px-3 py-1.5
+              "
+            >
+              <span
+                className={`h-1.5 w-1.5 rounded-full ${statusDot(
+                  project.status,
+                )}`}
+              />
+
+              <span
+                className="
+                  text-[9px] font-semibold uppercase
+                  tracking-[0.15em] text-white/45
+                "
+              >
+                {statusLabel(project.status)}
+              </span>
+            </div>
+
+            <span className="font-mono text-[10px] text-white/25">
+              {project.year}
+            </span>
+          </div>
+
+          <span
+            className="
+              font-mono text-xs tracking-[0.18em]
+              text-white/18
+            "
+          >
+            {String(index + 1).padStart(2, "0")}
+          </span>
+        </div>
+
+        {/* Heading */}
+        <div className="mt-7">
+          <p
+            className="
+              text-[10px] font-semibold uppercase
+              tracking-[0.2em]
+              text-signal-400/65
+            "
+          >
+            {project.category}
+          </p>
+
+          <h3
+            className="
+              mt-2 font-display text-2xl
+              font-semibold tracking-[-0.03em]
+              text-white sm:text-3xl
+            "
+          >
+            {project.name}
+          </h3>
+
+          <p
+            className="
+              mt-4 max-w-2xl text-sm
+              leading-7 text-white/48
+            "
+          >
+            {project.description}
+          </p>
+        </div>
+
+        {/* Metrics */}
+        <div className="mt-7">
+          <ProjectMetrics project={project} />
+        </div>
+
+        {/* Tech preview */}
+        <div className="mt-6 flex flex-wrap gap-2">
+          {project.technologies.slice(0, 5).map((technology) => (
+            <span
+              key={technology}
+              className="
+                rounded-full border border-white/[0.07]
+                bg-white/[0.02]
+                px-3 py-1.5
+                font-mono text-[9px]
+                uppercase tracking-[0.1em]
+                text-white/35
+              "
+            >
+              {technology}
+            </span>
+          ))}
+
+          {project.technologies.length > 5 && (
+            <span
+              className="
+                rounded-full border border-white/[0.05]
+                px-3 py-1.5
+                font-mono text-[9px]
+                text-white/25
+              "
+            >
+              +{project.technologies.length - 5}
+            </span>
+          )}
+        </div>
+
+        {/* CTA */}
+        <button
+          type="button"
+          onClick={onOpen}
+          className="
+            mt-8 flex w-full items-center
+            justify-between rounded-2xl
+            border border-white/[0.075]
+            bg-white/[0.025]
+            px-4 py-3.5
+            text-left transition
+            hover:border-signal-400/25
+            hover:bg-signal-400/[0.045]
+          "
+        >
+          <span
+            className="
+              text-[10px] font-semibold uppercase
+              tracking-[0.18em]
+              text-white/55
+            "
+          >
+            View Case Study
+          </span>
+
+          <ArrowUpRight
+            size={16}
+            className="
+              text-signal-400
+              transition-transform duration-300
+              group-hover:translate-x-0.5
+              group-hover:-translate-y-0.5
+            "
+          />
+        </button>
+      </div>
+    </motion.article>
+  );
+}
+
+/* -------------------------------------------------------------------------- */
+/*                              MAIN COMPONENT                                */
+/* -------------------------------------------------------------------------- */
+
+export default function Projects() {
+  const [selectedProject, setSelectedProject] =
+    useState<PortfolioProject | null>(null);
+
+  const [activeCategory, setActiveCategory] =
+    useState("All");
+
+  const categories = useMemo(() => {
+    return [
+      "All",
+      ...Array.from(
+        new Set(
+          portfolioProjects.map(
+            (project) => project.category,
+          ),
+        ),
+      ),
+    ];
+  }, []);
+
+  const visibleProjects = useMemo(() => {
+    if (activeCategory === "All") {
+      return portfolioProjects;
+    }
+
+    return portfolioProjects.filter(
+      (project) =>
+        project.category === activeCategory,
+    );
+  }, [activeCategory]);
+
+  return (
+    <>
+      <section
+        id="projects"
+        className="
+          relative overflow-hidden
+          px-5 py-24
+          sm:px-8
+          lg:px-10 lg:py-32
+        "
+      >
+        {/* Background treatment */}
+        <div
+          className="
+            pointer-events-none absolute
+            left-1/2 top-20
+            h-[420px] w-[70%]
+            -translate-x-1/2
+            rounded-full
+            bg-signal-400/[0.025]
+            blur-[120px]
+          "
+        />
+
+        <div className="relative mx-auto max-w-7xl">
+          {/* Section heading */}
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 20,
+            }}
+            whileInView={{
+              opacity: 1,
+              y: 0,
+            }}
+            viewport={{
+              once: true,
+              amount: 0.5,
+            }}
+            transition={{
+              duration: 0.55,
+            }}
+            className="
+              grid gap-6
+              lg:grid-cols-[0.8fr_1.2fr]
+              lg:items-end
+            "
+          >
+            <div>
+              <div className="flex items-center gap-3">
+                <Code2
+                  size={16}
+                  className="text-signal-400"
+                />
+
+                <p
+                  className="
+                    font-mono text-[10px]
+                    uppercase tracking-[0.24em]
+                    text-signal-400/70
+                  "
+                >
+                  Selected Work
                 </p>
               </div>
 
-              <p className="relative mt-4 text-sm leading-7 text-mist-300">
-                {project.outcome}
+              <h2
+                className="
+                  mt-4 max-w-xl font-display
+                  text-4xl font-semibold
+                  tracking-[-0.04em]
+                  text-white
+                  sm:text-5xl
+                "
+              >
+                Systems built around
+                <span className="text-signal-400">
+                  {" "}
+                  AI, data & automation.
+                </span>
+              </h2>
+            </div>
+
+            <div className="lg:pb-1">
+              <p
+                className="
+                  max-w-2xl text-sm leading-7
+                  text-white/45
+                  sm:text-base
+                "
+              >
+                A selection of practical systems and products
+                covering enterprise AI, recruitment technology
+                and interactive application development.
               </p>
-            </motion.div>
-          </div>
-
-          {/* =================================================
-              CONTRIBUTIONS
-          ================================================== */}
-
-          <motion.div
-            whileHover={{
-              borderColor:
-                "rgba(255,255,255,0.1)",
-            }}
-            transition={{
-              duration: 0.25,
-            }}
-            className="
-              mt-5 rounded-2xl
-              border border-white/[0.06]
-              bg-white/[0.018]
-              p-5 sm:p-6
-            "
-          >
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-mist-500">
-              My Contribution
-            </p>
-
-            <ul className="mt-5 grid gap-3 lg:grid-cols-2">
-              {project.contributions.map(
-                (
-                  contribution,
-                  contributionIndex
-                ) => (
-                  <motion.li
-                    key={`${project.title}-${contributionIndex}`}
-                    whileHover={{
-                      x: 4,
-                      backgroundColor:
-                        "rgba(255,255,255,0.018)",
-                      borderColor:
-                        "rgba(255,255,255,0.05)",
-                    }}
-                    transition={{
-                      duration: 0.22,
-                    }}
-                    className="
-                      flex gap-3 rounded-xl
-                      border border-transparent p-2
-                      text-sm leading-6 text-mist-300
-                    "
-                  >
-                    <motion.span
-                      whileHover={{
-                        scale: 1.1,
-                        rotate: 5,
-                      }}
-                      className="
-                        mt-0.5 flex h-5 w-5 shrink-0
-                        items-center justify-center rounded-full
-                        border border-signal-400/15
-                        bg-signal-400/[0.04]
-                        text-signal-300
-                      "
-                    >
-                      <Check
-                        size={11}
-                        aria-hidden="true"
-                      />
-                    </motion.span>
-
-                    <span>{contribution}</span>
-                  </motion.li>
-                )
-              )}
-            </ul>
+            </div>
           </motion.div>
 
-          {/* =================================================
-              TECHNOLOGY TAGS
-          ================================================== */}
+          {/* Filters */}
+          <div
+            className="
+              mt-10 flex gap-2 overflow-x-auto
+              pb-2 [scrollbar-width:none]
+              [&::-webkit-scrollbar]:hidden
+            "
+          >
+            {categories.map((category) => {
+              const active =
+                category === activeCategory;
 
-          <div className="mt-7">
-            <p className="font-mono text-[10px] uppercase tracking-[0.2em] text-mist-500">
-              Technology &amp; Capabilities
-            </p>
-
-            <div className="mt-3 flex flex-wrap gap-2">
-              {project.tags.map((tag) => (
-                <motion.span
-                  key={tag}
-                  whileHover={{
-                    y: -3,
-                    scale: 1.035,
-                  }}
-                  transition={{
-                    duration: 0.2,
-                  }}
-                  className="
-                    rounded-full border border-white/[0.07]
-                    bg-white/[0.025]
-                    px-3 py-1.5
-                    font-mono text-[10px] text-mist-300
-                    transition-colors duration-300
-                    hover:border-signal-400/30
-                    hover:bg-signal-400/[0.05]
-                    hover:text-signal-300
-                    hover:shadow-[0_0_16px_rgba(45,212,191,0.06)]
-                  "
+              return (
+                <button
+                  key={category}
+                  type="button"
+                  onClick={() =>
+                    setActiveCategory(category)
+                  }
+                  className={`
+                    shrink-0 rounded-full
+                    border px-4 py-2
+                    text-[10px] font-semibold
+                    uppercase tracking-[0.14em]
+                    transition
+                    ${
+                      active
+                        ? "border-signal-400/30 bg-signal-400/[0.08] text-signal-300"
+                        : "border-white/[0.07] bg-white/[0.02] text-white/35 hover:border-white/15 hover:text-white/60"
+                    }
+                  `}
                 >
-                  {tag}
-                </motion.span>
-              ))}
-            </div>
+                  {category}
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Project cards */}
+          <div
+            className="
+              mt-8 grid gap-5
+              lg:grid-cols-2
+            "
+          >
+            <AnimatePresence mode="popLayout">
+              {visibleProjects.map(
+                (project, index) => (
+                  <ProjectCard
+                    key={project.id}
+                    project={project}
+                    index={index}
+                    onOpen={() =>
+                      setSelectedProject(project)
+                    }
+                  />
+                ),
+              )}
+            </AnimatePresence>
+          </div>
+
+          {/* Bottom note */}
+          <div
+            className="
+              mt-8 flex items-center
+              justify-center gap-2
+              text-center
+            "
+          >
+            <Network
+              size={13}
+              className="text-white/20"
+            />
+
+            <p
+              className="
+                text-[10px] uppercase
+                tracking-[0.14em]
+                text-white/22
+              "
+            >
+              Open a project to explore its architecture,
+              contribution and impact
+            </p>
           </div>
         </div>
-      </PremiumCard>
-    </motion.article>
+      </section>
+
+      <AnimatePresence>
+        {selectedProject && (
+          <CaseStudyModal
+            key={selectedProject.id}
+            project={selectedProject}
+            onClose={() =>
+              setSelectedProject(null)
+            }
+          />
+        )}
+      </AnimatePresence>
+    </>
   );
 }
