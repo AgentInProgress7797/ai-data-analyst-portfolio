@@ -88,20 +88,35 @@ export type SkillCategory = {
 
 export const skillGroups: SkillCategory[] = [
   {
-    category: "Enterprise AI & Automation",
+    category: "AI & LLM Systems",
     skills: [
       "Generative AI",
-      "Agentic AI",
+      "LLMs",
       "OpenAI",
       "Anthropic Claude",
       "OpenClaw",
+      "OpenRouter",
       "Prompt Engineering",
-      "Workflow Automation",
-      "AI Security & Governance",
+      "Model Routing",
     ],
   },
+
   {
-    category: "Data Analytics & Intelligence",
+    category: "AI Agents & Automation",
+    skills: [
+      "Agentic AI",
+      "AI Agents",
+      "Multi-Agent Workflows",
+      "Tool Calling",
+      "Workflow Automation",
+      "Model Fallback",
+      "Session Management",
+      "Tool Integration",
+    ],
+  },
+
+  {
+    category: "Data Analytics & Business Intelligence",
     skills: [
       "SQL",
       "Python",
@@ -111,28 +126,49 @@ export const skillGroups: SkillCategory[] = [
       "ETL",
       "Data Validation",
       "KPI Dashboarding",
+      "MIS Reporting",
+      "Management Reporting",
     ],
   },
+
   {
-    category: "Enterprise Systems & Reporting",
+    category: "Enterprise Systems & Integration",
     skills: [
       "Salesforce SFDC",
       "SAP ERP",
       "CRM Analytics",
-      "MIS Reporting",
-      "Management Reporting",
-      "Stakeholder Reporting",
+      "APIs",
+      "WebSocket",
+      "Internal Applications",
+      "Enterprise AI Assistants",
+      "Business Workflows",
     ],
   },
+
   {
-    category: "Business Analysis",
+    category: "AI Infrastructure & Operations",
     skills: [
-      "CSAT Analysis",
-      "NPS Analysis",
-      "Root Cause Analysis",
-      "Process Improvement",
-      "Requirements Analysis",
-      "Cross-Functional Collaboration",
+      "Enterprise Deployment",
+      "Local AI Models",
+      "Cloud AI Models",
+      "Multi-Model Configuration",
+      "Model Routing",
+      "Automatic Fallback",
+      "Token Optimization",
+      "Session Configuration",
+    ],
+  },
+
+  {
+    category: "AI Security & Access",
+    skills: [
+      "AI Security & Governance",
+      "Authentication",
+      "Access Control",
+      "Workspace Permissions",
+      "Role-Based Access",
+      "Secure File Access",
+      "Session Controls",
     ],
   },
 ];
@@ -547,5 +583,5 @@ export const seo = {
   description:
     "Portfolio of Ashish Pawar, an AI Data Analyst working across enterprise AI, Generative AI, data analytics, dashboards, business intelligence and workflow automation.",
 
-  url: "https://ai-data-analyst-portfolio.vercel.app",
+  url: "",
 };

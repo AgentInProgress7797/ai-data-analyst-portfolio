@@ -9,58 +9,77 @@ const categoryMeta: Record<
     description: string;
   }
 > = {
-  "Enterprise AI & Automation": {
+  "AI & LLM Systems": {
     number: "01",
     description:
-      "Designing practical AI workflows, agent-based systems, and secure automation for enterprise use cases.",
+      "Working with Generative AI and large language models for internal applications, business workflows and enterprise use cases.",
   },
 
-  "Data Analytics & Intelligence": {
+  "AI Agents & Automation": {
     number: "02",
     description:
-      "Transforming complex data into reliable dashboards, management insights, and decision-ready reporting.",
+      "Building agent-based workflows where AI can use tools, follow defined processes and support multi-step business tasks.",
   },
 
-  "Enterprise Systems & Reporting": {
+  "Data Analytics & Business Intelligence": {
     number: "03",
     description:
-      "Working across business systems and reporting environments to connect operational data with stakeholder needs.",
+      "Using data from business systems to build dashboards, reports and analysis that support day-to-day and management decisions.",
   },
 
-  "Business Analysis": {
+  "Enterprise Systems & Integration": {
     number: "04",
     description:
-      "Understanding processes, identifying performance gaps, and translating business requirements into usable solutions.",
+      "Connecting AI and analytics solutions with internal applications, APIs, enterprise platforms and existing business processes.",
+  },
+
+  "AI Infrastructure & Operations": {
+    number: "05",
+    description:
+      "Working with AI deployment, model routing, local and cloud models, session configuration and the operational side of running AI systems.",
+  },
+
+  "AI Security & Access": {
+    number: "06",
+    description:
+      "Managing authentication, permissions, access controls and governance requirements for internal AI environments.",
   },
 };
 
 export default function Skills() {
   return (
     <section id="skills" className="section relative z-10">
-      {/* Section heading */}
+      {/* =====================================================
+          SECTION HEADING
+      ====================================================== */}
+
       <Reveal>
         <p className="eyebrow">Technical Expertise</p>
       </Reveal>
 
       <Reveal delay={0.05}>
         <h2 className="mt-3 max-w-3xl text-3xl font-semibold leading-tight text-white sm:text-4xl">
-          The technologies and capabilities behind my work.
+          The technical areas behind the systems I work on.
         </h2>
       </Reveal>
 
       <Reveal delay={0.1}>
         <p className="mt-5 max-w-2xl text-base leading-7 text-mist-400">
-          My experience combines enterprise AI, analytics, reporting, and
-          business process understanding. I use these capabilities to build
-          solutions that are practical, maintainable, and useful to the people
-          working with them.
+          My work covers AI, data, automation and enterprise systems. Depending
+          on the problem, that can mean working with an LLM, building an agent
+          workflow, analysing business data, connecting an internal system or
+          handling the infrastructure and access needed to run it reliably.
         </p>
       </Reveal>
 
-      {/* Skills grid */}
+      {/* =====================================================
+          SKILLS GRID
+      ====================================================== */}
+
       <div className="mt-12 grid gap-5 sm:grid-cols-2">
         {skillGroups.map((group, index) => {
           const meta = categoryMeta[group.category];
+
           const capabilityNumber =
             meta?.number ?? String(index + 1).padStart(2, "0");
 
@@ -76,7 +95,10 @@ export default function Skills() {
                 tiltAmount={1.8}
                 className="group h-full rounded-2xl p-6"
               >
-                {/* Hover glow */}
+                {/* =================================================
+                    TOP HOVER GLOW
+                ================================================== */}
+
                 <div
                   className="
                     pointer-events-none absolute
@@ -91,7 +113,10 @@ export default function Skills() {
                   aria-hidden="true"
                 />
 
-                {/* Secondary lower glow */}
+                {/* =================================================
+                    LOWER AMBIENT GLOW
+                ================================================== */}
+
                 <div
                   className="
                     pointer-events-none absolute
@@ -104,7 +129,10 @@ export default function Skills() {
                 />
 
                 <div className="relative flex h-full flex-col">
-                  {/* Header */}
+                  {/* ===============================================
+                      CARD HEADER
+                  ================================================ */}
+
                   <div className="flex items-start justify-between gap-5">
                     <div>
                       <p className="font-mono text-[11px] uppercase tracking-[0.24em] text-signal-400/70">
@@ -130,17 +158,26 @@ export default function Skills() {
                     </span>
                   </div>
 
-                  {/* Category description */}
+                  {/* ===============================================
+                      DESCRIPTION
+                  ================================================ */}
+
                   {meta?.description && (
                     <p className="mt-4 max-w-xl text-sm leading-6 text-mist-500">
                       {meta.description}
                     </p>
                   )}
 
-                  {/* Divider */}
+                  {/* ===============================================
+                      DIVIDER
+                  ================================================ */}
+
                   <div className="my-5 h-px bg-gradient-to-r from-signal-400/20 via-white/[0.06] to-transparent" />
 
-                  {/* Skills */}
+                  {/* ===============================================
+                      SKILLS
+                  ================================================ */}
+
                   <div className="flex flex-wrap gap-2">
                     {group.skills.map((skill) => (
                       <span
@@ -165,7 +202,10 @@ export default function Skills() {
                     ))}
                   </div>
 
-                  {/* Bottom status row */}
+                  {/* ===============================================
+                      STATUS ROW
+                  ================================================ */}
+
                   <div className="mt-auto pt-6">
                     <div className="flex items-center justify-between border-t border-white/[0.05] pt-4">
                       <span className="font-mono text-[10px] uppercase tracking-[0.18em] text-mist-600">
@@ -177,6 +217,7 @@ export default function Skills() {
                           className="h-1.5 w-1.5 rounded-full bg-signal-400 shadow-[0_0_7px_rgba(94,234,212,0.7)]"
                           aria-hidden="true"
                         />
+
                         Active
                       </span>
                     </div>
