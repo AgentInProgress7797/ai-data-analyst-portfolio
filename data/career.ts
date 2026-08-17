@@ -18,188 +18,217 @@ export type CareerMilestone = {
 
 export const careerMilestones: CareerMilestone[] = [
   {
-    id: "data-foundation",
-    year: "2022",
+    id: "operational-analytics",
+
+    year: "2019",
+
     period: "Foundation",
-    category: "Data Intelligence",
-    title: "Analytics & Data Foundation",
-    organisation: "Enterprise Analytics Journey",
+
+    category: "Operational Analytics",
+
+    title: "Building the Data Foundation",
+
+    organisation: "Teleperformance",
+
     summary:
-      "Started by working with business data, reports and dashboards, gradually building a practical understanding of how data supports everyday decisions.",
+      "My early work was closely tied to day-to-day operations. I worked with collection performance, repayment data, reporting and team-level metrics, which gave me a practical understanding of how data is actually used by business teams.",
+
     impact: [
-      "Learned how to break business questions into clear data and reporting requirements.",
-      "Worked with structured data, reporting workflows and operational insights.",
-      "Improved my skills in cleaning, organizing and presenting data clearly.",
+      "Built recurring MIS reports and performance views for operational teams.",
+
+      "Worked with repayment, delinquency and call-centre data to understand performance gaps.",
+
+      "Used reporting and root cause analysis to support process and team improvements.",
+
+      "Developed a strong understanding of how operational data connects with business decisions.",
     ],
+
     technologies: [
-      "Python",
-      "SQL",
       "Excel",
-      "Power BI",
-      "Data Analytics",
+      "MIS Reporting",
+      "Data Analysis",
+      "KPI Tracking",
+      "Root Cause Analysis",
     ],
+
     metrics: [
       {
-        value: "5+",
-        label: "Core Technologies",
+        value: "Ops",
+        label: "Business Context",
       },
+
       {
-        value: "BI",
-        label: "Reporting Focus",
+        value: "KPI",
+        label: "Performance Focus",
       },
+
       {
         value: "Data",
         label: "Decision Support",
       },
     ],
   },
+
   {
-    id: "enterprise-bi",
+    id: "business-intelligence",
+
     year: "2023",
-    period: "Enterprise Growth",
+
+    period: "BI & Reporting",
+
     category: "Business Intelligence",
-    title: "Enterprise BI & Reporting",
-    organisation: "Business Intelligence Systems",
+
+    title: "Moving into Enterprise Reporting & BI",
+
+    organisation: "Tata Capital",
+
     summary:
-      "Moved into business reporting and dashboard development, with a stronger focus on making operational information easier to understand and use.",
+      "I moved deeper into structured analytics and enterprise reporting, working with data from CRM, Salesforce and SAP environments and turning it into dashboards, MIS reports and management-ready information.",
+
     impact: [
-      "Translated business requirements into practical dashboards and reports.",
-      "Made operational and management information easier for teams to review.",
-      "Supported teams through clearer reporting and performance visibility.",
+      "Built KPI dashboards and recurring management reports for business reviews.",
+
+      "Worked with SQL, Python, Power BI, Tableau and Advanced Excel for reporting and analysis.",
+
+      "Validated and consolidated information from multiple enterprise systems before publishing reports.",
+
+      "Supported CSAT, NPS and ad-hoc analysis alongside recurring reporting requirements.",
     ],
+
     technologies: [
-      "Power BI",
       "SQL",
-      "Excel",
-      "Dashboards",
-      "Data Visualization",
+      "Python",
+      "Power BI",
+      "Tableau",
+      "Advanced Excel",
+      "Salesforce",
+      "SAP ERP",
     ],
+
     metrics: [
-      {
-        value: "360°",
-        label: "Business Visibility",
-      },
       {
         value: "BI",
-        label: "Dashboard Systems",
+        label: "Reporting Systems",
       },
+
+      {
+        value: "SQL",
+        label: "Data Analysis",
+      },
+
       {
         value: "KPI",
-        label: "Performance Tracking",
+        label: "Management Visibility",
       },
     ],
   },
+
   {
-    id: "intelligent-automation",
-    year: "2024",
-    period: "Automation",
-    category: "Intelligent Systems",
-    title: "AI & Process Automation",
-    organisation: "Enterprise Automation Initiatives",
-    summary:
-      "Started combining analytics with automation to reduce repetitive work and make internal processes more efficient.",
-    impact: [
-      "Tested AI-assisted workflows for practical internal use cases.",
-      "Automated repetitive operational and reporting activities.",
-      "Worked on connecting reporting, business processes and automation tools.",
-    ],
-    technologies: [
-      "Python",
-      "Automation",
-      "APIs",
-      "Machine Learning",
-      "Workflow Design",
-    ],
-    metrics: [
-      {
-        value: "AI",
-        label: "Workflow Enablement",
-      },
-      {
-        value: "API",
-        label: "System Integration",
-      },
-      {
-        value: "Auto",
-        label: "Process Improvement",
-      },
-    ],
-  },
-  {
-    id: "magic-ai",
-    year: "2025",
+    id: "enterprise-ai",
+
+    year: "2026",
+
     period: "Enterprise AI",
+
     category: "Generative AI",
-    title: "Magic AI Enterprise Platform",
-    organisation: "Reliance Infrastructure Limited",
+
+    title: "Applying AI Inside Enterprise Workflows",
+
+    organisation: "Reliance Infrastructure",
+
     summary:
-      "Managed and improved Magic AI, an internal assistant used by multiple departments for document work, queries, drafting and day-to-day productivity.",
+      "My current work extends beyond reporting into enterprise AI. I work on internal AI systems, model configuration, user access, departmental workspaces, integrations and the operational issues that come with running AI for real users.",
+
     impact: [
-      "Helped employees across departments start using generative AI in their regular work.",
-      "Managed user access, departmental workspaces, onboarding and usage support.",
-      "Worked on model configuration, authentication, security controls and internal integrations.",
-      "Prepared simple user guides and internal mailers for non-technical employees.",
+      "Supported an internal AI assistant used across multiple business departments.",
+
+      "Worked with Generative AI models, model routing, fallback behaviour and session configuration.",
+
+      "Managed departmental workspaces, user access and permissions for internal AI use cases.",
+
+      "Worked through practical production issues involving authentication, connectivity, configuration and AI provider availability.",
     ],
+
     technologies: [
-      "Claude",
-      "OpenRouter",
       "OpenClaw",
+      "Anthropic Claude",
+      "OpenRouter",
+      "LLMs",
       "Docker",
-      "LDAP",
-      "WordPress",
       "WebSocket",
+      "Authentication",
+      "Model Routing",
     ],
+
     metrics: [
       {
         value: "40+",
         label: "Active Users",
       },
+
       {
         value: "6+",
         label: "Departments",
       },
+
       {
-        value: "24/7",
+        value: "24×7",
         label: "AI Availability",
       },
     ],
   },
+
   {
-    id: "agentic-ai",
-    year: "2026",
-    period: "Current Focus",
-    category: "Agentic Intelligence",
-    title: "AI Agents & Intelligent Automation",
-    organisation: "AI Data Analytics & Intelligent Automation",
+    id: "agentic-automation",
+
+    year: "Now",
+
+    period: "Current Direction",
+
+    category: "Agentic AI & Automation",
+
+    title: "From AI Assistance to Intelligent Workflows",
+
+    organisation: "Applied AI & Automation",
+
     summary:
-      "Currently focusing on AI agents, secure integrations, automation and internal tools that can solve practical business problems.",
+      "My current direction is toward AI agents, tool-enabled workflows and practical automation. The focus is not simply on adding AI to a process, but on understanding where an agent, model, API or automated workflow can genuinely remove friction from business work.",
+
     impact: [
-      "Exploring AI agents for HR, internal support and departmental workflows.",
-      "Working on ideas for AI-assisted recruitment, candidate matching and HR workflows.",
-      "Studying how AI platforms can connect securely with internal applications and data.",
-      "Bringing analytics, automation and generative AI together in usable internal solutions.",
+      "Working on AI-assisted recruitment and candidate-matching workflows.",
+
+      "Exploring agent-based approaches for internal support and department-specific business processes.",
+
+      "Combining AI models, APIs, tools and business logic into practical workflows.",
+
+      "Continuing to build on my analytics background while moving deeper into applied and agentic AI.",
     ],
+
     technologies: [
       "Agentic AI",
+      "AI Agents",
       "LLMs",
+      "APIs",
+      "Tool Calling",
+      "Workflow Automation",
       "Next.js",
       "Docker",
-      "AI Agents",
-      "RAG",
-      "Enterprise AI",
     ],
+
     metrics: [
-      {
-        value: "LLM",
-        label: "Intelligence Layer",
-      },
       {
         value: "AI",
         label: "Agent Workflows",
       },
+
+      {
+        value: "API",
+        label: "Integration",
+      },
+
       {
         value: "Next",
-        label: "Innovation Focus",
+        label: "Current Focus",
       },
     ],
   },

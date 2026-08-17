@@ -4,12 +4,12 @@ import {
   Check,
   Clock3,
   Copy,
+  Github,
   Linkedin,
   Mail,
   MapPin,
   Phone,
   Send,
-  Github,
   Sparkles,
 } from "lucide-react";
 
@@ -22,20 +22,35 @@ import { personal } from "@/data/profile";
 import PremiumCard from "@/components/PremiumCard";
 import Reveal from "@/components/Reveal";
 
+/* =========================================================
+   OPPORTUNITY AREAS
+========================================================= */
+
 const opportunityAreas = [
+  "Applied AI",
   "Enterprise AI",
-  "Generative AI",
-  "Data Analytics",
-  "Business Intelligence",
-  "Intelligent Automation",
+  "Agentic AI",
+  "Data & BI",
+  "AI Automation",
 ];
 
+/* =========================================================
+   CONTACT COMPONENT
+========================================================= */
+
 export default function Contact() {
-  const [emailCopied, setEmailCopied] = useState(false);
+  const [emailCopied, setEmailCopied] =
+    useState(false);
+
+  /* =======================================================
+     COPY EMAIL
+  ======================================================== */
 
   async function copyEmail() {
     try {
-      await navigator.clipboard.writeText(personal.email);
+      await navigator.clipboard.writeText(
+        personal.email,
+      );
 
       setEmailCopied(true);
 
@@ -47,17 +62,35 @@ export default function Contact() {
     }
   }
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  /* =======================================================
+     CONTACT FORM
+  ======================================================== */
+
+  function handleSubmit(
+    event: FormEvent<HTMLFormElement>,
+  ) {
     event.preventDefault();
 
-    const formData = new FormData(event.currentTarget);
+    const formData = new FormData(
+      event.currentTarget,
+    );
 
-    const name = String(formData.get("name") ?? "").trim();
-    const email = String(formData.get("email") ?? "").trim();
-    const message = String(formData.get("message") ?? "").trim();
+    const name = String(
+      formData.get("name") ?? "",
+    ).trim();
+
+    const email = String(
+      formData.get("email") ?? "",
+    ).trim();
+
+    const message = String(
+      formData.get("message") ?? "",
+    ).trim();
 
     const subject = encodeURIComponent(
-      `Portfolio enquiry from ${name || "a visitor"}`
+      `Portfolio enquiry from ${
+        name || "a visitor"
+      }`,
     );
 
     const body = encodeURIComponent(
@@ -70,11 +103,13 @@ export default function Contact() {
         `Email: ${email}`,
         "",
         "Sent through your portfolio website.",
-      ].join("\n")
+      ].join("\n"),
     );
 
     window.location.href =
-      `mailto:${personal.email}?subject=${subject}&body=${body}`;
+      `mailto:${personal.email}` +
+      `?subject=${subject}` +
+      `&body=${body}`;
   }
 
   return (
@@ -82,52 +117,135 @@ export default function Contact() {
       id="contact"
       className="section relative z-10"
     >
-      {/* Section introduction */}
+      {/* =====================================================
+          SECTION INTRODUCTION
+      ====================================================== */}
+
       <Reveal>
         <p className="eyebrow">Contact</p>
       </Reveal>
 
       <Reveal delay={0.05}>
-        <h2 className="mt-3 max-w-4xl text-3xl font-semibold leading-tight text-white sm:text-4xl lg:text-5xl">
-          Let&apos;s discuss the next meaningful AI or data challenge.
+        <h2
+          className="
+            mt-3 max-w-4xl
+            text-3xl font-semibold
+            leading-tight text-white
+            sm:text-4xl
+            lg:text-5xl
+          "
+        >
+          Have a role, project or problem
+          worth discussing?
         </h2>
       </Reveal>
 
       <Reveal delay={0.1}>
-        <p className="mt-5 max-w-3xl text-base leading-7 text-mist-400 sm:text-lg">
-          I&apos;m open to conversations around enterprise AI, Generative AI,
-          analytics, business intelligence and intelligent automation. Share
-          what you&apos;re building, the problem you&apos;re solving or the
-          opportunity you have in mind.
+        <p
+          className="
+            mt-5 max-w-3xl
+            text-base leading-7
+            text-mist-400
+            sm:text-lg
+          "
+        >
+          I&apos;m open to conversations
+          around AI, data, automation and
+          enterprise technology. If
+          you&apos;re hiring, working on an
+          interesting problem or think my
+          experience could be useful, feel
+          free to reach out.
         </p>
       </Reveal>
 
-      <div className="mt-14 grid items-stretch gap-8 lg:grid-cols-[0.85fr_1.15fr]">
-        {/* Left side */}
+      {/* =====================================================
+          CONTACT GRID
+      ====================================================== */}
+
+      <div
+        className="
+          mt-14 grid
+          items-stretch gap-8
+          lg:grid-cols-[0.85fr_1.15fr]
+        "
+      >
+        {/* ===================================================
+            LEFT COLUMN
+        ==================================================== */}
+
         <div className="grid gap-5">
-          {/* Availability card */}
+          {/* =================================================
+              CURRENT FOCUS
+          ================================================== */}
+
           <Reveal
             delay={0.12}
             className="h-full"
           >
-            <PremiumCard className="group h-full rounded-3xl border border-signal-400/15 p-6 sm:p-7">
+            <PremiumCard
+              className="
+                group h-full
+                rounded-3xl
+                border border-signal-400/15
+                p-6 sm:p-7
+              "
+            >
+              {/* Ambient glow */}
+
               <div
-                className="pointer-events-none absolute -right-20 -top-20 h-52 w-52 rounded-full bg-signal-400/[0.09] blur-3xl opacity-70 transition-opacity duration-500 group-hover:opacity-100"
+                className="
+                  pointer-events-none absolute
+                  -right-20 -top-20
+                  h-52 w-52
+                  rounded-full
+                  bg-signal-400/[0.09]
+                  opacity-70
+                  blur-3xl
+                  transition-opacity duration-500
+                  group-hover:opacity-100
+                "
                 aria-hidden="true"
               />
 
               <div className="relative">
                 <div className="flex items-start justify-between gap-4">
-                  <span className="flex h-11 w-11 items-center justify-center rounded-xl border border-signal-400/20 bg-signal-400/[0.06] text-signal-300">
+                  <span
+                    className="
+                      flex h-11 w-11
+                      items-center justify-center
+                      rounded-xl
+                      border border-signal-400/20
+                      bg-signal-400/[0.06]
+                      text-signal-300
+                    "
+                  >
                     <Sparkles
                       size={19}
                       aria-hidden="true"
                     />
                   </span>
 
-                  <span className="inline-flex items-center gap-2 rounded-full border border-signal-400/20 bg-signal-400/[0.06] px-3 py-1.5 font-mono text-[10px] uppercase tracking-[0.16em] text-signal-300">
+                  <span
+                    className="
+                      inline-flex items-center gap-2
+                      rounded-full
+                      border border-signal-400/20
+                      bg-signal-400/[0.06]
+                      px-3 py-1.5
+                      font-mono text-[10px]
+                      uppercase tracking-[0.16em]
+                      text-signal-300
+                    "
+                  >
                     <span
-                      className="h-1.5 w-1.5 animate-pulse rounded-full bg-signal-400 shadow-[0_0_8px_rgba(94,234,212,0.85)]"
+                      className="
+                        h-1.5 w-1.5
+                        animate-pulse
+                        rounded-full
+                        bg-signal-400
+                        shadow-[0_0_8px_rgba(94,234,212,0.85)]
+                      "
                       aria-hidden="true"
                     />
 
@@ -135,49 +253,135 @@ export default function Contact() {
                   </span>
                 </div>
 
-                <p className="mt-6 font-mono text-[10px] uppercase tracking-[0.22em] text-mist-500">
-                  Professional Conversations
+                <p
+                  className="
+                    mt-6
+                    font-mono text-[10px]
+                    uppercase tracking-[0.22em]
+                    text-mist-500
+                  "
+                >
+                  Current Focus
                 </p>
 
-                <h3 className="mt-2 font-display text-2xl font-semibold leading-tight text-white">
-                  Interested in work that connects AI, data and business value.
+                <h3
+                  className="
+                    mt-2
+                    font-display
+                    text-2xl font-semibold
+                    leading-tight text-white
+                  "
+                >
+                  Open to work around AI,
+                  data and automation.
                 </h3>
 
-                <p className="mt-4 text-sm leading-7 text-mist-300">
-                  I&apos;m particularly interested in roles and collaborations
-                  where technology is used to improve real workflows, reporting
-                  and decision-making.
+                <p
+                  className="
+                    mt-4
+                    text-sm leading-7
+                    text-mist-300
+                  "
+                >
+                  I&apos;m particularly
+                  interested in opportunities
+                  where I can work hands-on
+                  with AI systems, analytics,
+                  automation and enterprise
+                  workflows.
                 </p>
 
+                {/* Opportunity tags */}
+
                 <div className="mt-6 flex flex-wrap gap-2">
-                  {opportunityAreas.map((area) => (
-                    <span
-                      key={area}
-                      className="rounded-full border border-white/[0.07] bg-white/[0.025] px-3 py-1.5 font-mono text-[10px] text-mist-300 transition-all duration-300 hover:-translate-y-0.5 hover:border-signal-400/30 hover:bg-signal-400/[0.06] hover:text-signal-300"
-                    >
-                      {area}
-                    </span>
-                  ))}
+                  {opportunityAreas.map(
+                    (area) => (
+                      <span
+                        key={area}
+                        className="
+                          rounded-full
+                          border border-white/[0.07]
+                          bg-white/[0.025]
+                          px-3 py-1.5
+                          font-mono text-[10px]
+                          text-mist-300
+                          transition-all duration-300
+                          hover:-translate-y-0.5
+                          hover:border-signal-400/30
+                          hover:bg-signal-400/[0.06]
+                          hover:text-signal-300
+                        "
+                      >
+                        {area}
+                      </span>
+                    ),
+                  )}
                 </div>
               </div>
             </PremiumCard>
           </Reveal>
 
-          {/* Contact methods */}
+          {/* =================================================
+              DIRECT CONTACT
+          ================================================== */}
+
           <Reveal delay={0.16}>
-            <PremiumCard className="rounded-3xl border border-white/[0.07] p-6 sm:p-7">
-              <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-mist-500">
+            <PremiumCard
+              className="
+                rounded-3xl
+                border border-white/[0.07]
+                p-6 sm:p-7
+              "
+            >
+              <p
+                className="
+                  font-mono text-[10px]
+                  uppercase tracking-[0.22em]
+                  text-mist-500
+                "
+              >
                 Direct Contact
               </p>
 
-              <h3 className="mt-2 font-display text-xl font-semibold text-white">
-                Choose the channel that works best.
+              <h3
+                className="
+                  mt-2
+                  font-display
+                  text-xl font-semibold
+                  text-white
+                "
+              >
+                Reach me directly.
               </h3>
 
               <div className="mt-6 grid gap-3">
-                {/* Email */}
-                <div className="group flex items-center gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.018] p-4 transition-all duration-300 hover:border-signal-400/20 hover:bg-signal-400/[0.025]">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-signal-400/15 bg-signal-400/[0.05] text-signal-300">
+                {/* ===========================================
+                    EMAIL
+                ============================================ */}
+
+                <div
+                  className="
+                    group flex items-center gap-4
+                    rounded-2xl
+                    border border-white/[0.06]
+                    bg-white/[0.018]
+                    p-4
+                    transition-all duration-300
+                    hover:border-signal-400/20
+                    hover:bg-signal-400/[0.025]
+                  "
+                >
+                  <span
+                    className="
+                      flex h-10 w-10
+                      shrink-0
+                      items-center justify-center
+                      rounded-xl
+                      border border-signal-400/15
+                      bg-signal-400/[0.05]
+                      text-signal-300
+                    "
+                  >
                     <Mail
                       size={18}
                       aria-hidden="true"
@@ -188,11 +392,25 @@ export default function Contact() {
                     href={`mailto:${personal.email}`}
                     className="min-w-0 flex-1"
                   >
-                    <span className="block font-mono text-[10px] uppercase tracking-[0.16em] text-mist-500">
+                    <span
+                      className="
+                        block
+                        font-mono text-[10px]
+                        uppercase tracking-[0.16em]
+                        text-mist-500
+                      "
+                    >
                       Email
                     </span>
 
-                    <span className="mt-1 block truncate text-sm text-mist-200 transition-colors group-hover:text-white">
+                    <span
+                      className="
+                        mt-1 block truncate
+                        text-sm text-mist-200
+                        transition-colors
+                        group-hover:text-white
+                      "
+                    >
                       {personal.email}
                     </span>
                   </a>
@@ -201,7 +419,18 @@ export default function Contact() {
                     type="button"
                     onClick={copyEmail}
                     aria-label="Copy email address"
-                    className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg border border-white/[0.07] text-mist-500 transition-all duration-300 hover:border-signal-400/30 hover:text-signal-300"
+                    data-cursor="interactive"
+                    className="
+                      flex h-9 w-9
+                      shrink-0
+                      items-center justify-center
+                      rounded-lg
+                      border border-white/[0.07]
+                      text-mist-500
+                      transition-all duration-300
+                      hover:border-signal-400/30
+                      hover:text-signal-300
+                    "
                   >
                     {emailCopied ? (
                       <Check
@@ -217,13 +446,39 @@ export default function Contact() {
                   </button>
                 </div>
 
-                {/* Phone */}
+                {/* ===========================================
+                    PHONE
+                ============================================ */}
+
                 {personal.phone && (
                   <a
-                    href={`tel:${personal.phone.replace(/[^+\d]/g, "")}`}
-                    className="group flex items-center gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.018] p-4 transition-all duration-300 hover:border-signal-400/20 hover:bg-signal-400/[0.025]"
+                    href={`tel:${personal.phone.replace(
+                      /[^+\d]/g,
+                      "",
+                    )}`}
+                    data-cursor="interactive"
+                    className="
+                      group flex items-center gap-4
+                      rounded-2xl
+                      border border-white/[0.06]
+                      bg-white/[0.018]
+                      p-4
+                      transition-all duration-300
+                      hover:border-signal-400/20
+                      hover:bg-signal-400/[0.025]
+                    "
                   >
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-signal-400/15 bg-signal-400/[0.05] text-signal-300">
+                    <span
+                      className="
+                        flex h-10 w-10
+                        shrink-0
+                        items-center justify-center
+                        rounded-xl
+                        border border-signal-400/15
+                        bg-signal-400/[0.05]
+                        text-signal-300
+                      "
+                    >
                       <Phone
                         size={18}
                         aria-hidden="true"
@@ -231,25 +486,62 @@ export default function Contact() {
                     </span>
 
                     <span>
-                      <span className="block font-mono text-[10px] uppercase tracking-[0.16em] text-mist-500">
+                      <span
+                        className="
+                          block
+                          font-mono text-[10px]
+                          uppercase tracking-[0.16em]
+                          text-mist-500
+                        "
+                      >
                         Phone
                       </span>
 
-                      <span className="mt-1 block text-sm text-mist-200 transition-colors group-hover:text-white">
+                      <span
+                        className="
+                          mt-1 block
+                          text-sm text-mist-200
+                          transition-colors
+                          group-hover:text-white
+                        "
+                      >
                         {personal.phone}
                       </span>
                     </span>
                   </a>
                 )}
 
-                {/* LinkedIn */}
+                {/* ===========================================
+                    LINKEDIN
+                ============================================ */}
+
                 <a
                   href={personal.linkedin}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.018] p-4 transition-all duration-300 hover:border-signal-400/20 hover:bg-signal-400/[0.025]"
+                  data-cursor="interactive"
+                  className="
+                    group flex items-center gap-4
+                    rounded-2xl
+                    border border-white/[0.06]
+                    bg-white/[0.018]
+                    p-4
+                    transition-all duration-300
+                    hover:border-signal-400/20
+                    hover:bg-signal-400/[0.025]
+                  "
                 >
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-signal-400/15 bg-signal-400/[0.05] text-signal-300">
+                  <span
+                    className="
+                      flex h-10 w-10
+                      shrink-0
+                      items-center justify-center
+                      rounded-xl
+                      border border-signal-400/15
+                      bg-signal-400/[0.05]
+                      text-signal-300
+                    "
+                  >
                     <Linkedin
                       size={18}
                       aria-hidden="true"
@@ -257,43 +549,121 @@ export default function Contact() {
                   </span>
 
                   <span>
-                    <span className="block font-mono text-[10px] uppercase tracking-[0.16em] text-mist-500">
+                    <span
+                      className="
+                        block
+                        font-mono text-[10px]
+                        uppercase tracking-[0.16em]
+                        text-mist-500
+                      "
+                    >
                       LinkedIn
                     </span>
 
-                    <span className="mt-1 block text-sm text-mist-200 transition-colors group-hover:text-white">
-                      Connect professionally
+                    <span
+                      className="
+                        mt-1 block
+                        text-sm text-mist-200
+                        transition-colors
+                        group-hover:text-white
+                      "
+                    >
+                      View my professional
+                      profile
                     </span>
                   </span>
                 </a>
-                {/* GitHub */}
-<a
-  href={personal.github}
-  target="_blank"
-  rel="noopener noreferrer"
-  data-cursor="interactive"
-  className="group flex items-center gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.018] p-4 transition-all duration-300 hover:border-signal-400/20 hover:bg-signal-400/[0.025]"
->
-  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-signal-400/15 bg-signal-400/[0.05] text-signal-300 transition-all duration-300 group-hover:border-signal-400/30 group-hover:bg-signal-400/[0.08]">
-    <Github
-      size={18}
-      aria-hidden="true"
-    />
-  </span>
 
-  <span>
-    <span className="block font-mono text-[10px] uppercase tracking-[0.16em] text-mist-500">
-      GitHub
-    </span>
+                {/* ===========================================
+                    GITHUB
+                ============================================ */}
 
-    <span className="mt-1 block text-sm text-mist-200 transition-colors group-hover:text-white">
-      Explore my code and projects
-    </span>
-  </span>
-</a>
-                {/* Location */}
-                <div className="flex items-center gap-4 rounded-2xl border border-white/[0.06] bg-white/[0.018] p-4">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-white/[0.08] bg-white/[0.025] text-mist-300">
+                <a
+                  href={personal.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  data-cursor="interactive"
+                  className="
+                    group flex items-center gap-4
+                    rounded-2xl
+                    border border-white/[0.06]
+                    bg-white/[0.018]
+                    p-4
+                    transition-all duration-300
+                    hover:border-signal-400/20
+                    hover:bg-signal-400/[0.025]
+                  "
+                >
+                  <span
+                    className="
+                      flex h-10 w-10
+                      shrink-0
+                      items-center justify-center
+                      rounded-xl
+                      border border-signal-400/15
+                      bg-signal-400/[0.05]
+                      text-signal-300
+                      transition-all duration-300
+                      group-hover:border-signal-400/30
+                      group-hover:bg-signal-400/[0.08]
+                    "
+                  >
+                    <Github
+                      size={18}
+                      aria-hidden="true"
+                    />
+                  </span>
+
+                  <span>
+                    <span
+                      className="
+                        block
+                        font-mono text-[10px]
+                        uppercase tracking-[0.16em]
+                        text-mist-500
+                      "
+                    >
+                      GitHub
+                    </span>
+
+                    <span
+                      className="
+                        mt-1 block
+                        text-sm text-mist-200
+                        transition-colors
+                        group-hover:text-white
+                      "
+                    >
+                      Explore my code and
+                      projects
+                    </span>
+                  </span>
+                </a>
+
+                {/* ===========================================
+                    LOCATION
+                ============================================ */}
+
+                <div
+                  className="
+                    flex items-center gap-4
+                    rounded-2xl
+                    border border-white/[0.06]
+                    bg-white/[0.018]
+                    p-4
+                  "
+                >
+                  <span
+                    className="
+                      flex h-10 w-10
+                      shrink-0
+                      items-center justify-center
+                      rounded-xl
+                      border border-white/[0.08]
+                      bg-white/[0.025]
+                      text-mist-300
+                    "
+                  >
                     <MapPin
                       size={18}
                       aria-hidden="true"
@@ -301,7 +671,14 @@ export default function Contact() {
                   </span>
 
                   <span>
-                    <span className="block font-mono text-[10px] uppercase tracking-[0.16em] text-mist-500">
+                    <span
+                      className="
+                        block
+                        font-mono text-[10px]
+                        uppercase tracking-[0.16em]
+                        text-mist-500
+                      "
+                    >
                       Location
                     </span>
 
@@ -312,59 +689,141 @@ export default function Contact() {
                 </div>
               </div>
 
-              {/* Response time */}
-              <div className="mt-5 flex items-start gap-3 rounded-2xl border border-signal-400/10 bg-signal-400/[0.025] p-4">
+              {/* ===============================================
+                  RESPONSE TIME
+              ================================================ */}
+
+              <div
+                className="
+                  mt-5 flex items-start gap-3
+                  rounded-2xl
+                  border border-signal-400/10
+                  bg-signal-400/[0.025]
+                  p-4
+                "
+              >
                 <Clock3
                   size={17}
-                  className="mt-0.5 shrink-0 text-signal-300"
+                  className="
+                    mt-0.5 shrink-0
+                    text-signal-300
+                  "
                   aria-hidden="true"
                 />
 
-                <p className="text-sm leading-6 text-mist-400">
-                  I usually respond to professional enquiries within one to two
-                  business days.
+                <p
+                  className="
+                    text-sm leading-6
+                    text-mist-400
+                  "
+                >
+                  I usually respond to
+                  professional enquiries
+                  within one to two business
+                  days.
                 </p>
               </div>
             </PremiumCard>
           </Reveal>
         </div>
 
-        {/* Contact form */}
+        {/* ===================================================
+            RIGHT COLUMN — CONTACT FORM
+        ==================================================== */}
+
         <Reveal
           delay={0.2}
           className="h-full"
         >
-          <PremiumCard className="group h-full rounded-3xl border border-white/[0.08] p-6 sm:p-8">
+          <PremiumCard
+            className="
+              group h-full
+              rounded-3xl
+              border border-white/[0.08]
+              p-6 sm:p-8
+            "
+          >
+            {/* Ambient glow */}
+
             <div
-              className="pointer-events-none absolute -bottom-24 -right-24 h-72 w-72 rounded-full bg-signal-400/[0.07] blur-3xl opacity-70 transition-opacity duration-500 group-hover:opacity-100"
+              className="
+                pointer-events-none absolute
+                -bottom-24 -right-24
+                h-72 w-72
+                rounded-full
+                bg-signal-400/[0.07]
+                opacity-70
+                blur-3xl
+                transition-opacity duration-500
+                group-hover:opacity-100
+              "
               aria-hidden="true"
             />
 
             <div className="relative">
+              {/* Form heading */}
+
               <div className="flex items-start justify-between gap-5">
                 <div>
-                  <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-mist-500">
+                  <p
+                    className="
+                      font-mono text-[10px]
+                      uppercase tracking-[0.22em]
+                      text-mist-500
+                    "
+                  >
                     Start a Conversation
                   </p>
 
-                  <h3 className="mt-2 max-w-xl font-display text-2xl font-semibold leading-tight text-white">
-                    Tell me what you&apos;re working on.
+                  <h3
+                    className="
+                      mt-2 max-w-xl
+                      font-display
+                      text-2xl font-semibold
+                      leading-tight text-white
+                    "
+                  >
+                    Send me a message.
                   </h3>
 
-                  <p className="mt-3 max-w-xl text-sm leading-7 text-mist-400">
-                    Share a role, project, collaboration idea or business
-                    problem. Submitting this form will open your email
-                    application with the message prepared.
+                  <p
+                    className="
+                      mt-3 max-w-xl
+                      text-sm leading-7
+                      text-mist-400
+                    "
+                  >
+                    Share a role, project or
+                    problem you&apos;d like to
+                    discuss. The form will
+                    prepare the message in
+                    your email app so you can
+                    review it before sending.
                   </p>
                 </div>
 
-                <span className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-signal-400/15 bg-signal-400/[0.05] text-signal-300 sm:flex">
+                <span
+                  className="
+                    hidden h-11 w-11
+                    shrink-0
+                    items-center justify-center
+                    rounded-xl
+                    border border-signal-400/15
+                    bg-signal-400/[0.05]
+                    text-signal-300
+                    sm:flex
+                  "
+                >
                   <Send
                     size={18}
                     aria-hidden="true"
                   />
                 </span>
               </div>
+
+              {/* =================================================
+                  FORM
+              ================================================== */}
 
               <form
                 onSubmit={handleSubmit}
@@ -388,10 +847,16 @@ export default function Contact() {
                   />
                 </div>
 
+                {/* Message */}
+
                 <div>
                   <label
                     htmlFor="contact-message"
-                    className="font-mono text-[11px] uppercase tracking-[0.18em] text-mist-500"
+                    className="
+                      font-mono text-[11px]
+                      uppercase tracking-[0.18em]
+                      text-mist-500
+                    "
                   >
                     Your message
                   </label>
@@ -401,26 +866,69 @@ export default function Contact() {
                     name="message"
                     required
                     rows={7}
-                    placeholder="Tell me about the opportunity, project or challenge..."
-                    className="mt-2 w-full resize-y rounded-2xl border border-white/[0.08] bg-white/[0.018] px-4 py-3.5 text-sm leading-7 text-white outline-none transition-all duration-300 placeholder:text-mist-700 focus:border-signal-400/40 focus:bg-signal-400/[0.025] focus:shadow-[0_0_24px_rgba(45,212,191,0.08)]"
+                    placeholder="Tell me about the role, project or problem..."
+                    className="
+                      mt-2 w-full
+                      resize-y
+                      rounded-2xl
+                      border border-white/[0.08]
+                      bg-white/[0.018]
+                      px-4 py-3.5
+                      text-sm leading-7
+                      text-white
+                      outline-none
+                      transition-all duration-300
+                      placeholder:text-mist-700
+                      focus:border-signal-400/40
+                      focus:bg-signal-400/[0.025]
+                      focus:shadow-[0_0_24px_rgba(45,212,191,0.08)]
+                    "
                   />
                 </div>
 
+                {/* Submit */}
+
                 <button
                   type="submit"
-                  className="group/button inline-flex w-full items-center justify-center gap-3 rounded-2xl bg-signal-500 px-6 py-4 font-mono text-sm font-semibold text-ink-950 transition-all duration-300 hover:-translate-y-0.5 hover:shadow-[0_0_30px_rgba(45,212,191,0.35)]"
+                  data-cursor="interactive"
+                  className="
+                    group/button
+                    inline-flex w-full
+                    items-center justify-center
+                    gap-3
+                    rounded-2xl
+                    bg-signal-500
+                    px-6 py-4
+                    font-mono text-sm
+                    font-semibold text-ink-950
+                    transition-all duration-300
+                    hover:-translate-y-0.5
+                    hover:shadow-[0_0_30px_rgba(45,212,191,0.35)]
+                  "
                 >
                   Prepare email
 
                   <Send
                     size={16}
-                    className="transition-transform duration-300 group-hover/button:translate-x-1"
+                    className="
+                      transition-transform
+                      duration-300
+                      group-hover/button:translate-x-1
+                    "
                     aria-hidden="true"
                   />
                 </button>
 
-                <p className="text-center font-mono text-[10px] uppercase tracking-[0.14em] text-mist-600">
-                  No data is stored by this website
+                <p
+                  className="
+                    text-center
+                    font-mono text-[10px]
+                    uppercase tracking-[0.14em]
+                    text-mist-600
+                  "
+                >
+                  No data is stored by this
+                  website
                 </p>
               </form>
             </div>
@@ -430,6 +938,10 @@ export default function Contact() {
     </section>
   );
 }
+
+/* =========================================================
+   FORM FIELD
+========================================================= */
 
 type FormFieldProps = {
   label: string;
@@ -452,7 +964,11 @@ function FormField({
     <div>
       <label
         htmlFor={inputId}
-        className="font-mono text-[11px] uppercase tracking-[0.18em] text-mist-500"
+        className="
+          font-mono text-[11px]
+          uppercase tracking-[0.18em]
+          text-mist-500
+        "
       >
         {label}
       </label>
@@ -464,7 +980,20 @@ function FormField({
         required
         placeholder={placeholder}
         autoComplete={autoComplete}
-        className="mt-2 w-full rounded-2xl border border-white/[0.08] bg-white/[0.018] px-4 py-3.5 text-sm text-white outline-none transition-all duration-300 placeholder:text-mist-700 focus:border-signal-400/40 focus:bg-signal-400/[0.025] focus:shadow-[0_0_24px_rgba(45,212,191,0.08)]"
+        className="
+          mt-2 w-full
+          rounded-2xl
+          border border-white/[0.08]
+          bg-white/[0.018]
+          px-4 py-3.5
+          text-sm text-white
+          outline-none
+          transition-all duration-300
+          placeholder:text-mist-700
+          focus:border-signal-400/40
+          focus:bg-signal-400/[0.025]
+          focus:shadow-[0_0_24px_rgba(45,212,191,0.08)]
+        "
       />
     </div>
   );
