@@ -145,20 +145,19 @@ export default function Hero() {
               </span>
             </motion.p>
 
-            {/* Heading */}
+            {/* Heading — rendered immediately for LCP performance */}
 
-            <motion.h1
-              variants={item}
-              className="max-w-[700px] text-[clamp(2.55rem,10vw,4.2rem)] font-semibold leading-[1.03] tracking-[-0.035em] text-white sm:text-[clamp(3rem,7vw,4.2rem)]"
-            >
-              <span className="block">
-                {personal.heroTitle}
-              </span>
+<h1
+  className="max-w-[700px] text-[clamp(2.55rem,10vw,4.2rem)] font-semibold leading-[1.03] tracking-[-0.035em] text-white sm:text-[clamp(3rem,7vw,4.2rem)]"
+>
+  <span className="block">
+    {personal.heroTitle}
+  </span>
 
-              <span className="gradient-text mt-1 block">
-                {personal.heroHighlight}
-              </span>
-            </motion.h1>
+  <span className="gradient-text mt-1 block">
+    {personal.heroHighlight}
+  </span>
+</h1>
 
             {/* Introduction */}
 

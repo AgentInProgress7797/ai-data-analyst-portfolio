@@ -107,7 +107,7 @@ function ProjectSelector({
                       "font-mono text-[9px] uppercase tracking-[0.18em]",
                       isActive
                         ? "text-signal-300"
-                        : "text-mist-700",
+                        : "text-mist-500",
                     ].join(" ")}
                   >
                     {String(index + 1).padStart(
@@ -142,7 +142,7 @@ function ProjectSelector({
                   {project.shortName}
                 </h3>
 
-                <p className="mt-1 truncate text-[11px] text-mist-700">
+                <p className="mt-1 truncate text-[11px] text-mist-500">
                   {project.category}
                 </p>
               </div>
@@ -198,7 +198,7 @@ function ProjectHeader({
               {project.status}
             </span>
 
-            <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-mist-700">
+            <span className="font-mono text-[10px] uppercase tracking-[0.15em] text-mist-500">
               {project.year}
             </span>
           </div>
