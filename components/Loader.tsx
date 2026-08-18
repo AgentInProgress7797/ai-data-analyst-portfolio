@@ -43,12 +43,18 @@ const bootSteps = [
    STATUS
 ========================================================= */
 
-function getBootStatus(progress: number): string {
+function getBootStatus(
+  progress: number,
+): string {
   const currentStep =
     bootSteps.find(
-      (step) => progress <= step.max,
+      (step) =>
+        progress <=
+        step.max,
     ) ??
-    bootSteps[bootSteps.length - 1];
+    bootSteps[
+      bootSteps.length - 1
+    ];
 
   return currentStep.label;
 }
@@ -60,23 +66,14 @@ function getBootStatus(progress: number): string {
 type MatrixStream = {
   x: number;
   y: number;
-
   speed: number;
-
   fontSize: number;
-
   length: number;
-
   opacity: number;
-
   bright: boolean;
-
   seed: number;
-
   drift: number;
-
   active: boolean;
-
   phase: number;
 };
 
@@ -86,7 +83,9 @@ type MatrixStream = {
 
 function MatrixRain() {
   const canvasRef =
-    useRef<HTMLCanvasElement>(null);
+    useRef<HTMLCanvasElement>(
+      null,
+    );
 
   useEffect(() => {
     const canvas =
@@ -97,7 +96,9 @@ function MatrixRain() {
     }
 
     const context =
-      canvas.getContext("2d");
+      canvas.getContext(
+        "2d",
+      );
 
     if (!context) {
       return;
@@ -114,24 +115,16 @@ function MatrixRain() {
     let height =
       window.innerHeight;
 
-    let streams: MatrixStream[] = [];
+    let streams: MatrixStream[] =
+      [];
 
     let animationFrameId = 0;
 
     let previousTime = 0;
 
     const isMobile = () =>
-      window.innerWidth < 768;
-
-    /*
-     * Programming / AI-style Matrix alphabet.
-     *
-     * Numbers
-     * Letters
-     * Brackets
-     * Operators
-     * Programming symbols
-     */
+      window.innerWidth <
+      768;
 
     const characters =
       "01{}[]<>/\\();:=+-_*#@$%&|!?ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz23456789";
@@ -140,211 +133,171 @@ function MatrixRain() {
        CREATE MATRIX STREAMS
     ===================================================== */
 
-    const createStreams = () => {
-      const mobile =
-        isMobile();
+    const createStreams =
+      () => {
+        const mobile =
+          isMobile();
 
-      /*
-       * Instead of placing every stream randomly,
-       * divide the screen into columns.
-       *
-       * This prevents large empty areas.
-       */
+        const columnSpacing =
+          mobile ? 10 : 7;
 
-      const columnSpacing =
-        mobile ? 10 : 7;
+        const streamCount =
+          Math.ceil(
+            width /
+              columnSpacing,
+          );
 
-      const streamCount =
-        Math.ceil(
-          width / columnSpacing,
-        );
+        streams =
+          Array.from(
+            {
+              length:
+                streamCount,
+            },
+            (
+              _,
+              index,
+            ) => {
+              const bright =
+                index %
+                  8 ===
+                0;
 
-      streams = Array.from(
-        {
-          length: streamCount,
-        },
+              const active =
+                Math.random() >
+                (mobile
+                  ? 0.08
+                  : 0.04);
 
-        (_, index) => {
-          /*
-           * Approximately every 11th stream
-           * becomes a brighter signal stream.
-           */
+              const jitter =
+                (Math.random() -
+                  0.5) *
+                (mobile
+                  ? 5
+                  : 6);
 
-          const bright =
-            index % 8 === 0;
+              return {
+                x:
+                  index *
+                    columnSpacing +
+                  jitter,
 
-          /*
-           * Leave some controlled gaps.
-           *
-           * This keeps the Matrix premium
-           * rather than turning it into
-           * a solid wall of characters.
-           */
-
-          const active =
-            Math.random() >
-            (mobile ? 0.08 : 0.04);
-
-          /*
-           * Small horizontal randomness
-           * prevents perfect grid appearance.
-           */
-
-          const jitter =
-            (Math.random() - 0.5) *
-            (mobile ? 5 : 6);
-
-          return {
-            x:
-              index *
-                columnSpacing +
-              jitter,
-
-            /*
-             * Important:
-             *
-             * Streams start throughout the
-             * viewport immediately.
-             *
-             * Matrix is therefore visible
-             * from 0%.
-             */
-
-            y:
-              Math.random() *
-                (height + 300) -
-              150,
-
-            /*
-             * Bright streams move faster.
-             */
-
-            speed: bright
-              ? Math.random() *
-                  0.65 +
-                1.15
-              : Math.random() *
-                  0.45 +
-                0.65,
-
-            /*
-             * Keep characters relatively
-             * small because we now have
-             * many more columns.
-             */
-
-            fontSize: mobile
-              ? Math.random() *
-                  2.5 +
-                7.5
-              : Math.random() *
-                  3 +
-                8,
-
-            /*
-             * Longer trails than before.
-             */
-
-            length: bright
-              ? Math.floor(
+                y:
                   Math.random() *
-                    18,
-                ) + 26
-              : Math.floor(
+                    (height +
+                      300) -
+                  150,
+
+                speed:
+                  bright
+                    ? Math.random() *
+                        0.65 +
+                      1.15
+                    : Math.random() *
+                        0.45 +
+                      0.65,
+
+                fontSize:
+                  mobile
+                    ? Math.random() *
+                        2.5 +
+                      7.5
+                    : Math.random() *
+                        3 +
+                      8,
+
+                length:
+                  bright
+                    ? Math.floor(
+                        Math.random() *
+                          18,
+                      ) + 26
+                    : Math.floor(
+                        Math.random() *
+                          17,
+                      ) + 20,
+
+                opacity:
+                  active
+                    ? bright
+                      ? Math.random() *
+                          0.16 +
+                        0.28
+                      : Math.random() *
+                          0.09 +
+                        0.08
+                    : 0,
+
+                bright,
+
+                seed:
                   Math.random() *
-                    17,
-                ) + 20,
+                  5000,
 
-            /*
-             * More streams =
-             * slightly lower opacity.
-             */
+                drift:
+                  (Math.random() -
+                    0.5) *
+                  0.012,
 
-            opacity: active
-              ? bright
-                ? Math.random() *
-                    0.16 +
-                  0.28
-                : Math.random() *
-                    0.09 +
-                  0.08
-              : 0,
+                active,
 
-            bright,
-
-            seed:
-              Math.random() *
-              5000,
-
-            /*
-             * Extremely subtle horizontal drift.
-             */
-
-            drift:
-              (Math.random() -
-                0.5) *
-              0.012,
-
-            active,
-
-            /*
-             * Individual flicker timing.
-             */
-
-            phase:
-              Math.random() *
-              Math.PI *
-              2,
-          };
-        },
-      );
-    };
+                phase:
+                  Math.random() *
+                  Math.PI *
+                  2,
+              };
+            },
+          );
+      };
 
     /* =====================================================
        RESIZE
     ===================================================== */
 
-    const resize = () => {
-      width =
-        window.innerWidth;
+    const resize =
+      () => {
+        width =
+          window.innerWidth;
 
-      height =
-        window.innerHeight;
+        height =
+          window.innerHeight;
 
-      const pixelRatio =
-        Math.min(
-          window.devicePixelRatio ||
-            1,
-          2,
+        const pixelRatio =
+          Math.min(
+            window
+              .devicePixelRatio ||
+              1,
+            2,
+          );
+
+        canvas.width =
+          Math.floor(
+            width *
+              pixelRatio,
+          );
+
+        canvas.height =
+          Math.floor(
+            height *
+              pixelRatio,
+          );
+
+        canvas.style.width =
+          `${width}px`;
+
+        canvas.style.height =
+          `${height}px`;
+
+        context.setTransform(
+          pixelRatio,
+          0,
+          0,
+          pixelRatio,
+          0,
+          0,
         );
 
-      canvas.width =
-        Math.floor(
-          width * pixelRatio,
-        );
-
-      canvas.height =
-        Math.floor(
-          height * pixelRatio,
-        );
-
-      canvas.style.width =
-        `${width}px`;
-
-      canvas.style.height =
-        `${height}px`;
-
-      context.setTransform(
-        pixelRatio,
-        0,
-        0,
-        pixelRatio,
-        0,
-        0,
-      );
-
-      createStreams();
-    };
+        createStreams();
+      };
 
     /* =====================================================
        DRAW MATRIX STREAM
@@ -362,7 +315,8 @@ function MatrixRain() {
       }
 
       const lineHeight =
-        stream.fontSize * 1.12;
+        stream.fontSize *
+        1.12;
 
       context.font =
         `${stream.fontSize}px ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace`;
@@ -373,34 +327,28 @@ function MatrixRain() {
       context.textBaseline =
         "middle";
 
-      /*
-       * Very subtle brightness breathing.
-       */
-
       const breathing =
         0.88 +
         Math.sin(
-          time * 0.001 +
+          time *
+            0.001 +
             stream.phase,
         ) *
           0.12;
 
       for (
         let index = 0;
-        index < stream.length;
+        index <
+        stream.length;
         index += 1
       ) {
-        /*
-         * Character changes slowly
-         * while falling.
-         */
-
         const characterIndex =
           Math.abs(
             Math.floor(
               stream.seed +
                 index * 7 +
-                time * 0.0035,
+                time *
+                  0.0035,
             ),
           ) %
           characters.length;
@@ -412,23 +360,16 @@ function MatrixRain() {
 
         const y =
           stream.y -
-          index * lineHeight;
-
-        /*
-         * Skip characters outside
-         * visible region.
-         */
+          index *
+            lineHeight;
 
         if (
           y < -40 ||
-          y > height + 40
+          y >
+            height + 40
         ) {
           continue;
         }
-
-        /*
-         * Fade toward trail end.
-         */
 
         const trailRatio =
           1 -
@@ -446,71 +387,38 @@ function MatrixRain() {
           trailFade *
           breathing;
 
-        /*
-         * Signal head gets brighter.
-         */
-
-        if (index === 0) {
+        if (
+          index === 0
+        ) {
           opacity *=
             stream.bright
               ? 2.7
               : 1.55;
         }
 
-        /* ===============================================
-           BRIGHT SIGNAL HEAD
-        =============================================== */
-
         if (
           stream.bright &&
           index === 0
         ) {
           context.fillStyle =
-            `rgba(
-              204,
-              255,
-              248,
-              ${Math.min(
-                opacity,
-                0.72,
-              )}
-            )`;
-        }
-
-        /* ===============================================
-           BRIGHT STREAM BODY
-        =============================================== */
-
-        else if (
+            `rgba(204,255,248,${Math.min(
+              opacity,
+              0.72,
+            )})`;
+        } else if (
           stream.bright
         ) {
           context.fillStyle =
-            `rgba(
-              94,
-              234,
-              212,
-              ${Math.min(
-                opacity,
-                0.30,
-              )}
-            )`;
-        }
-
-        /* ===============================================
-           NORMAL STREAM
-        =============================================== */
-
-        else {
+            `rgba(94,234,212,${Math.min(
+              opacity,
+              0.3,
+            )})`;
+        } else {
           context.fillStyle =
-            `rgba(
-              45,
-              212,
-              191,
-              ${Math.min(
-                opacity,
-                0.16,
-              )}
-            )`;
+            `rgba(45,212,191,${Math.min(
+              opacity,
+              0.16,
+            )})`;
         }
 
         context.fillText(
@@ -518,10 +426,6 @@ function MatrixRain() {
           stream.x,
           y,
         );
-
-        /* ===============================================
-           SIGNAL HEAD GLOW
-        =============================================== */
 
         if (
           stream.bright &&
@@ -564,7 +468,8 @@ function MatrixRain() {
             y,
             18,
             0,
-            Math.PI * 2,
+            Math.PI *
+              2,
           );
 
           context.fillStyle =
@@ -583,33 +488,25 @@ function MatrixRain() {
       stream: MatrixStream,
       deltaMultiplier: number,
     ) => {
-      if (reducedMotion) {
+      if (
+        reducedMotion
+      ) {
         return;
       }
 
-      if (!stream.active) {
+      if (
+        !stream.active
+      ) {
         return;
       }
-
-      /*
-       * Downward motion.
-       */
 
       stream.y +=
         stream.speed *
         deltaMultiplier;
 
-      /*
-       * Tiny horizontal movement.
-       */
-
       stream.x +=
         stream.drift *
         deltaMultiplier;
-
-      /*
-       * Horizontal wrap.
-       */
 
       if (
         stream.x < -20
@@ -630,29 +527,15 @@ function MatrixRain() {
         stream.fontSize *
         1.35;
 
-      /*
-       * Respawn after leaving
-       * bottom of screen.
-       */
-
       if (
         stream.y -
           streamHeight >
         height + 50
       ) {
-        /*
-         * Respawn slightly above viewport.
-         */
-
         stream.y =
           -Math.random() *
             180 -
           30;
-
-        /*
-         * Keep approximate column position,
-         * but add tiny variation.
-         */
 
         stream.x +=
           (Math.random() -
@@ -668,10 +551,6 @@ function MatrixRain() {
           Math.PI *
           2;
 
-        /*
-         * Occasionally change trail length.
-         */
-
         stream.length =
           stream.bright
             ? Math.floor(
@@ -682,11 +561,6 @@ function MatrixRain() {
                 Math.random() *
                   17,
               ) + 20;
-
-        /*
-         * Slight speed variation
-         * every time it respawns.
-         */
 
         stream.speed =
           stream.bright
@@ -715,10 +589,12 @@ function MatrixRain() {
               34,
             );
 
-      previousTime = time;
+      previousTime =
+        time;
 
       const deltaMultiplier =
-        delta / 16.67;
+        delta /
+        16.67;
 
       context.clearRect(
         0,
@@ -741,7 +617,9 @@ function MatrixRain() {
         },
       );
 
-      if (!reducedMotion) {
+      if (
+        !reducedMotion
+      ) {
         animationFrameId =
           window.requestAnimationFrame(
             render,
@@ -749,22 +627,13 @@ function MatrixRain() {
       }
     };
 
-    /* =====================================================
-       INITIALIZE
-    ===================================================== */
-
     resize();
-
-    /*
-     * Immediate first render.
-     *
-     * Matrix is visible from
-     * beginning of loader.
-     */
 
     render(0);
 
-    if (!reducedMotion) {
+    if (
+      !reducedMotion
+    ) {
       animationFrameId =
         window.requestAnimationFrame(
           render,
@@ -832,10 +701,8 @@ function CircuitOverlay() {
           h-full
           w-[540px]
           opacity-[0.12]
-
           sm:-left-[120px]
           sm:w-[660px]
-
           lg:-left-[70px]
           lg:w-[760px]
         "
@@ -860,7 +727,6 @@ function CircuitOverlay() {
           }}
           animate={{
             pathLength: 1,
-
             opacity: [
               0.12,
               0.4,
@@ -951,10 +817,8 @@ function CircuitOverlay() {
           w-[540px]
           scale-x-[-1]
           opacity-[0.10]
-
           sm:-right-[120px]
           sm:w-[660px]
-
           lg:-right-[70px]
           lg:w-[760px]
         "
@@ -1061,74 +925,78 @@ export default function Loader() {
       | number
       | undefined;
 
-    const tick = () => {
-      timer =
-        window.setTimeout(
-          () => {
-            setPct(
-              (
-                current,
-              ) => {
-                if (
-                  current >=
-                  100
-                ) {
-                  return 100;
-                }
+    const tick =
+      () => {
+        timer =
+          window.setTimeout(
+            () => {
+              setPct(
+                (
+                  current,
+                ) => {
+                  if (
+                    current >=
+                    100
+                  ) {
+                    return 100;
+                  }
 
-                let increment =
-                  1;
+                  let increment =
+                    1;
 
-                if (
-                  current < 22
-                ) {
-                  increment =
-                    Math.floor(
-                      Math.random() *
-                        5,
-                    ) + 4;
-                } else if (
-                  current < 52
-                ) {
-                  increment =
-                    Math.floor(
-                      Math.random() *
-                        4,
-                    ) + 2;
-                } else if (
-                  current < 78
-                ) {
-                  increment =
-                    Math.floor(
-                      Math.random() *
-                        3,
-                    ) + 2;
-                } else if (
-                  current < 94
-                ) {
-                  increment =
-                    Math.floor(
-                      Math.random() *
-                        2,
-                    ) + 1;
-                }
+                  if (
+                    current <
+                    22
+                  ) {
+                    increment =
+                      Math.floor(
+                        Math.random() *
+                          5,
+                      ) + 4;
+                  } else if (
+                    current <
+                    52
+                  ) {
+                    increment =
+                      Math.floor(
+                        Math.random() *
+                          4,
+                      ) + 2;
+                  } else if (
+                    current <
+                    78
+                  ) {
+                    increment =
+                      Math.floor(
+                        Math.random() *
+                          3,
+                      ) + 2;
+                  } else if (
+                    current <
+                    94
+                  ) {
+                    increment =
+                      Math.floor(
+                        Math.random() *
+                          2,
+                      ) + 1;
+                  }
 
-                return Math.min(
-                  current +
-                    increment,
-                  100,
-                );
-              },
-            );
+                  return Math.min(
+                    current +
+                      increment,
+                    100,
+                  );
+                },
+              );
 
-            tick();
-          },
-
-          getProgressDelay(
-            pct,
-          ),
-        );
-    };
+              tick();
+            },
+            getProgressDelay(
+              pct,
+            ),
+          );
+      };
 
     tick();
 
@@ -1149,7 +1017,9 @@ export default function Loader() {
   ========================================================= */
 
   useEffect(() => {
-    if (!isReady) {
+    if (
+      !isReady
+    ) {
       return;
     }
 
@@ -1176,7 +1046,7 @@ export default function Loader() {
             ),
           );
         },
-        1350,
+        550,
       );
 
     return () => {
@@ -1209,8 +1079,7 @@ export default function Loader() {
               "blur(10px)",
           }}
           transition={{
-            duration: 0.8,
-
+            duration: 0.45,
             ease: [
               0.25,
               0,
@@ -1219,21 +1088,11 @@ export default function Loader() {
             ],
           }}
         >
-          {/* MATRIX */}
-
           <MatrixRain />
-
-          {/* CIRCUITS */}
 
           <CircuitOverlay />
 
-          {/* =================================================
-              CENTER READABILITY MASK
-
-              Keeps Matrix visible around the screen,
-              but slightly reduces interference directly
-              behind the important loader information.
-          ================================================== */}
+          {/* CENTER READABILITY MASK */}
 
           <div
             aria-hidden="true"
@@ -1246,9 +1105,7 @@ export default function Loader() {
             "
           />
 
-          {/* =================================================
-              EDGE VIGNETTE
-          ================================================== */}
+          {/* EDGE VIGNETTE */}
 
           <div
             aria-hidden="true"
@@ -1261,9 +1118,7 @@ export default function Loader() {
             "
           />
 
-          {/* =================================================
-              CENTER AMBIENT GLOW
-          ================================================== */}
+          {/* CENTER AMBIENT GLOW */}
 
           <motion.div
             aria-hidden="true"
@@ -1324,9 +1179,7 @@ export default function Loader() {
             "
           />
 
-          {/* =================================================
-              SCANNING LINE
-          ================================================== */}
+          {/* SCANNING LINE */}
 
           {!systemOnline && (
             <motion.div
@@ -1358,9 +1211,7 @@ export default function Loader() {
             />
           )}
 
-          {/* =================================================
-              MAIN CONTENT
-          ================================================== */}
+          {/* MAIN CONTENT */}
 
           <div
             className="
@@ -1373,8 +1224,6 @@ export default function Loader() {
               sm:px-6
             "
           >
-            {/* NAME */}
-
             <motion.h1
               initial={{
                 opacity: 0,
@@ -1390,7 +1239,6 @@ export default function Loader() {
               }}
               transition={{
                 duration: 0.7,
-
                 ease: [
                   0.25,
                   0,
@@ -1409,10 +1257,6 @@ export default function Loader() {
             >
               ASHISH PAWAR
             </motion.h1>
-
-            {/* =================================================
-                POSITIONING LINE
-            ================================================== */}
 
             <motion.div
               initial={{
@@ -1451,9 +1295,7 @@ export default function Loader() {
 
               <span
                 aria-hidden="true"
-                className="
-                  text-signal-400/40
-                "
+                className="text-signal-400/40"
               >
                 •
               </span>
@@ -1464,9 +1306,7 @@ export default function Loader() {
 
               <span
                 aria-hidden="true"
-                className="
-                  text-signal-400/40
-                "
+                className="text-signal-400/40"
               >
                 •
               </span>
@@ -1476,9 +1316,7 @@ export default function Loader() {
               </span>
             </motion.div>
 
-            {/* =================================================
-                PROGRESS HEADER
-            ================================================== */}
+            {/* PROGRESS HEADER */}
 
             <motion.div
               initial={{
@@ -1543,9 +1381,7 @@ export default function Loader() {
               </span>
             </motion.div>
 
-            {/* =================================================
-                PROGRESS TRACK
-            ================================================== */}
+            {/* PROGRESS TRACK */}
 
             <div
               className="
@@ -1558,8 +1394,6 @@ export default function Loader() {
                 bg-white/[0.07]
               "
             >
-              {/* COMPLETED BAR */}
-
               <motion.div
                 animate={{
                   width:
@@ -1582,10 +1416,6 @@ export default function Loader() {
                   shadow-[0_0_16px_rgba(45,212,191,0.34)]
                 "
               />
-
-              {/* =================================================
-                  SIGNAL HEAD
-              ================================================== */}
 
               <motion.div
                 aria-hidden="true"
@@ -1677,9 +1507,7 @@ export default function Loader() {
               </motion.div>
             </div>
 
-            {/* =================================================
-                BOOT STATUS
-            ================================================== */}
+            {/* BOOT STATUS */}
 
             <div
               className="
@@ -1760,20 +1588,9 @@ export default function Loader() {
                 />
               )}
             </div>
-
-            {/*
-             * AI CORE // DATA ENGINE // AGENT LAYER
-             *
-             * REMOVED intentionally.
-             *
-             * It was competing visually
-             * with the Matrix background.
-             */}
           </div>
 
-          {/* =================================================
-              SYSTEM ONLINE PULSE
-          ================================================== */}
+          {/* SYSTEM ONLINE PULSE */}
 
           <AnimatePresence>
             {systemOnline && (
@@ -1798,7 +1615,6 @@ export default function Loader() {
                 }}
                 transition={{
                   duration: 0.95,
-
                   ease: [
                     0.22,
                     1,
@@ -1831,47 +1647,30 @@ export default function Loader() {
 }
 
 /* =========================================================
-   PROGRESS DELAY
+   OPTIMIZED PROGRESS DELAY
 ========================================================= */
 
 function getProgressDelay(
   progress: number,
 ) {
   if (
-    progress >= 18 &&
-    progress <= 22
-  ) {
-    return 170;
-  }
-
-  if (
-    progress >= 39 &&
-    progress <= 43
-  ) {
-    return 190;
-  }
-
-  if (
-    progress >= 63 &&
-    progress <= 67
-  ) {
-    return 200;
-  }
-
-  if (
     progress >= 89 &&
     progress <= 94
   ) {
-    return 170;
+    return 55;
   }
 
-  if (progress < 25) {
-    return 72;
+  if (
+    progress < 25
+  ) {
+    return 28;
   }
 
-  if (progress < 70) {
-    return 88;
+  if (
+    progress < 70
+  ) {
+    return 34;
   }
 
-  return 105;
+  return 42;
 }

@@ -570,11 +570,11 @@ function DesktopAvatar() {
           aria-hidden="true"
         />
 
-        {/* Three.js orb and particles */}
+        {/* Three.js orb and particles — aligned with avatar */}
 
-        <div className="pointer-events-none absolute inset-0 z-0 overflow-visible bg-transparent">
-          <OrbScene />
-        </div>
+<div className="pointer-events-none absolute inset-0 z-0 -translate-y-[8%] overflow-visible bg-transparent">
+  <OrbScene />
+</div>
 
         {/* Fixed avatar positioning wrapper */}
 
@@ -773,6 +773,29 @@ function DesktopAvatar() {
                   className="pointer-events-none absolute -left-1/2 top-0 h-full w-1/3 rotate-12 bg-gradient-to-r from-transparent via-white/30 to-transparent blur-xl"
                   aria-hidden="true"
                 />
+
+                {/* Neural scan line */}
+
+<motion.div
+  variants={{
+    rest: {
+      opacity: 0,
+      top: "8%",
+    },
+
+    hover: {
+      opacity: [0, 0.9, 0.9, 0],
+      top: ["8%", "8%", "92%", "92%"],
+    },
+  }}
+  transition={{
+    duration: 1.15,
+    ease: "easeInOut",
+    times: [0, 0.08, 0.88, 1],
+  }}
+  className="pointer-events-none absolute left-[8%] z-20 h-px w-[84%] bg-signal-300 shadow-[0_0_6px_rgba(94,234,212,0.95),0_0_14px_rgba(45,212,191,0.7)]"
+  aria-hidden="true"
+/>
 
                 {/* Inner teal ring */}
 
