@@ -27,12 +27,17 @@ function Counter({ value, suffix }: { value: number; suffix: string }) {
 export default function AnimatedStats() {
   return (
     <dl className="grid grid-cols-2 gap-6 border-t border-white/[0.06] pt-6 sm:grid-cols-4">
-      {stats.map((s) => (
-        <div key={s.label}>
-          <Counter value={s.value} suffix={s.suffix} />
-          <p className="mt-1 font-mono text-[11px] uppercase tracking-wide text-mist-500">{s.label}</p>
-        </div>
-      ))}
-    </dl>
+  {stats.map((s) => (
+    <div key={s.label}>
+      <dd>
+        <Counter value={s.value} suffix={s.suffix} />
+      </dd>
+
+      <dt className="mt-1 font-mono text-[11px] uppercase tracking-wide text-mist-500">
+        {s.label}
+      </dt>
+    </div>
+  ))}
+</dl>
   );
 }
