@@ -50,7 +50,7 @@ export const portfolioProjects: PortfolioProject[] = [
     year: "2025–Present",
 
     description:
-      "Magic AI is an internal assistant used by employees for document drafting, business queries and day-to-day productivity. My work includes user access, departmental workspaces, model configuration, internal integrations, onboarding and ongoing platform support.",
+      "Magic AI is an internal AI assistant used by employees for document drafting, business queries and day-to-day work. I work on user access, department workspaces, model configuration and fallbacks, internal integrations, onboarding and platform support.",
 
     metrics: [
       {
@@ -94,18 +94,18 @@ export const portfolioProjects: PortfolioProject[] = [
         title: "OpenClaw Gateway",
         subtitle: "Sessions, tools and routing",
         details: [
-          "Manages user sessions and request routing.",
-          "Connects users with the configured AI models.",
-          "Controls available tools and workspace permissions.",
+          "Manages user sessions, agent requests and model routing.",
+          "Connects users with the configured AI models and available tools.",
+          "Applies workspace permissions and controls available capabilities.",
         ],
       },
       {
         title: "AI Model Layer",
-        subtitle: "Claude and configured fallbacks",
+        subtitle: "Primary model and fallbacks",
         details: [
           "Uses Claude as the primary enterprise model.",
-          "Supports model fallback when the primary model is unavailable.",
-          "Different models can be configured according to workload and task requirements.",
+          "Supports fallback models when the primary model is unavailable.",
+          "Model selection can be adjusted according to workload, availability and task requirements.",
         ],
       },
       {
@@ -113,7 +113,7 @@ export const portfolioProjects: PortfolioProject[] = [
         subtitle: "Controlled document access",
         details: [
           "Separates departmental documents and user content.",
-          "Applies access controls based on workspace permissions.",
+          "Applies workspace-level access controls for files and resources.",
           "Helps prevent users from accessing unrelated departmental information.",
         ],
       },
@@ -133,17 +133,18 @@ export const portfolioProjects: PortfolioProject[] = [
     ],
 
     impact: [
-      "Helped employees use generative AI in their regular work.",
-      "Created department-specific access and workspace controls.",
-      "Supported document drafting, business queries and internal productivity.",
-      "Prepared onboarding material and simple communication for non-technical users.",
+      "Supported 40+ users across multiple departments on the internal AI platform.",
+      "Set up department-specific workspaces and access controls for internal documents.",
+      "Supported document drafting, business queries and day-to-day AI-assisted work.",
+      "Created onboarding material and user communication for non-technical teams.",
     ],
 
     responsibilities: [
       "Platform administration and user onboarding",
-      "Model configuration and fallback planning",
-      "Department workspace management",
+      "Model configuration, routing and fallback planning",
+      "Department workspace and permission management",
       "Authentication and access coordination",
+      "Troubleshooting sessions, connectivity and file-access issues",
       "Usage support and internal communication",
     ],
 
@@ -152,7 +153,7 @@ export const portfolioProjects: PortfolioProject[] = [
         "Business teams needed an internal AI assistant that could help with everyday work while keeping company information within a controlled environment.",
 
       approach:
-        "I focused on user access, department workspaces, model configuration, authentication, onboarding and ongoing platform support. I also worked with internal teams to resolve connectivity, permissions and usability issues.",
+        "I worked on department-wise access, workspace permissions, model routing and fallback configuration, authentication, onboarding and platform support. A large part of the work also involved troubleshooting connectivity, file-access and session issues across users and departments.",
 
       result:
         "Magic AI is now used across multiple departments for document drafting, business queries and routine productivity tasks, with access managed through departmental workspaces and internal controls.",
@@ -189,7 +190,7 @@ export const portfolioProjects: PortfolioProject[] = [
     year: "2026",
 
     description:
-      "An HR-focused application concept for managing job requirements, finding relevant candidate profiles and supporting recruiters with AI-assisted matching. The current focus is on designing a practical workflow that can operate within an internal environment.",
+      "An AI-assisted recruitment application currently in development for JD analysis, candidate discovery and profile matching. The workflow is designed around recruiter review, structured matching criteria and internal deployment.",
 
     metrics: [
       {
@@ -270,18 +271,18 @@ export const portfolioProjects: PortfolioProject[] = [
     ],
 
     impact: [
-      "Designed to reduce manual candidate-profile searching.",
-      "Aims to provide consistent matching against job requirements.",
-      "Keeps recruiters in control of shortlisting decisions.",
-      "Supports an internal deployment model instead of relying entirely on cloud infrastructure.",
+      "Designed to reduce the time spent manually searching and comparing candidate profiles.",
+      "Aims to apply the same matching criteria consistently across shortlisted profiles.",
+      "Keeps recruiters responsible for shortlisting and final hiring decisions.",
+      "Designed around an internal deployment model for recruitment workflows and supporting data.",
     ],
 
     responsibilities: [
-      "Workflow and product planning",
-      "Candidate-search research",
-      "AI matching design",
-      "Database and deployment planning",
-      "Enterprise UI direction",
+      "Recruitment workflow and product design",
+      "Candidate-source and search API research",
+      "JD parsing and AI matching logic",
+      "Data model and deployment planning",
+      "Recruiter dashboard and UI design",
     ],
 
     story: {
@@ -289,10 +290,10 @@ export const portfolioProjects: PortfolioProject[] = [
         "Recruiters spend time manually reviewing job descriptions, searching for candidate profiles and comparing applicants against hiring requirements.",
 
       approach:
-        "I designed a workflow that combines job-description analysis, public-profile discovery and AI-assisted matching. The recruiter remains responsible for reviewing recommendations and making final shortlisting decisions.",
+        "I designed a workflow that turns a job description into structured hiring criteria, searches approved sources for relevant public profiles and uses AI-assisted matching to compare candidates. Recruiters remain responsible for reviewing the recommendations and deciding who should move forward.",
 
       result:
-        "The current prototype defines a clearer recruitment workflow and provides a practical foundation for candidate discovery, comparison and internal deployment. The project is still under development.",
+        "The current prototype defines a clearer recruitment workflow for JD analysis, profile discovery and candidate comparison. The application is still under development and is being designed for internal deployment.",
     },
 
     engineeringDecisions: [
@@ -326,7 +327,7 @@ export const portfolioProjects: PortfolioProject[] = [
     year: "2026",
 
     description:
-      "A custom portfolio designed to present my work in AI, analytics and enterprise automation. Rather than using a standard template, I built it as an interactive system with a command palette, career timeline, custom cursor, 3D elements and reusable dashboard components.",
+      "A custom portfolio built to present my work across AI, analytics and enterprise automation. Instead of using a standard template, I developed it as an interactive application with a command palette, career timeline, custom cursor, 3D elements and reusable dashboard components.",
 
     metrics: [
       {
@@ -338,12 +339,12 @@ export const portfolioProjects: PortfolioProject[] = [
         label: "Interactive visuals",
       },
       {
-        value: "100%",
-        label: "Responsive",
+        value: "97",
+        label: "Lighthouse performance",
       },
       {
-        value: "Custom",
-        label: "Design system",
+        value: "100",
+        label: "Accessibility",
       },
     ],
 
@@ -363,7 +364,7 @@ export const portfolioProjects: PortfolioProject[] = [
         details: [
           "Uses reusable React components across the portfolio.",
           "Organises pages, metadata and application-level structure.",
-          "Supports a maintainable and scalable frontend codebase.",
+          "Supports a maintainable frontend codebase as sections evolve.",
         ],
       },
       {
@@ -407,10 +408,10 @@ export const portfolioProjects: PortfolioProject[] = [
     ],
 
     impact: [
-      "Presents technical work through practical project stories.",
-      "Demonstrates frontend development and UI thinking.",
-      "Creates a consistent identity around enterprise AI and analytics.",
-      "Provides a responsive experience across desktop and mobile devices.",
+      "Presents AI, analytics and automation work through structured project case studies.",
+      "Demonstrates frontend development, interaction design and technical communication.",
+      "Provides a consistent professional identity across projects, career history and technical capabilities.",
+      "Reached 97 Lighthouse performance with 100 accessibility, best-practices and SEO scores during production testing.",
     ],
 
     responsibilities: [
@@ -418,7 +419,7 @@ export const portfolioProjects: PortfolioProject[] = [
       "Frontend development",
       "Responsive layout implementation",
       "Content structure and project storytelling",
-      "Performance and visual refinement",
+      "Performance, accessibility and visual refinement",
     ],
 
     story: {
@@ -426,10 +427,10 @@ export const portfolioProjects: PortfolioProject[] = [
         "A standard portfolio template would not clearly represent the combination of enterprise AI, analytics, automation and frontend work in my profile.",
 
       approach:
-        "I designed and developed the portfolio as a custom application using reusable components, interactive navigation, animated timelines, project dashboards and a consistent visual system.",
+        "I designed and developed the portfolio as a custom Next.js application with reusable components, interactive navigation, animated timelines, project case studies and a consistent visual system. I also worked through performance, accessibility and SEO testing before treating the production version as complete.",
 
       result:
-        "The finished portfolio presents my work as connected projects and systems rather than a simple list of skills. It also demonstrates my frontend development, interaction design and technical communication abilities.",
+        "The finished portfolio presents my work as connected projects and systems rather than a simple list of skills. It also demonstrates frontend development, interaction design and technical communication, while maintaining strong production Lighthouse scores.",
     },
 
     engineeringDecisions: [
