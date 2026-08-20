@@ -15,11 +15,11 @@ import Reveal from "@/components/Reveal";
 
 const currentLearning = [
   "Model Context Protocol",
-  "Multi-Agent Systems",
+  "Agent Memory",
   "RAG Architecture",
-  "Enterprise AI Security",
-  "Local LLM Deployment",
-  "AI Governance",
+  "AI Evaluation",
+  "Local LLM Optimization",
+  "Enterprise AI Governance",
 ];
 
 export default function Certifications() {
@@ -28,7 +28,10 @@ export default function Certifications() {
       id="certifications"
       className="section relative z-10"
     >
-      {/* Section heading */}
+      {/* =====================================================
+          SECTION HEADING
+      ====================================================== */}
+
       <Reveal>
         <p className="eyebrow">
           Learning &amp; Professional Development
@@ -44,16 +47,22 @@ export default function Certifications() {
 
       <Reveal delay={0.1}>
         <p className="mt-5 max-w-3xl text-base leading-7 text-mist-400 sm:text-lg">
-          I treat professional learning as an ongoing part of my work. My
-          current focus is strengthening both the technical and governance
-          aspects of enterprise AI so that solutions remain useful, secure and
-          practical.
+          I keep learning alongside the systems I work on. My current focus is
+          understanding AI agents, model behaviour, security and the
+          infrastructure needed to run AI reliably in an enterprise
+          environment.
         </p>
       </Reveal>
 
-      {/* Top section */}
+      {/* =====================================================
+          TOP SECTION
+      ====================================================== */}
+
       <div className="mt-14 grid items-start gap-8 lg:grid-cols-[1.2fr_0.8fr]">
-        {/* Professional certifications */}
+        {/* =================================================
+            PROFESSIONAL CERTIFICATIONS
+        ================================================== */}
+
         <div>
           <Reveal delay={0.12}>
             <div className="flex items-center gap-3">
@@ -66,7 +75,7 @@ export default function Certifications() {
 
               <div>
                 <p className="font-mono text-[10px] uppercase tracking-[0.22em] text-mist-500">
-                  Verified Learning
+                  Completed Learning
                 </p>
 
                 <h3 className="mt-1 font-display text-xl font-semibold text-white sm:text-2xl">
@@ -90,14 +99,31 @@ export default function Certifications() {
                   className="group flex h-full min-h-[150px] rounded-2xl border border-white/[0.07] p-5"
                 >
                   {/* Hover glow */}
+
                   <div
-                    className="pointer-events-none absolute -right-12 -top-12 h-32 w-32 rounded-full bg-signal-400/[0.08] opacity-0 blur-3xl transition-all duration-500 group-hover:scale-110 group-hover:opacity-100"
+                    className="
+                      pointer-events-none absolute
+                      -right-12 -top-12
+                      h-32 w-32 rounded-full
+                      bg-signal-400/[0.08]
+                      opacity-0 blur-3xl
+                      transition-all duration-500
+                      group-hover:scale-110
+                      group-hover:opacity-100
+                    "
                     aria-hidden="true"
                   />
 
                   {/* Lower ambient glow */}
+
                   <div
-                    className="pointer-events-none absolute -bottom-16 -left-16 h-32 w-32 rounded-full bg-cyan-400/[0.035] blur-3xl"
+                    className="
+                      pointer-events-none absolute
+                      -bottom-16 -left-16
+                      h-32 w-32 rounded-full
+                      bg-cyan-400/[0.035]
+                      blur-3xl
+                    "
                     aria-hidden="true"
                   />
 
@@ -126,7 +152,7 @@ export default function Certifications() {
                           aria-hidden="true"
                         />
 
-                        Verified
+                        Completed
                       </div>
                     </div>
                   </div>
@@ -136,7 +162,10 @@ export default function Certifications() {
           </div>
         </div>
 
-        {/* Current learning */}
+        {/* =================================================
+            CURRENT LEARNING
+        ================================================== */}
+
         <Reveal
           delay={0.18}
           className="h-full"
@@ -148,12 +177,27 @@ export default function Certifications() {
             className="group h-full min-h-[320px] rounded-2xl border border-white/[0.07] p-6 sm:p-7"
           >
             <div
-              className="pointer-events-none absolute -right-16 -top-16 h-44 w-44 rounded-full bg-signal-400/[0.08] opacity-60 blur-3xl transition-all duration-500 group-hover:scale-110 group-hover:opacity-100"
+              className="
+                pointer-events-none absolute
+                -right-16 -top-16
+                h-44 w-44 rounded-full
+                bg-signal-400/[0.08]
+                opacity-60 blur-3xl
+                transition-all duration-500
+                group-hover:scale-110
+                group-hover:opacity-100
+              "
               aria-hidden="true"
             />
 
             <div
-              className="pointer-events-none absolute -bottom-20 -left-20 h-44 w-44 rounded-full bg-cyan-400/[0.035] blur-3xl"
+              className="
+                pointer-events-none absolute
+                -bottom-20 -left-20
+                h-44 w-44 rounded-full
+                bg-cyan-400/[0.035]
+                blur-3xl
+              "
               aria-hidden="true"
             />
 
@@ -181,7 +225,20 @@ export default function Certifications() {
                 {currentLearning.map((topic) => (
                   <span
                     key={topic}
-                    className="rounded-full border border-white/[0.08] bg-white/[0.025] px-3.5 py-2 font-mono text-[10px] text-mist-300 transition-all duration-300 hover:-translate-y-0.5 hover:border-signal-400/30 hover:bg-signal-400/[0.06] hover:text-signal-300 hover:shadow-[0_0_16px_rgba(94,234,212,0.08)]"
+                    className="
+                      rounded-full
+                      border border-white/[0.08]
+                      bg-white/[0.025]
+                      px-3.5 py-2
+                      font-mono text-[10px]
+                      text-mist-300
+                      transition-all duration-300
+                      hover:-translate-y-0.5
+                      hover:border-signal-400/30
+                      hover:bg-signal-400/[0.06]
+                      hover:text-signal-300
+                      hover:shadow-[0_0_16px_rgba(94,234,212,0.08)]
+                    "
                   >
                     {topic}
                   </span>
@@ -191,9 +248,8 @@ export default function Certifications() {
               <div className="mt-8 h-px bg-gradient-to-r from-signal-400/20 via-white/[0.06] to-transparent" />
 
               <p className="mt-6 text-sm leading-7 text-mist-400">
-                These topics support my goal of building enterprise AI systems
-                that are secure, maintainable and connected to real business
-                workflows.
+                These are areas I am currently testing and learning alongside
+                my work with enterprise AI, agents and internal automation.
               </p>
 
               <div className="mt-7 flex items-center justify-between border-t border-white/[0.05] pt-4">
@@ -216,9 +272,15 @@ export default function Certifications() {
         </Reveal>
       </div>
 
-      {/* Bottom aligned cards */}
+      {/* =====================================================
+          BOTTOM ALIGNED CARDS
+      ====================================================== */}
+
       <div className="mt-6 grid items-stretch gap-5 lg:grid-cols-2">
-        {/* Education */}
+        {/* =================================================
+            EDUCATION
+        ================================================== */}
+
         <Reveal
           delay={0.22}
           className="h-full"
@@ -230,7 +292,15 @@ export default function Certifications() {
             className="group h-full rounded-2xl border border-white/[0.07] p-6 sm:p-7"
           >
             <div
-              className="pointer-events-none absolute -left-16 -top-16 h-40 w-40 rounded-full bg-amber-300/[0.04] blur-3xl transition-opacity duration-500 group-hover:opacity-100"
+              className="
+                pointer-events-none absolute
+                -left-16 -top-16
+                h-40 w-40 rounded-full
+                bg-amber-300/[0.04]
+                blur-3xl
+                transition-opacity duration-500
+                group-hover:opacity-100
+              "
               aria-hidden="true"
             />
 
@@ -258,7 +328,16 @@ export default function Certifications() {
                 {education.map((item) => (
                   <div
                     key={`${item.school}-${item.degree}`}
-                    className="rounded-xl border border-white/[0.06] bg-white/[0.02] p-5 transition-all duration-300 hover:-translate-y-0.5 hover:border-amber-300/15 hover:bg-amber-300/[0.025]"
+                    className="
+                      rounded-xl
+                      border border-white/[0.06]
+                      bg-white/[0.02]
+                      p-5
+                      transition-all duration-300
+                      hover:-translate-y-0.5
+                      hover:border-amber-300/15
+                      hover:bg-amber-300/[0.025]
+                    "
                   >
                     <p className="font-medium text-white sm:text-lg">
                       {item.school}
@@ -278,7 +357,10 @@ export default function Certifications() {
           </PremiumCard>
         </Reveal>
 
-        {/* Learning philosophy */}
+        {/* =================================================
+            LEARNING PHILOSOPHY
+        ================================================== */}
+
         <Reveal
           delay={0.26}
           className="h-full"
@@ -290,7 +372,16 @@ export default function Certifications() {
             className="group h-full rounded-2xl border border-white/[0.07] p-6 sm:p-7"
           >
             <div
-              className="pointer-events-none absolute -bottom-16 -right-16 h-40 w-40 rounded-full bg-signal-400/[0.06] opacity-60 blur-3xl transition-all duration-500 group-hover:scale-110 group-hover:opacity-100"
+              className="
+                pointer-events-none absolute
+                -bottom-16 -right-16
+                h-40 w-40 rounded-full
+                bg-signal-400/[0.06]
+                opacity-60 blur-3xl
+                transition-all duration-500
+                group-hover:scale-110
+                group-hover:opacity-100
+              "
               aria-hidden="true"
             />
 
