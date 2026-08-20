@@ -147,154 +147,591 @@ function ArchitectureFlow({
 }: {
   project: PortfolioProject;
 }) {
+  const layerCount = project.architecture.length;
+
   return (
-    <div className="relative">
-      {/* Desktop horizontal signal line */}
+    <div
+      className="
+        relative overflow-hidden
+        rounded-[24px]
+        border border-white/[0.07]
+        bg-[#06101a]/55
+        p-4
+        sm:p-5
+        lg:p-6
+      "
+    >
+      {/* =====================================================
+          AMBIENT BACKGROUND
+      ====================================================== */}
+
       <div
+        aria-hidden="true"
         className="
           pointer-events-none absolute
-          left-[8%] right-[8%] top-[43px]
-          hidden h-px overflow-hidden
-          bg-white/[0.08]
-          lg:block
+          left-1/2 top-0
+          h-40 w-[70%]
+          -translate-x-1/2
+          rounded-full
+          bg-signal-400/[0.035]
+          blur-[80px]
         "
-      >
-        <motion.div
-          className="
-            absolute inset-y-0 w-24
-            bg-gradient-to-r
-            from-transparent via-signal-400 to-transparent
-          "
-          animate={{
-            x: ["-100%", "900%"],
-          }}
-          transition={{
-            duration: 4.5,
-            repeat: Infinity,
-            ease: "linear",
-          }}
-        />
-      </div>
+      />
+
+      {/* =====================================================
+          ARCHITECTURE HEADER
+      ====================================================== */}
 
       <div
         className="
-          grid gap-3
-          lg:grid-cols-5
+          relative mb-6
+          flex flex-col gap-3
+          border-b border-white/[0.06]
+          pb-5
+          sm:flex-row
+          sm:items-center
+          sm:justify-between
         "
       >
-        {project.architecture.map((node, index) => (
-          <motion.div
-            key={`${project.id}-${node.title}`}
-            initial={{
-              opacity: 0,
-              y: 14,
-            }}
-            whileInView={{
-              opacity: 1,
-              y: 0,
-            }}
-            viewport={{
-              once: true,
-              amount: 0.25,
-            }}
-            transition={{
-              duration: 0.45,
-              delay: index * 0.07,
-            }}
-            className="relative"
-          >
-            <div
+        <div>
+          <div className="flex items-center gap-2">
+            <Network
+              size={14}
+              className="text-signal-400"
+              aria-hidden="true"
+            />
+
+            <p
               className="
-                group relative h-full overflow-hidden
-                rounded-2xl border border-white/[0.08]
-                bg-[#08111d]/80 p-4
-                transition duration-300
-                hover:-translate-y-1
-                hover:border-signal-400/25
-                hover:bg-[#0a1624]/90
+                font-mono text-[10px]
+                font-semibold uppercase
+                tracking-[0.18em]
+                text-signal-400/75
               "
             >
-              <div className="mb-4 flex items-center justify-between">
+              System Flow
+            </p>
+          </div>
+
+          <p
+            className="
+              mt-2 text-xs
+              leading-5 text-white/35
+            "
+          >
+            Request → Processing → Intelligence → Output
+          </p>
+        </div>
+
+        <div
+          className="
+            inline-flex w-fit
+            items-center gap-2
+            rounded-full
+            border border-white/[0.07]
+            bg-white/[0.025]
+            px-3 py-1.5
+          "
+        >
+          <span
+            className="
+              h-1.5 w-1.5
+              rounded-full
+              bg-signal-400
+              shadow-[0_0_8px_rgba(45,212,191,0.8)]
+            "
+          />
+
+          <span
+            className="
+              font-mono text-[9px]
+              uppercase tracking-[0.16em]
+              text-white/35
+            "
+          >
+            {layerCount} Layers
+          </span>
+        </div>
+      </div>
+
+      {/* =====================================================
+          DESKTOP ARCHITECTURE
+      ====================================================== */}
+
+      <div className="relative hidden lg:block">
+        {/* Main connector */}
+
+        <div
+          aria-hidden="true"
+          className="
+            pointer-events-none absolute
+            left-[8%] right-[8%]
+            top-[46px]
+            z-0 h-px
+            bg-gradient-to-r
+            from-transparent
+            via-white/[0.14]
+            to-transparent
+          "
+        />
+
+        {/* Moving signal packet */}
+
+        <motion.div
+          aria-hidden="true"
+          className="
+            pointer-events-none absolute
+            left-[8%] top-[42px]
+            z-10
+            h-[9px] w-[9px]
+            rounded-full
+            bg-signal-300
+            shadow-[0_0_7px_rgba(45,212,191,1),0_0_18px_rgba(45,212,191,0.65)]
+          "
+          animate={{
+            left: ["8%", "91%"],
+            opacity: [0, 1, 1, 0],
+          }}
+          transition={{
+            duration: 4.8,
+            repeat: Infinity,
+            ease: "linear",
+            times: [0, 0.08, 0.92, 1],
+          }}
+        />
+
+        {/* Direction arrow */}
+
+        <div
+          aria-hidden="true"
+          className="
+            pointer-events-none absolute
+            right-[7.2%] top-[39px]
+            z-10
+            text-[12px]
+            text-signal-400/55
+          "
+        >
+          ›
+        </div>
+
+        {/* Nodes */}
+
+        <div
+          className="
+            relative z-10
+            grid grid-cols-5
+            gap-3
+          "
+        >
+          {project.architecture.map(
+            (node, index) => (
+              <motion.div
+                key={`${project.id}-${node.title}`}
+                initial={{
+                  opacity: 0,
+                  y: 16,
+                }}
+                whileInView={{
+                  opacity: 1,
+                  y: 0,
+                }}
+                viewport={{
+                  once: true,
+                  amount: 0.25,
+                }}
+                transition={{
+                  duration: 0.45,
+                  delay: index * 0.08,
+                }}
+                className="relative pt-[24px]"
+              >
+                {/* Connection node */}
+
                 <div
                   className="
-                    flex h-9 w-9 items-center justify-center
-                    rounded-xl border border-signal-400/20
-                    bg-signal-400/[0.06]
+                    absolute
+                    left-1/2 top-[18px]
+                    z-20
+                    flex h-[17px] w-[17px]
+                    -translate-x-1/2
+                    items-center justify-center
+                    rounded-full
+                    border border-signal-400/35
+                    bg-[#07111b]
                   "
                 >
-                  <span className="font-mono text-xs text-signal-400">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-                </div>
-
-                <motion.div
-                  className="
-                    h-2 w-2 rounded-full
-                    bg-signal-400
-                    shadow-[0_0_12px_rgba(45,212,191,0.9)]
-                  "
-                  animate={{
-                    opacity: [0.25, 1, 0.25],
-                    scale: [0.8, 1.25, 0.8],
-                  }}
-                  transition={{
-                    duration: 2.2,
-                    repeat: Infinity,
-                    delay: index * 0.25,
-                  }}
-                />
-              </div>
-
-              <h4 className="text-sm font-semibold text-white">
-                {node.title}
-              </h4>
-
-              <p className="mt-1 text-xs leading-relaxed text-signal-400/70">
-                {node.subtitle}
-              </p>
-
-              <ul className="mt-4 space-y-2">
-                {node.details.map((detail) => (
-                  <li
-                    key={detail}
+                  <motion.span
                     className="
-                      flex gap-2 text-[11px]
-                      leading-relaxed text-white/42
-                    "
-                  >
-                    <span className="mt-[7px] h-1 w-1 shrink-0 rounded-full bg-white/25" />
-                    <span>{detail}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            {/* Mobile connector */}
-            {index < project.architecture.length - 1 && (
-              <div className="flex h-7 justify-center lg:hidden">
-                <div className="relative h-full w-px bg-white/10">
-                  <motion.div
-                    className="
-                      absolute left-1/2 top-0
-                      h-2 w-2 -translate-x-1/2
-                      rounded-full bg-signal-400
-                      shadow-[0_0_12px_rgba(45,212,191,0.85)]
+                      h-[5px] w-[5px]
+                      rounded-full
+                      bg-signal-400
+                      shadow-[0_0_8px_rgba(45,212,191,0.9)]
                     "
                     animate={{
-                      y: [0, 20, 0],
-                      opacity: [0, 1, 0],
+                      opacity: [0.4, 1, 0.4],
                     }}
                     transition={{
-                      duration: 1.8,
+                      duration: 2,
                       repeat: Infinity,
-                      delay: index * 0.18,
+                      delay: index * 0.25,
+                    }}
+                  />
+                </div>
+
+                {/* Node card */}
+
+                <div
+                  className="
+                    group relative
+                    h-full min-h-[245px]
+                    overflow-hidden
+                    rounded-2xl
+                    border border-white/[0.075]
+                    bg-[#08131f]/90
+                    p-4
+                    transition-all duration-300
+                    hover:-translate-y-1
+                    hover:border-signal-400/25
+                    hover:bg-[#0a1725]
+                    hover:shadow-[0_18px_45px_rgba(0,0,0,0.2)]
+                  "
+                >
+                  {/* Hover glow */}
+
+                  <div
+                    aria-hidden="true"
+                    className="
+                      pointer-events-none
+                      absolute -right-12 -top-12
+                      h-28 w-28
+                      rounded-full
+                      bg-signal-400/[0.04]
+                      blur-3xl
+                      transition
+                      group-hover:bg-signal-400/[0.08]
+                    "
+                  />
+
+                  {/* Number */}
+
+                  <div
+                    className="
+                      relative
+                      flex items-start
+                      justify-between gap-3
+                    "
+                  >
+                    <span
+                      className="
+                        font-mono text-[10px]
+                        font-semibold
+                        tracking-[0.16em]
+                        text-signal-400/70
+                      "
+                    >
+                      {String(index + 1).padStart(
+                        2,
+                        "0",
+                      )}
+                    </span>
+
+                    <span
+                      className="
+                        font-mono text-[8px]
+                        uppercase
+                        tracking-[0.14em]
+                        text-white/18
+                      "
+                    >
+                      Layer
+                    </span>
+                  </div>
+
+                  {/* Node heading */}
+
+                  <div className="relative mt-6">
+                    <h4
+                      className="
+                        text-sm font-semibold
+                        leading-5 text-white
+                        transition-colors
+                        group-hover:text-signal-200
+                      "
+                    >
+                      {node.title}
+                    </h4>
+
+                    <p
+                      className="
+                        mt-2
+                        font-mono text-[9px]
+                        uppercase
+                        leading-4
+                        tracking-[0.11em]
+                        text-signal-400/55
+                      "
+                    >
+                      {node.subtitle}
+                    </p>
+                  </div>
+
+                  {/* Divider */}
+
+                  <div
+                    className="
+                      relative my-4 h-px
+                      bg-gradient-to-r
+                      from-signal-400/20
+                      via-white/[0.05]
+                      to-transparent
+                    "
+                  />
+
+                  {/* Details */}
+
+                  <ul className="relative space-y-2.5">
+                    {node.details.map(
+                      (detail) => (
+                        <li
+                          key={detail}
+                          className="
+                            flex gap-2
+                            text-[10px]
+                            leading-[1.55]
+                            text-white/38
+                          "
+                        >
+                          <span
+                            className="
+                              mt-[6px]
+                              h-1 w-1
+                              shrink-0
+                              rounded-full
+                              bg-signal-400/45
+                            "
+                          />
+
+                          <span>
+                            {detail}
+                          </span>
+                        </li>
+                      ),
+                    )}
+                  </ul>
+                </div>
+              </motion.div>
+            ),
+          )}
+        </div>
+
+        {/* Flow labels */}
+
+        <div
+          className="
+            mt-4 flex
+            items-center
+            justify-between
+            px-2
+            font-mono
+            text-[8px]
+            uppercase
+            tracking-[0.16em]
+            text-white/18
+          "
+        >
+          <span>Input</span>
+
+          <span>Processing</span>
+
+          <span>Output</span>
+        </div>
+      </div>
+
+      {/* =====================================================
+          MOBILE / TABLET ARCHITECTURE
+      ====================================================== */}
+
+      <div className="relative lg:hidden">
+        {project.architecture.map(
+          (node, index) => (
+            <motion.div
+              key={`${project.id}-${node.title}-mobile`}
+              initial={{
+                opacity: 0,
+                y: 12,
+              }}
+              whileInView={{
+                opacity: 1,
+                y: 0,
+              }}
+              viewport={{
+                once: true,
+                amount: 0.2,
+              }}
+              transition={{
+                duration: 0.4,
+                delay: index * 0.05,
+              }}
+              className="relative"
+            >
+              {/* Node */}
+
+              <div
+                className="
+                  relative overflow-hidden
+                  rounded-2xl
+                  border border-white/[0.075]
+                  bg-[#08131f]/90
+                  p-4
+                "
+              >
+                <div
+                  className="
+                    flex items-start
+                    gap-4
+                  "
+                >
+                  {/* Number */}
+
+                  <div
+                    className="
+                      flex h-10 w-10
+                      shrink-0
+                      items-center
+                      justify-center
+                      rounded-xl
+                      border border-signal-400/20
+                      bg-signal-400/[0.055]
+                    "
+                  >
+                    <span
+                      className="
+                        font-mono text-[10px]
+                        text-signal-400
+                      "
+                    >
+                      {String(index + 1).padStart(
+                        2,
+                        "0",
+                      )}
+                    </span>
+                  </div>
+
+                  <div className="min-w-0 flex-1">
+                    <h4 className="text-sm font-semibold text-white">
+                      {node.title}
+                    </h4>
+
+                    <p
+                      className="
+                        mt-1
+                        font-mono text-[9px]
+                        uppercase
+                        tracking-[0.1em]
+                        text-signal-400/55
+                      "
+                    >
+                      {node.subtitle}
+                    </p>
+
+                    <ul className="mt-4 space-y-2">
+                      {node.details.map(
+                        (detail) => (
+                          <li
+                            key={detail}
+                            className="
+                              flex gap-2
+                              text-[11px]
+                              leading-relaxed
+                              text-white/40
+                            "
+                          >
+                            <span
+                              className="
+                                mt-[7px]
+                                h-1 w-1
+                                shrink-0
+                                rounded-full
+                                bg-signal-400/45
+                              "
+                            />
+
+                            <span>
+                              {detail}
+                            </span>
+                          </li>
+                        ),
+                      )}
+                    </ul>
+                  </div>
+
+                  {/* Status */}
+
+                  <motion.span
+                    aria-hidden="true"
+                    className="
+                      mt-1 h-2 w-2
+                      shrink-0
+                      rounded-full
+                      bg-signal-400
+                      shadow-[0_0_10px_rgba(45,212,191,0.8)]
+                    "
+                    animate={{
+                      opacity: [
+                        0.35,
+                        1,
+                        0.35,
+                      ],
+                    }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      delay: index * 0.2,
                     }}
                   />
                 </div>
               </div>
-            )}
-          </motion.div>
-        ))}
+
+              {/* Vertical connector */}
+
+              {index <
+                project.architecture
+                  .length -
+                  1 && (
+                <div
+                  aria-hidden="true"
+                  className="
+                    relative mx-auto
+                    h-9 w-px
+                    bg-white/10
+                  "
+                >
+                  <motion.div
+                    className="
+                      absolute
+                      left-1/2 top-0
+                      h-2 w-2
+                      -translate-x-1/2
+                      rounded-full
+                      bg-signal-400
+                      shadow-[0_0_10px_rgba(45,212,191,0.8)]
+                    "
+                    animate={{
+                      y: [0, 28],
+                      opacity: [0, 1, 0],
+                    }}
+                    transition={{
+                      duration: 1.5,
+                      repeat: Infinity,
+                      delay: index * 0.2,
+                    }}
+                  />
+                </div>
+              )}
+            </motion.div>
+          ),
+        )}
       </div>
     </div>
   );
