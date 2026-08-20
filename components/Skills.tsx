@@ -12,37 +12,37 @@ const categoryMeta: Record<
   "AI & LLM Systems": {
     number: "01",
     description:
-      "Working with Generative AI and large language models for internal applications, business workflows and enterprise use cases.",
+      "Working with Generative AI and LLMs across model integration, prompt design and enterprise workflows, with a focus on turning model capabilities into practical internal applications.",
   },
 
   "AI Agents & Automation": {
     number: "02",
     description:
-      "Building agent-based workflows where AI can use tools, follow defined processes and support multi-step business tasks.",
+      "Building AI agent workflows that use tools, maintain task context and carry out multi-step processes within defined business and access boundaries.",
   },
 
   "Data Analytics & Business Intelligence": {
     number: "03",
     description:
-      "Using data from business systems to build dashboards, reports and analysis that support day-to-day and management decisions.",
+      "Working with business data using SQL, Python, Power BI and Tableau to build dashboards, recurring reports and analysis for operational and management decisions.",
   },
 
   "Enterprise Systems & Integration": {
     number: "04",
     description:
-      "Connecting AI and analytics solutions with internal applications, APIs, enterprise platforms and existing business processes.",
+      "Connecting AI and analytics solutions with APIs, internal applications and enterprise platforms such as Salesforce and SAP to support existing business workflows.",
   },
 
   "AI Infrastructure & Operations": {
     number: "05",
     description:
-      "Working with AI deployment, model routing, local and cloud models, session configuration and the operational side of running AI systems.",
+      "Working with local and cloud AI models, multi-model configuration, routing, fallbacks, sessions and token usage to keep AI systems reliable and manageable.",
   },
 
   "AI Security & Access": {
     number: "06",
     description:
-      "Managing authentication, permissions, access controls and governance requirements for internal AI environments.",
+      "Working with authentication, role-based access, workspace permissions and session controls to manage how users and AI agents interact with internal resources.",
   },
 };
 
