@@ -8,7 +8,6 @@ import {
   Linkedin,
   Mail,
   MapPin,
-  Phone,
   Send,
   Sparkles,
 } from "lucide-react";
@@ -58,7 +57,8 @@ export default function Contact() {
         setEmailCopied(false);
       }, 2000);
     } catch {
-      window.location.href = `mailto:${personal.email}`;
+      window.location.href =
+        `mailto:${personal.email}`;
     }
   }
 
@@ -122,7 +122,9 @@ export default function Contact() {
       ====================================================== */}
 
       <Reveal>
-        <p className="eyebrow">Contact</p>
+        <p className="eyebrow">
+          Contact
+        </p>
       </Reveal>
 
       <Reveal delay={0.05}>
@@ -149,13 +151,12 @@ export default function Contact() {
             sm:text-lg
           "
         >
-          I&apos;m open to conversations
-          around AI, data, automation and
-          enterprise technology. If
-          you&apos;re hiring, working on an
-          interesting problem or think my
-          experience could be useful, feel
-          free to reach out.
+          I&apos;m open to opportunities
+          across AI, data and automation. If
+          you&apos;re hiring, building
+          something in this space or think my
+          experience could be relevant to your
+          team, feel free to reach out.
         </p>
       </Reveal>
 
@@ -272,8 +273,8 @@ export default function Contact() {
                     leading-tight text-white
                   "
                 >
-                  Open to work around AI,
-                  data and automation.
+                  Interested in AI, data and
+                  automation roles.
                 </h3>
 
                 <p
@@ -283,12 +284,11 @@ export default function Contact() {
                     text-mist-300
                   "
                 >
-                  I&apos;m particularly
-                  interested in opportunities
-                  where I can work hands-on
-                  with AI systems, analytics,
-                  automation and enterprise
-                  workflows.
+                  I&apos;m particularly interested
+                  in roles where I can work
+                  hands-on with AI systems,
+                  analytics, automation and
+                  enterprise workflows.
                 </p>
 
                 {/* Opportunity tags */}
@@ -447,71 +447,6 @@ export default function Contact() {
                 </div>
 
                 {/* ===========================================
-                    PHONE
-                ============================================ */}
-
-                {personal.phone && (
-                  <a
-                    href={`tel:${personal.phone.replace(
-                      /[^+\d]/g,
-                      "",
-                    )}`}
-                    data-cursor="interactive"
-                    className="
-                      group flex items-center gap-4
-                      rounded-2xl
-                      border border-white/[0.06]
-                      bg-white/[0.018]
-                      p-4
-                      transition-all duration-300
-                      hover:border-signal-400/20
-                      hover:bg-signal-400/[0.025]
-                    "
-                  >
-                    <span
-                      className="
-                        flex h-10 w-10
-                        shrink-0
-                        items-center justify-center
-                        rounded-xl
-                        border border-signal-400/15
-                        bg-signal-400/[0.05]
-                        text-signal-300
-                      "
-                    >
-                      <Phone
-                        size={18}
-                        aria-hidden="true"
-                      />
-                    </span>
-
-                    <span>
-                      <span
-                        className="
-                          block
-                          font-mono text-[10px]
-                          uppercase tracking-[0.16em]
-                          text-mist-500
-                        "
-                      >
-                        Phone
-                      </span>
-
-                      <span
-                        className="
-                          mt-1 block
-                          text-sm text-mist-200
-                          transition-colors
-                          group-hover:text-white
-                        "
-                      >
-                        {personal.phone}
-                      </span>
-                    </span>
-                  </a>
-                )}
-
-                {/* ===========================================
                     LINKEDIN
                 ============================================ */}
 
@@ -568,8 +503,7 @@ export default function Contact() {
                         group-hover:text-white
                       "
                     >
-                      View my professional
-                      profile
+                      View my professional profile
                     </span>
                   </span>
                 </a>
@@ -634,8 +568,7 @@ export default function Contact() {
                         group-hover:text-white
                       "
                     >
-                      Explore my code and
-                      projects
+                      Explore my code and projects
                     </span>
                   </span>
                 </a>
@@ -718,9 +651,8 @@ export default function Contact() {
                   "
                 >
                   I usually respond to
-                  professional enquiries
-                  within one to two business
-                  days.
+                  professional enquiries within
+                  one to two business days.
                 </p>
               </div>
             </PremiumCard>
@@ -795,10 +727,10 @@ export default function Contact() {
                   >
                     Share a role, project or
                     problem you&apos;d like to
-                    discuss. The form will
-                    prepare the message in
-                    your email app so you can
-                    review it before sending.
+                    discuss. The form will prepare
+                    the message in your email app
+                    so you can review it before
+                    sending.
                   </p>
                 </div>
 
@@ -927,8 +859,7 @@ export default function Contact() {
                     text-mist-600
                   "
                 >
-                  No data is stored by this
-                  website
+                  No data is stored by this website
                 </p>
               </form>
             </div>
@@ -958,7 +889,8 @@ function FormField({
   placeholder,
   autoComplete,
 }: FormFieldProps) {
-  const inputId = `contact-${name}`;
+  const inputId =
+    `contact-${name}`;
 
   return (
     <div>
