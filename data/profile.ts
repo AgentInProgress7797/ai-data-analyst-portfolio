@@ -191,23 +191,26 @@ export const experience: Experience[] = [
     role: "Senior Executive – AI Data Analyst",
     period: "February 2026 – Present",
     location: "Mumbai, Maharashtra, India",
+
     points: [
-      "Develop enterprise AI solutions using OpenAI, Anthropic Claude and OpenClaw for internal business workflows and employee-facing use cases.",
+      "Work on enterprise AI solutions for internal business teams, including department-specific AI assistants, agent workflows and employee-facing use cases.",
 
-      "Design data and automation workflows that connect AI models with business processes, reporting systems and internal applications.",
+      "Configure AI agents, model routing, fallback behaviour, sessions and tool access based on different business functions and user requirements.",
 
-      "Work with structured and unstructured data from enterprise platforms, communication systems and digital sources to produce usable intelligence and management insights.",
+      "Integrate AI workflows with internal applications, files and enterprise resources while working with authentication, permissions and controlled access.",
 
-      "Collaborate with business, operations and technology teams to understand requirements, test solutions and support production implementation.",
+      "Handle the operational side of running AI systems, including model availability, connectivity, token usage, session behaviour and production troubleshooting.",
 
-      "Convert technical and analytical outputs into clear findings, recommendations and decision-ready reports for stakeholders.",
+      "Work with business and technology teams to understand practical use cases, test solutions and move AI workflows from experimentation into day-to-day use.",
     ],
   },
+
   {
     company: "Tata Capital",
     role: "Data Analyst – Data Reporting & Dashboarding",
     period: "May 2023 – December 2025",
     location: "Thane, Maharashtra, India",
+
     points: [
       "Worked with CRM, Salesforce and SAP data to support recurring reporting, business analysis and management reviews.",
 
@@ -220,11 +223,13 @@ export const experience: Experience[] = [
       "Helped reduce repetitive reporting effort by improving report structures and automating parts of the data-preparation process.",
     ],
   },
+
   {
     company: "Teleperformance",
     role: "Team Leader – Data Analytics & Business Intelligence",
     period: "January 2019 – September 2022",
     location: "Thane, Maharashtra, India",
+
     points: [
       "Created MIS reports and KPI dashboards for collection performance, portfolio monitoring and team reviews.",
 
