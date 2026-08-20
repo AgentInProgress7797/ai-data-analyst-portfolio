@@ -20,14 +20,16 @@ import {
 
 import {
   BriefcaseBusiness,
+  Check,
   Contact,
-  Download,
   FolderKanban,
+  Github,
   GraduationCap,
   Home,
   Linkedin,
-  Search,
+  Mail,
   Route,
+  Search,
   Sparkles,
   User,
   X,
@@ -36,11 +38,19 @@ import {
 import PremiumCard from "@/components/PremiumCard";
 import { personal } from "@/data/profile";
 
+/* =========================================================
+   TYPES
+========================================================= */
+
 type CommandIcon = ComponentType<{
   size?: number;
   className?: string;
   "aria-hidden"?: boolean | "true" | "false";
 }>;
+
+type CommandCategory =
+  | "Navigate"
+  | "Connect";
 
 type Command = {
   id: string;
@@ -48,15 +58,21 @@ type Command = {
   description: string;
   keywords: string[];
   icon: CommandIcon;
-  action: () => void;
+  category: CommandCategory;
+  action: () => void | Promise<void>;
 };
 
+/* =========================================================
+   HELPERS
+========================================================= */
+
 function scrollToSection(sectionId: string) {
-  const section = document.getElementById(sectionId);
+  const section =
+    document.getElementById(sectionId);
 
   if (!section) {
     console.warn(
-      `Command Palette: section with id="${sectionId}" was not found.`
+      `Command Palette: section with id="${sectionId}" was not found.`,
     );
 
     return;
@@ -68,19 +84,39 @@ function scrollToSection(sectionId: string) {
   });
 }
 
+/* =========================================================
+   COMMAND PALETTE
+========================================================= */
+
 export default function CommandPalette() {
-  const [isOpen, setIsOpen] = useState(false);
-const [query, setQuery] = useState("");
-const [activeIndex, setActiveIndex] = useState(0);
+  const [isOpen, setIsOpen] =
+    useState(false);
 
-/* Show launcher only after loader finishes */
-const [portfolioReady, setPortfolioReady] =
-  useState(false);
+  const [query, setQuery] =
+    useState("");
 
-const [isFooterVisible, setIsFooterVisible] =
-  useState(false);
+  const [activeIndex, setActiveIndex] =
+    useState(0);
 
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [statusMessage, setStatusMessage] =
+    useState("");
+
+  /* Show launcher only after loader finishes */
+
+  const [portfolioReady, setPortfolioReady] =
+    useState(false);
+
+  const [
+    isFooterVisible,
+    setIsFooterVisible,
+  ] = useState(false);
+
+  const inputRef =
+    useRef<HTMLInputElement>(null);
+
+  /* =======================================================
+     CLOSE / OPEN
+  ======================================================== */
 
   const closePalette = useCallback(() => {
     setIsOpen(false);
@@ -92,204 +128,344 @@ const [isFooterVisible, setIsFooterVisible] =
     setIsOpen(true);
   }, []);
 
+  /* =======================================================
+     STATUS MESSAGE
+  ======================================================== */
+
+  const showStatus = useCallback(
+    (message: string) => {
+      setStatusMessage(message);
+
+      window.setTimeout(() => {
+        setStatusMessage("");
+      }, 2200);
+    },
+    [],
+  );
+
+  /* =======================================================
+     COMMANDS
+  ======================================================== */
+
   const commands = useMemo<Command[]>(
     () => [
+      /* ===================================================
+         NAVIGATE
+      ==================================================== */
+
       {
         id: "home",
         label: "Go to Home",
-        description: "Jump to the beginning of the portfolio",
-        keywords: ["home", "top", "start", "overview"],
+        description:
+          "Jump to the beginning of the portfolio",
+        keywords: [
+          "home",
+          "top",
+          "start",
+          "overview",
+        ],
         icon: Home,
-        action: () => scrollToSection("top"),
+        category: "Navigate",
+        action: () =>
+          scrollToSection("top"),
       },
+
       {
-        id: "about",
-        label: "View About",
-        description: "Learn more about my professional profile",
-        keywords: ["about", "profile", "bio", "who"],
+        id: "profile",
+        label: "View Profile",
+        description:
+          "Learn more about my background and professional journey",
+        keywords: [
+          "profile",
+          "about",
+          "bio",
+          "who",
+          "background",
+        ],
         icon: User,
-        action: () => scrollToSection("about"),
+        category: "Navigate",
+        action: () =>
+          scrollToSection("about"),
       },
+
+      {
+        id: "expertise",
+        label: "View Expertise",
+        description:
+          "Explore my AI, data and enterprise technology capabilities",
+        keywords: [
+          "expertise",
+          "skills",
+          "technology",
+          "stack",
+          "tools",
+          "ai",
+          "data",
+        ],
+        icon: Sparkles,
+        category: "Navigate",
+        action: () =>
+          scrollToSection("skills"),
+      },
+
       {
         id: "experience",
         label: "View Experience",
-        description: "Explore my career and professional journey",
+        description:
+          "Explore my professional experience and roles",
         keywords: [
           "experience",
           "career",
           "work",
           "employment",
+          "jobs",
         ],
         icon: BriefcaseBusiness,
-        action: () => scrollToSection("experience"),
+        category: "Navigate",
+        action: () =>
+          scrollToSection("experience"),
       },
+
       {
-  id: "career",
-  label: "View Career Intelligence",
-  description:
-    "Explore my journey across analytics, automation and enterprise AI",
-  keywords: [
-    "career",
-    "timeline",
-    "journey",
-    "growth",
-    "enterprise ai",
-  ],
-  icon: Route,
-  action: () => scrollToSection("career"),
-},
+        id: "career",
+        label: "View Career Intelligence",
+        description:
+          "Explore my progression across analytics, automation and enterprise AI",
+        keywords: [
+          "career",
+          "timeline",
+          "journey",
+          "growth",
+          "progression",
+          "enterprise ai",
+        ],
+        icon: Route,
+        category: "Navigate",
+        action: () =>
+          scrollToSection("career"),
+      },
+
       {
         id: "projects",
-        label: "Explore Projects",
-        description: "View enterprise AI and analytics projects",
+        label: "View Case Studies",
+        description:
+          "Explore selected AI, analytics and automation projects",
         keywords: [
           "projects",
+          "case studies",
           "work",
           "portfolio",
           "magic ai",
+          "hrms",
         ],
         icon: FolderKanban,
-        action: () => scrollToSection("projects"),
+        category: "Navigate",
+        action: () =>
+          scrollToSection("projects"),
       },
+
       {
-        id: "skills",
-        label: "View Skills",
+        id: "learning",
+        label: "View Learning",
         description:
-          "Explore my AI, analytics and technology skills",
+          "Explore certifications, education and current learning",
         keywords: [
-          "skills",
-          "technology",
-          "stack",
-          "tools",
-        ],
-        icon: Sparkles,
-        action: () => scrollToSection("skills"),
-      },
-      {
-        id: "certifications",
-        label: "View Certifications",
-        description:
-          "Explore certifications and professional learning",
-        keywords: [
+          "learning",
           "certifications",
           "certificates",
           "education",
-          "learning",
+          "courses",
         ],
         icon: GraduationCap,
-        action: () => scrollToSection("certifications"),
+        category: "Navigate",
+        action: () =>
+          scrollToSection(
+            "certifications",
+          ),
       },
+
       {
         id: "contact",
-        label: "Contact Me",
-        description: "Open the contact section",
+        label: "Go to Contact",
+        description:
+          "Open the contact and opportunities section",
         keywords: [
           "contact",
           "email",
           "connect",
           "message",
+          "opportunity",
+          "hire",
         ],
         icon: Contact,
-        action: () => scrollToSection("contact"),
+        category: "Navigate",
+        action: () =>
+          scrollToSection("contact"),
       },
-      {
-        id: "resume",
-        label: "Download Resume",
-        description:
-          "Download a copy of my professional resume",
-        keywords: ["resume", "cv", "download", "profile"],
-        icon: Download,
-        action: () => {
-          const anchor = document.createElement("a");
 
-          anchor.href = personal.resumeUrl;
-          anchor.download = "";
-          anchor.rel = "noopener noreferrer";
+      /* ===================================================
+         CONNECT
+      ==================================================== */
 
-          document.body.appendChild(anchor);
-          anchor.click();
-          anchor.remove();
-        },
-      },
       {
         id: "linkedin",
         label: "Open LinkedIn",
-        description: "Visit my LinkedIn profile",
+        description:
+          "Visit my LinkedIn profile",
         keywords: [
           "linkedin",
           "social",
           "profile",
           "connect",
+          "professional",
         ],
         icon: Linkedin,
+        category: "Connect",
         action: () => {
           window.open(
             personal.linkedin,
             "_blank",
-            "noopener,noreferrer"
+            "noopener,noreferrer",
           );
         },
       },
+
+      {
+        id: "github",
+        label: "Open GitHub",
+        description:
+          "Explore my repositories and project code",
+        keywords: [
+          "github",
+          "code",
+          "repository",
+          "repositories",
+          "projects",
+          "source",
+        ],
+        icon: Github,
+        category: "Connect",
+        action: () => {
+          window.open(
+            personal.github,
+            "_blank",
+            "noopener,noreferrer",
+          );
+        },
+      },
+
+      {
+        id: "email",
+        label: "Copy Email",
+        description:
+          "Copy my email address to your clipboard",
+        keywords: [
+          "email",
+          "mail",
+          "copy",
+          "contact",
+          "message",
+        ],
+        icon: Mail,
+        category: "Connect",
+        action: async () => {
+          try {
+            await navigator.clipboard.writeText(
+              personal.email,
+            );
+
+            showStatus("Email copied");
+          } catch {
+            window.location.href =
+              `mailto:${personal.email}`;
+          }
+        },
+      },
     ],
-    []
+    [showStatus],
   );
 
-  const filteredCommands = useMemo(() => {
-    const normalisedQuery = query.trim().toLowerCase();
+  /* =======================================================
+     FILTER COMMANDS
+  ======================================================== */
 
-    if (!normalisedQuery) {
-      return commands;
-    }
+  const filteredCommands =
+    useMemo(() => {
+      const normalisedQuery =
+        query.trim().toLowerCase();
 
-    return commands.filter((command) => {
-      const searchableText = [
-        command.label,
-        command.description,
-        ...command.keywords,
-      ]
-        .join(" ")
-        .toLowerCase();
-
-      return searchableText.includes(normalisedQuery);
-    });
-  }, [commands, query]);
-
-  const executeCommand = useCallback(
-    (command: Command | undefined) => {
-      if (!command) {
-        return;
+      if (!normalisedQuery) {
+        return commands;
       }
 
-      closePalette();
+      return commands.filter(
+        (command) => {
+          const searchableText = [
+            command.label,
+            command.description,
+            command.category,
+            ...command.keywords,
+          ]
+            .join(" ")
+            .toLowerCase();
 
-      window.setTimeout(() => {
-        command.action();
-      }, 120);
-    },
-    [closePalette]
-  );
+          return searchableText.includes(
+            normalisedQuery,
+          );
+        },
+      );
+    }, [commands, query]);
+
+  /* =======================================================
+     EXECUTE COMMAND
+  ======================================================== */
+
+  const executeCommand =
+    useCallback(
+      (command: Command | undefined) => {
+        if (!command) {
+          return;
+        }
+
+        closePalette();
+
+        window.setTimeout(() => {
+          void command.action();
+        }, 120);
+      },
+      [closePalette],
+    );
+
+  /* =======================================================
+     GLOBAL KEYBOARD SHORTCUT
+  ======================================================== */
 
   useEffect(() => {
     const handleGlobalShortcut = (
-      event: KeyboardEvent
+      event: KeyboardEvent,
     ) => {
       const isCommandShortcut =
-        (event.metaKey || event.ctrlKey) &&
-        event.key.toLowerCase() === "k";
+        (event.metaKey ||
+          event.ctrlKey) &&
+        event.key.toLowerCase() ===
+          "k";
 
       if (isCommandShortcut) {
         event.preventDefault();
 
-        setIsOpen((currentValue) => {
-          const nextValue = !currentValue;
+        setIsOpen(
+          (currentValue) => {
+            const nextValue =
+              !currentValue;
 
-          if (!nextValue) {
-            setQuery("");
-            setActiveIndex(0);
-          }
+            if (!nextValue) {
+              setQuery("");
+              setActiveIndex(0);
+            }
 
-          return nextValue;
-        });
+            return nextValue;
+          },
+        );
       }
 
       if (event.key === "Escape") {
@@ -299,16 +475,20 @@ const [isFooterVisible, setIsFooterVisible] =
 
     window.addEventListener(
       "keydown",
-      handleGlobalShortcut
+      handleGlobalShortcut,
     );
 
     return () => {
       window.removeEventListener(
         "keydown",
-        handleGlobalShortcut
+        handleGlobalShortcut,
       );
     };
   }, [closePalette]);
+
+  /* =======================================================
+     FOCUS + BODY SCROLL LOCK
+  ======================================================== */
 
   useEffect(() => {
     if (!isOpen) {
@@ -318,103 +498,156 @@ const [isFooterVisible, setIsFooterVisible] =
     const previousOverflow =
       document.body.style.overflow;
 
-    document.body.style.overflow = "hidden";
+    document.body.style.overflow =
+      "hidden";
 
-    const focusTimer = window.setTimeout(() => {
-      inputRef.current?.focus();
-    }, 80);
+    const focusTimer =
+      window.setTimeout(() => {
+        inputRef.current?.focus();
+      }, 80);
 
     return () => {
-      window.clearTimeout(focusTimer);
+      window.clearTimeout(
+        focusTimer,
+      );
 
       document.body.style.overflow =
         previousOverflow;
     };
   }, [isOpen]);
 
+  /* =======================================================
+     PORTFOLIO READY
+  ======================================================== */
+
   useEffect(() => {
-  const handlePortfolioReady = () => {
-  window.setTimeout(() => {
-    setPortfolioReady(true);
-  }, 300);
-};
+    const handlePortfolioReady =
+      () => {
+        window.setTimeout(() => {
+          setPortfolioReady(true);
+        }, 300);
+      };
 
-  window.addEventListener(
-    "portfolio-ready",
-    handlePortfolioReady
-  );
-
-  return () => {
-    window.removeEventListener(
+    window.addEventListener(
       "portfolio-ready",
-      handlePortfolioReady
+      handlePortfolioReady,
     );
-  };
-}, []);
 
-useEffect(() => {
-  const footer = document.getElementById("site-footer");
+    return () => {
+      window.removeEventListener(
+        "portfolio-ready",
+        handlePortfolioReady,
+      );
+    };
+  }, []);
 
-  if (!footer) return;
+  /* =======================================================
+     FOOTER VISIBILITY
+  ======================================================== */
 
-  const observer = new IntersectionObserver(
-    ([entry]) => {
-      setIsFooterVisible(entry.isIntersecting);
-    },
-    {
-      threshold: 0,
-      rootMargin: "0px 0px 120px 0px",
+  useEffect(() => {
+    const footer =
+      document.getElementById(
+        "site-footer",
+      );
+
+    if (!footer) {
+      return;
     }
-  );
 
-  observer.observe(footer);
+    const observer =
+      new IntersectionObserver(
+        ([entry]) => {
+          setIsFooterVisible(
+            entry.isIntersecting,
+          );
+        },
+        {
+          threshold: 0,
+          rootMargin:
+            "0px 0px 120px 0px",
+        },
+      );
 
-  return () => observer.disconnect();
-}, []);
+    observer.observe(footer);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, []);
+
+  /* =======================================================
+     RESET ACTIVE INDEX AFTER SEARCH
+  ======================================================== */
 
   useEffect(() => {
-  setActiveIndex(0);
-}, [query]);
+    setActiveIndex(0);
+  }, [query]);
+
+  /* =======================================================
+     ACTIVE INDEX SAFETY
+  ======================================================== */
 
   useEffect(() => {
-    if (filteredCommands.length === 0) {
+    if (
+      filteredCommands.length === 0
+    ) {
       setActiveIndex(0);
       return;
     }
 
-    if (activeIndex >= filteredCommands.length) {
-      setActiveIndex(filteredCommands.length - 1);
+    if (
+      activeIndex >=
+      filteredCommands.length
+    ) {
+      setActiveIndex(
+        filteredCommands.length - 1,
+      );
     }
-  }, [activeIndex, filteredCommands.length]);
+  }, [
+    activeIndex,
+    filteredCommands.length,
+  ]);
+
+  /* =======================================================
+     INPUT KEYBOARD NAVIGATION
+  ======================================================== */
 
   const handleInputKeyDown = (
-    event: ReactKeyboardEvent<HTMLInputElement>
+    event: ReactKeyboardEvent<HTMLInputElement>,
   ) => {
     if (event.key === "ArrowDown") {
       event.preventDefault();
 
-      if (filteredCommands.length === 0) {
+      if (
+        filteredCommands.length === 0
+      ) {
         return;
       }
 
-      setActiveIndex((currentIndex) =>
-        currentIndex >= filteredCommands.length - 1
-          ? 0
-          : currentIndex + 1
+      setActiveIndex(
+        (currentIndex) =>
+          currentIndex >=
+          filteredCommands.length - 1
+            ? 0
+            : currentIndex + 1,
       );
     }
 
     if (event.key === "ArrowUp") {
       event.preventDefault();
 
-      if (filteredCommands.length === 0) {
+      if (
+        filteredCommands.length === 0
+      ) {
         return;
       }
 
-      setActiveIndex((currentIndex) =>
-        currentIndex <= 0
-          ? filteredCommands.length - 1
-          : currentIndex - 1
+      setActiveIndex(
+        (currentIndex) =>
+          currentIndex <= 0
+            ? filteredCommands.length - 1
+            : currentIndex - 1,
       );
     }
 
@@ -422,54 +655,175 @@ useEffect(() => {
       event.preventDefault();
 
       executeCommand(
-        filteredCommands[activeIndex]
+        filteredCommands[
+          activeIndex
+        ],
       );
     }
   };
 
+  /* =======================================================
+     CATEGORY LABEL HELPER
+  ======================================================== */
+
+  function shouldShowCategory(
+    index: number,
+  ) {
+    if (query.trim()) {
+      return false;
+    }
+
+    if (index === 0) {
+      return true;
+    }
+
+    return (
+      filteredCommands[index]
+        .category !==
+      filteredCommands[index - 1]
+        .category
+    );
+  }
+
+  /* =======================================================
+     RENDER
+  ======================================================== */
+
   return (
     <>
-  <AnimatePresence>
-    {portfolioReady && !isFooterVisible && (
-      <motion.button
-  type="button"
-  onClick={openPalette}
-  initial={{
-    opacity: 0,
-    y: 20,
-    scale: 0.96,
-  }}
-  animate={{
-    opacity: 1,
-    y: 0,
-    scale: 1,
-  }}
-  exit={{
-    opacity: 0,
-    y: 20,
-    scale: 0.96,
-  }}
-  transition={{
-    duration: 0.35,
-    ease: [0.25, 0, 0, 1],
-  }}
-  aria-label="Open portfolio command palette"
-  data-cursor="interactive"
-  className="fixed bottom-5 right-5 z-[9000] hidden items-center gap-2 rounded-full border border-signal-400/25 bg-[#07110f]/90 px-4 py-2.5 font-mono text-xs text-mist-200 shadow-[0_12px_40px_rgba(0,0,0,0.45),0_0_22px_rgba(45,212,191,0.1)] backdrop-blur-xl transition-all duration-300 hover:-translate-y-0.5 hover:border-signal-400/55 hover:text-signal-300 md:flex"
->
-        <Search
-          size={14}
-          aria-hidden="true"
-        />
+      {/* ===================================================
+          FLOATING LAUNCHER
+      ==================================================== */}
 
-        <span>Quick navigation</span>
+      <AnimatePresence>
+        {portfolioReady &&
+          !isFooterVisible && (
+            <motion.button
+              type="button"
+              onClick={openPalette}
+              initial={{
+                opacity: 0,
+                y: 20,
+                scale: 0.96,
+              }}
+              animate={{
+                opacity: 1,
+                y: 0,
+                scale: 1,
+              }}
+              exit={{
+                opacity: 0,
+                y: 20,
+                scale: 0.96,
+              }}
+              transition={{
+                duration: 0.35,
+                ease: [
+                  0.25,
+                  0,
+                  0,
+                  1,
+                ],
+              }}
+              aria-label="Open portfolio command palette"
+              data-cursor="interactive"
+              className="
+                fixed bottom-5 right-5
+                z-[9000]
+                hidden items-center
+                gap-2 rounded-full
+                border border-signal-400/25
+                bg-[#07110f]/90
+                px-4 py-2.5
+                font-mono text-xs
+                text-mist-200
+                shadow-[0_12px_40px_rgba(0,0,0,0.45),0_0_22px_rgba(45,212,191,0.1)]
+                backdrop-blur-xl
+                transition-all duration-300
+                hover:-translate-y-0.5
+                hover:border-signal-400/55
+                hover:text-signal-300
+                md:flex
+              "
+            >
+              <Search
+                size={14}
+                aria-hidden="true"
+              />
 
-        <span className="rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-0.5 text-[10px] font-semibold text-mist-300">
-          ⌘ K
-        </span>
-      </motion.button>
-    )}
-    </AnimatePresence>
+              <span>
+                Quick navigation
+              </span>
+
+              <span
+                className="
+                  rounded-md
+                  border border-white/10
+                  bg-white/[0.04]
+                  px-1.5 py-0.5
+                  text-[10px]
+                  font-semibold
+                  text-mist-300
+                "
+              >
+                ⌘ K
+              </span>
+            </motion.button>
+          )}
+      </AnimatePresence>
+
+      {/* ===================================================
+          STATUS TOAST
+      ==================================================== */}
+
+      <AnimatePresence>
+        {statusMessage && (
+          <motion.div
+            initial={{
+              opacity: 0,
+              y: 10,
+              scale: 0.97,
+            }}
+            animate={{
+              opacity: 1,
+              y: 0,
+              scale: 1,
+            }}
+            exit={{
+              opacity: 0,
+              y: 8,
+              scale: 0.97,
+            }}
+            transition={{
+              duration: 0.2,
+            }}
+            className="
+              fixed bottom-20
+              right-5 z-[99999]
+              flex items-center gap-2
+              rounded-xl
+              border border-signal-400/25
+              bg-[#07110f]/95
+              px-4 py-3
+              font-mono text-xs
+              text-signal-200
+              shadow-[0_15px_50px_rgba(0,0,0,0.5)]
+              backdrop-blur-xl
+            "
+          >
+            <Check
+              size={15}
+              aria-hidden="true"
+            />
+
+            {statusMessage}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* ===================================================
+          COMMAND PALETTE
+      ==================================================== */}
 
       <AnimatePresence>
         {isOpen && (
@@ -477,7 +831,15 @@ useEffect(() => {
             role="dialog"
             aria-modal="true"
             aria-label="Portfolio command palette"
-            className="fixed inset-0 z-[99999] flex items-start justify-center px-4 pt-[10vh] sm:pt-[14vh]"
+            className="
+              fixed inset-0
+              z-[99999]
+              flex items-start
+              justify-center
+              px-4
+              pt-[10vh]
+              sm:pt-[14vh]
+            "
             initial={{
               opacity: 0,
             }}
@@ -491,12 +853,18 @@ useEffect(() => {
               duration: 0.2,
             }}
           >
+            {/* Backdrop */}
+
             <motion.button
               type="button"
               aria-label="Close command palette"
               onClick={closePalette}
               data-cursor="interactive"
-              className="absolute inset-0 bg-[#020706]/78 backdrop-blur-md"
+              className="
+                absolute inset-0
+                bg-[#020706]/78
+                backdrop-blur-md
+              "
               initial={{
                 opacity: 0,
               }}
@@ -511,8 +879,13 @@ useEffect(() => {
               }}
             />
 
+            {/* Palette */}
+
             <motion.div
-              className="relative z-10 w-full max-w-[680px]"
+              className="
+                relative z-10
+                w-full max-w-[680px]
+              "
               initial={{
                 opacity: 0,
                 scale: 0.96,
@@ -537,19 +910,47 @@ useEffect(() => {
             >
               <PremiumCard
                 enableTilt={false}
-                ariaLabel="AI portfolio command centre"
-                className="rounded-[24px] border border-signal-400/20 bg-[#06100f]/95 shadow-[0_35px_110px_rgba(0,0,0,0.78),0_0_55px_rgba(45,212,191,0.09)] backdrop-blur-2xl"
+                ariaLabel="Portfolio command centre"
+                className="
+                  rounded-[24px]
+                  border border-signal-400/20
+                  bg-[#06100f]/95
+                  shadow-[0_35px_110px_rgba(0,0,0,0.78),0_0_55px_rgba(45,212,191,0.09)]
+                  backdrop-blur-2xl
+                "
               >
                 <div className="overflow-hidden rounded-[24px]">
+                  {/* Top cyan line */}
+
                   <div
                     aria-hidden="true"
-                    className="h-px w-full bg-gradient-to-r from-transparent via-signal-300/80 to-transparent"
+                    className="
+                      h-px w-full
+                      bg-gradient-to-r
+                      from-transparent
+                      via-signal-300/80
+                      to-transparent
+                    "
                   />
 
-                  <div className="flex items-center gap-3 border-b border-white/[0.09] px-4 py-4 sm:px-6 sm:py-5">
+                  {/* Search header */}
+
+                  <div
+                    className="
+                      flex items-center
+                      gap-3
+                      border-b
+                      border-white/[0.09]
+                      px-4 py-4
+                      sm:px-6 sm:py-5
+                    "
+                  >
                     <Search
                       size={20}
-                      className="shrink-0 text-signal-300"
+                      className="
+                        shrink-0
+                        text-signal-300
+                      "
                       aria-hidden="true"
                     />
 
@@ -558,13 +959,27 @@ useEffect(() => {
                       type="text"
                       value={query}
                       onChange={(event) =>
-                        setQuery(event.target.value)
+                        setQuery(
+                          event.target
+                            .value,
+                        )
                       }
-                      onKeyDown={handleInputKeyDown}
+                      onKeyDown={
+                        handleInputKeyDown
+                      }
                       placeholder="Search portfolio commands..."
                       aria-label="Search portfolio commands"
                       autoComplete="off"
-                      className="min-w-0 flex-1 bg-transparent text-sm font-medium text-white outline-none placeholder:text-mist-500 sm:text-base"
+                      className="
+                        min-w-0 flex-1
+                        bg-transparent
+                        text-sm
+                        font-medium
+                        text-white
+                        outline-none
+                        placeholder:text-mist-500
+                        sm:text-base
+                      "
                     />
 
                     <button
@@ -572,7 +987,17 @@ useEffect(() => {
                       onClick={closePalette}
                       aria-label="Close command palette"
                       data-cursor="interactive"
-                      className="rounded-xl border border-white/[0.1] bg-white/[0.025] p-2 text-mist-400 transition-all duration-200 hover:border-signal-400/35 hover:bg-signal-400/[0.07] hover:text-signal-200"
+                      className="
+                        rounded-xl
+                        border border-white/[0.1]
+                        bg-white/[0.025]
+                        p-2
+                        text-mist-400
+                        transition-all duration-200
+                        hover:border-signal-400/35
+                        hover:bg-signal-400/[0.07]
+                        hover:text-signal-200
+                      "
                     >
                       <X
                         size={16}
@@ -581,85 +1006,180 @@ useEffect(() => {
                     </button>
                   </div>
 
-                  <div className="max-h-[430px] overflow-y-auto px-2 py-2 sm:px-3">
-                    {filteredCommands.length > 0 ? (
+                  {/* Commands */}
+
+                  <div
+                    className="
+                      max-h-[430px]
+                      overflow-y-auto
+                      px-2 py-2
+                      sm:px-3
+                    "
+                  >
+                    {filteredCommands.length >
+                    0 ? (
                       filteredCommands.map(
-                        (command, index) => {
-                          const Icon = command.icon;
+                        (
+                          command,
+                          index,
+                        ) => {
+                          const Icon =
+                            command.icon;
+
                           const isActive =
-                            index === activeIndex;
+                            index ===
+                            activeIndex;
 
                           return (
-                            <button
-                              key={command.id}
-                              type="button"
-                              data-cursor="interactive"
-                              onMouseEnter={() =>
-                                setActiveIndex(index)
+                            <div
+                              key={
+                                command.id
                               }
-                              onFocus={() =>
-                                setActiveIndex(index)
-                              }
-                              onClick={() =>
-                                executeCommand(command)
-                              }
-                              className={[
-                                "group flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-all duration-200 sm:px-4",
-                                isActive
-                                  ? "bg-signal-400/[0.11] text-white shadow-[inset_0_0_0_1px_rgba(45,212,191,0.16),0_10px_30px_rgba(0,0,0,0.12)]"
-                                  : "text-mist-300 hover:bg-white/[0.035]",
-                              ].join(" ")}
                             >
-                              <span
-                                className={[
-                                  "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-all duration-200",
-                                  isActive
-                                    ? "border-signal-400/45 bg-signal-400/[0.1] text-signal-200 shadow-[0_0_18px_rgba(45,212,191,0.1)]"
-                                    : "border-white/[0.08] bg-white/[0.02] text-mist-500 group-hover:border-white/[0.14] group-hover:text-mist-300",
-                                ].join(" ")}
-                              >
-                                <Icon
-                                  size={18}
-                                  aria-hidden="true"
-                                />
-                              </span>
-
-                              <span className="min-w-0 flex-1">
-                                <span
-                                  className={[
-                                    "block text-sm font-semibold transition-colors sm:text-[15px]",
-                                    isActive
-                                      ? "text-white"
-                                      : "text-mist-300",
-                                  ].join(" ")}
+                              {shouldShowCategory(
+                                index,
+                              ) && (
+                                <div
+                                  className="
+                                    px-3
+                                    pb-2
+                                    pt-4
+                                    font-mono
+                                    text-[9px]
+                                    font-semibold
+                                    uppercase
+                                    tracking-[0.2em]
+                                    text-mist-600
+                                    sm:px-4
+                                  "
                                 >
-                                  {command.label}
-                                </span>
-
-                                <span
-                                  className={[
-                                    "mt-1 block truncate text-xs transition-colors sm:text-[13px]",
-                                    isActive
-                                      ? "text-mist-200"
-                                      : "text-mist-500",
-                                  ].join(" ")}
-                                >
-                                  {command.description}
-                                </span>
-                              </span>
-
-                              {isActive && (
-                                <span className="hidden rounded-lg border border-signal-400/20 bg-signal-400/[0.06] px-2.5 py-1.5 font-mono text-[10px] font-bold tracking-wide text-mist-200 sm:inline-flex">
-                                  ENTER
-                                </span>
+                                  {
+                                    command.category
+                                  }
+                                </div>
                               )}
-                            </button>
+
+                              <button
+                                type="button"
+                                data-cursor="interactive"
+                                onMouseEnter={() =>
+                                  setActiveIndex(
+                                    index,
+                                  )
+                                }
+                                onFocus={() =>
+                                  setActiveIndex(
+                                    index,
+                                  )
+                                }
+                                onClick={() =>
+                                  executeCommand(
+                                    command,
+                                  )
+                                }
+                                className={[
+                                  "group flex w-full items-center gap-3 rounded-2xl px-3 py-3 text-left transition-all duration-200 sm:px-4",
+                                  isActive
+                                    ? "bg-signal-400/[0.11] text-white shadow-[inset_0_0_0_1px_rgba(45,212,191,0.16),0_10px_30px_rgba(0,0,0,0.12)]"
+                                    : "text-mist-300 hover:bg-white/[0.035]",
+                                ].join(
+                                  " ",
+                                )}
+                              >
+                                <span
+                                  className={[
+                                    "flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-all duration-200",
+                                    isActive
+                                      ? "border-signal-400/45 bg-signal-400/[0.1] text-signal-200 shadow-[0_0_18px_rgba(45,212,191,0.1)]"
+                                      : "border-white/[0.08] bg-white/[0.02] text-mist-500 group-hover:border-white/[0.14] group-hover:text-mist-300",
+                                  ].join(
+                                    " ",
+                                  )}
+                                >
+                                  <Icon
+                                    size={18}
+                                    aria-hidden="true"
+                                  />
+                                </span>
+
+                                <span className="min-w-0 flex-1">
+                                  <span
+                                    className={[
+                                      "block text-sm font-semibold transition-colors sm:text-[15px]",
+                                      isActive
+                                        ? "text-white"
+                                        : "text-mist-300",
+                                    ].join(
+                                      " ",
+                                    )}
+                                  >
+                                    {
+                                      command.label
+                                    }
+                                  </span>
+
+                                  <span
+                                    className={[
+                                      "mt-1 block truncate text-xs transition-colors sm:text-[13px]",
+                                      isActive
+                                        ? "text-mist-200"
+                                        : "text-mist-500",
+                                    ].join(
+                                      " ",
+                                    )}
+                                  >
+                                    {
+                                      command.description
+                                    }
+                                  </span>
+                                </span>
+
+                                {isActive && (
+                                  <span
+                                    className="
+                                      hidden
+                                      rounded-lg
+                                      border border-signal-400/20
+                                      bg-signal-400/[0.06]
+                                      px-2.5 py-1.5
+                                      font-mono
+                                      text-[10px]
+                                      font-bold
+                                      tracking-wide
+                                      text-mist-200
+                                      sm:inline-flex
+                                    "
+                                  >
+                                    ENTER
+                                  </span>
+                                )}
+                              </button>
+                            </div>
                           );
-                        }
+                        },
                       )
                     ) : (
-                      <div className="flex min-h-[210px] flex-col items-center justify-center px-6 text-center">
-                        <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl border border-white/[0.08] bg-white/[0.025]">
+                      <div
+                        className="
+                          flex min-h-[210px]
+                          flex-col
+                          items-center
+                          justify-center
+                          px-6
+                          text-center
+                        "
+                      >
+                        <div
+                          className="
+                            mb-4
+                            flex h-12 w-12
+                            items-center
+                            justify-center
+                            rounded-2xl
+                            border border-white/[0.08]
+                            bg-white/[0.025]
+                          "
+                        >
                           <Search
                             size={22}
                             className="text-mist-500"
@@ -672,19 +1192,50 @@ useEffect(() => {
                         </p>
 
                         <p className="mt-1.5 text-xs text-mist-500">
-                          Try searching for projects,
-                          experience, resume or contact.
+                          Try searching for
+                          projects, experience,
+                          GitHub, LinkedIn or
+                          contact.
                         </p>
                       </div>
                     )}
                   </div>
 
-                  <div className="flex flex-wrap items-center justify-between gap-3 border-t border-white/[0.1] bg-black/[0.08] px-4 py-3 font-mono text-[11px] font-bold tracking-wide text-mist-200 sm:px-6 sm:text-xs">
+                  {/* Footer */}
+
+                  <div
+                    className="
+                      flex flex-wrap
+                      items-center
+                      justify-between
+                      gap-3
+                      border-t
+                      border-white/[0.1]
+                      bg-black/[0.08]
+                      px-4 py-3
+                      font-mono
+                      text-[11px]
+                      font-bold
+                      tracking-wide
+                      text-mist-200
+                      sm:px-6
+                      sm:text-xs
+                    "
+                  >
                     <span className="text-signal-300/90">
-                      AI PORTFOLIO COMMAND CENTER
+                      PORTFOLIO COMMAND
+                      CENTER
                     </span>
 
-                    <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-mist-200">
+                    <div
+                      className="
+                        flex flex-wrap
+                        items-center
+                        gap-x-5
+                        gap-y-2
+                        text-mist-200
+                      "
+                    >
                       <span>
                         <strong className="text-white">
                           ↑ ↓
