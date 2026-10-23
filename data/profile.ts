@@ -20,7 +20,7 @@ export const personal = {
     "for complex enterprise challenges.",
 
   heroDescription:
-    "I work at the intersection of artificial intelligence, data analytics and business operations. With 7+ years of experience, I build practical solutions that simplify workflows, connect data and support better business decisions.",
+    "I work across enterprise AI, data analytics and internal application development. Over the past 7+ years, my work has moved from reporting and business analysis into building and supporting AI assistants, chatbots and production applications used by business teams.",
 
   location: "Mumbai, Maharashtra, India",
   email: "ashishpawar7797@gmail.com",
@@ -39,14 +39,14 @@ export const personal = {
   yearsExperience: 7,
 
   summary:
-    "AI Data Analyst with 7+ years of experience across data analytics, reporting, dashboards, business intelligence and enterprise AI solutions. My work includes handling data from CRM, Salesforce and SAP ERP systems, building management reports and dashboards, and developing AI-driven workflows that reduce manual effort and improve decision-making.",
+    "AI Data Analyst with 7+ years of experience in reporting, business intelligence and enterprise technology. I now work on internal AI platforms, chatbot integrations and Python-based business applications, alongside my background in SQL, dashboards and operational reporting. My focus is on getting systems into use and keeping them dependable after launch.",
 
   longSummary: [
     "My career began in operational analytics, where I worked with performance data, collections reporting and team-level insights. That experience helped me understand how data is used in day-to-day business decisions, not only how it is processed.",
 
-    "I later moved into enterprise reporting and dashboard development, working with SQL, Python, Power BI, Tableau, Advanced Excel, Salesforce and SAP data. Today, my focus includes Generative AI, AI agents, workflow automation and secure enterprise AI implementation.",
+    "I later moved into enterprise reporting and dashboard development, using SQL, Python, Power BI, Tableau, Advanced Excel, Salesforce and SAP data. More recently, I have worked on enterprise AI assistants, chatbot extensions and an employee attendance portal with biometric data integration.",
 
-    "I enjoy working between business and technology teams: understanding the actual problem, simplifying the workflow, building the solution and explaining the result in a way that stakeholders can act on.",
+    "I like work that starts with a real operational problem and ends with something people can use. That usually means discussing requirements with business teams, building or integrating the solution, testing it carefully and supporting it in production.",
   ],
 };
 
@@ -98,6 +98,7 @@ export const skillGroups: SkillCategory[] = [
       "OpenRouter",
       "Prompt Engineering",
       "LLM Integration",
+      "Model Fallback Configuration",
     ],
   },
 
@@ -110,6 +111,7 @@ export const skillGroups: SkillCategory[] = [
       "Tool Calling",
       "Tool Integration",
       "Workflow Automation",
+      "Chatbot Extensions",
       "Session Management",
       "Agent Access Controls",
     ],
@@ -128,6 +130,7 @@ export const skillGroups: SkillCategory[] = [
       "KPI Dashboarding",
       "MIS Reporting",
       "Management Reporting",
+      "SQL Server",
     ],
   },
 
@@ -142,6 +145,8 @@ export const skillGroups: SkillCategory[] = [
       "Internal Applications",
       "Enterprise AI Assistants",
       "Business Workflows",
+      "Biometric Attendance Integration",
+      "Read-Only Database Integration",
     ],
   },
 
@@ -156,6 +161,23 @@ export const skillGroups: SkillCategory[] = [
       "Automatic Fallback",
       "Token Optimization",
       "Session Configuration",
+      "Production Troubleshooting",
+      "PM2",
+      "Windows Services",
+    ],
+  },
+
+  {
+    category: "Application Development",
+    skills: [
+      "Python",
+      "Flask",
+      "Next.js",
+      "TypeScript",
+      "JavaScript",
+      "REST APIs",
+      "SQLite",
+      "Git & GitHub",
     ],
   },
 
@@ -193,15 +215,15 @@ export const experience: Experience[] = [
     location: "Mumbai, Maharashtra, India",
 
     points: [
-      "Work on enterprise AI solutions for internal business teams, including department-specific AI assistants, agent workflows and employee-facing use cases.",
+      "Work on internal AI platforms and employee-facing applications, including Magic AI, the Rel Robo chatbot and an attendance self-service portal now used in production.",
 
-      "Configure AI agents, model routing, fallback behaviour, sessions and tool access based on different business functions and user requirements.",
+      "Configure OpenClaw agents, model routing, fallback behaviour, sessions and tool permissions for different business functions; also maintain custom controls in the internal AI interface.",
 
-      "Integrate AI workflows with internal applications, files and enterprise resources while working with authentication, permissions and controlled access.",
+      "Work on chatbot extensions and keyword-based service discovery, including configuration changes, testing and production issue resolution.",
 
-      "Handle the operational side of running AI systems, including model availability, connectivity, token usage, session behaviour and production troubleshooting.",
+      "Develop and support a Python/Flask attendance portal with manager approval workflows, biometric punch-data integration, SQL Server connectivity and attendance reconciliation rules.",
 
-      "Work with business and technology teams to understand practical use cases, test solutions and move AI workflows from experimentation into day-to-day use.",
+      "Coordinate with business and IT teams on requirements, UAT, controlled production changes, access issues, email delivery and ongoing application support.",
     ],
   },
 
@@ -430,8 +452,49 @@ export const projects: Project[] = [
 
   category: "AI",
 
-  status: "In Development",
+  status: "Live",
 },
+  {
+    title: "Employee Attendance Self-Service Portal",
+    subtitle: "Attendance Management & Biometric Integration",
+    description:
+      "An internal attendance application for non-payroll employees, covering attendance records, manager approvals, leave workflows and biometric data synchronisation.",
+    challenge:
+      "Attendance records and requests needed to be managed consistently while bringing biometric punches from an external eSSL system into the portal without changing the source database.",
+    contributions: [
+      "Developed and supported Python/Flask attendance workflows for employees and managers.",
+      "Integrated biometric attendance data through a read-only SQL Server connection.",
+      "Worked on rotational and overnight shift reconciliation, leave precedence and exception review rules.",
+      "Implemented and tested bulk regularisation approval workflows and employee email formatting changes.",
+      "Validated staged changes before production deployment and supported service troubleshooting.",
+    ],
+    outcome:
+      "Deployed an internal attendance portal used for attendance tracking and approval workflows, with biometric data integration and production support.",
+    confidential: true,
+    tags: ["Python", "Flask", "SQL Server", "SQLite", "eSSL", "Attendance Automation"],
+    category: "Automation",
+    status: "Live",
+  },
+  {
+    title: "Rel Robo – Enterprise Chatbot",
+    subtitle: "Internal Chatbot & Service Extensions",
+    description:
+      "An internal chatbot with configured extensions for service-related queries and employee assistance.",
+    challenge:
+      "Employees needed a simpler way to reach supported services through a chatbot, with reliable keyword matching and controlled extension behaviour.",
+    contributions: [
+      "Worked on chatbot extension configuration and service-specific keyword triggers.",
+      "Reviewed plugin behaviour and supported UAT and production testing scenarios.",
+      "Checked changes against existing extension settings to avoid disrupting working functionality.",
+      "Supported rollout and follow-up troubleshooting for the live chatbot.",
+    ],
+    outcome:
+      "Supported a production chatbot with service extensions and keyword-based access to supported workflows.",
+    confidential: true,
+    tags: ["Chatbots", "Plugin Integration", "Keyword Routing", "UAT", "Enterprise AI"],
+    category: "AI",
+    status: "Live",
+  },
   {
     title: "Enterprise KPI & MIS Reporting",
     subtitle: "Business Intelligence and Management Reporting",
@@ -586,7 +649,7 @@ export const seo = {
     "Ashish Pawar | Enterprise AI, Data Analytics & Automation",
 
   description:
-    "Portfolio of Ashish Pawar, an AI Data Analyst working across enterprise AI, Generative AI, data analytics, dashboards, business intelligence and workflow automation.",
+    "Portfolio of Ashish Pawar, covering enterprise AI platforms, production chatbots, Python applications, biometric attendance integration, data analytics and business intelligence.",
 
   url: "https://ai-data-analyst-portfolio.vercel.app",
 };
