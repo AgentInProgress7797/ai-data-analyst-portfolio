@@ -62,8 +62,8 @@ export const portfolioProjects: PortfolioProject[] = [
         label: "Departments",
       },
       {
-        value: "24×7",
-        label: "Availability",
+        value: "Internal",
+        label: "Deployment",
       },
       {
         value: "Claude",
@@ -135,6 +135,7 @@ export const portfolioProjects: PortfolioProject[] = [
     impact: [
       "Supported 40+ users across multiple departments on the internal AI platform.",
       "Set up department-specific workspaces and access controls for internal documents.",
+      "Simplified parts of the assistant interface and worked on model configuration and token-usage efficiency.",
       "Supported document drafting, business queries and day-to-day AI-assisted work.",
       "Created onboarding material and user communication for non-technical teams.",
     ],
@@ -145,6 +146,7 @@ export const portfolioProjects: PortfolioProject[] = [
       "Department workspace and permission management",
       "Authentication and access coordination",
       "Troubleshooting sessions, connectivity and file-access issues",
+      "Custom OpenClaw UI controls and production support",
       "Usage support and internal communication",
     ],
 
@@ -181,6 +183,212 @@ export const portfolioProjects: PortfolioProject[] = [
     ],
   },
 
+  {
+    id: "attendance-portal",
+    name: "Employee Attendance Self-Service Portal",
+    shortName: "Attendance Portal",
+    category: "Enterprise Workflow Automation",
+    status: "Operational",
+    year: "2026–Present",
+    description:
+      "A web-based attendance portal for non-payroll employees and managers. I worked on biometric data integration, shift calculations, leave and regularization workflows, manager approvals, reporting and production support.",
+    metrics: [
+      { value: "Flask", label: "Application backend" },
+      { value: "eSSL", label: "Biometric integration" },
+      { value: "SQL", label: "Read-only source access" },
+      { value: "Live", label: "Deployment stage" },
+    ],
+    architecture: [
+      {
+        title: "Employees and Managers",
+        subtitle: "Self-service and approval workflows",
+        details: [
+          "Employees view attendance and submit leave or regularization requests.",
+          "Managers review individual and selected bulk requests.",
+          "Role-based screens keep employee and manager actions separate.",
+        ],
+      },
+      {
+        title: "Flask Application",
+        subtitle: "Portal routes and business rules",
+        details: [
+          "Handles attendance views, requests, approvals and exports.",
+          "Applies attendance and leave precedence rules.",
+          "Serves the employee and manager interfaces.",
+        ],
+      },
+      {
+        title: "Biometric Data Integration",
+        subtitle: "Remote eSSL SQL Server source",
+        details: [
+          "Connects to the external eSSL attendance database with read-only credentials.",
+          "Reads biometric punch records for mapped employees.",
+          "Keeps the source biometric database unchanged.",
+        ],
+      },
+      {
+        title: "Attendance Reconciliation",
+        subtitle: "Shifts, punches and leave precedence",
+        details: [
+          "Calculates working time from the first valid IN to the final valid OUT.",
+          "Assigns cross-midnight night shifts to their IN date.",
+          "Preserves approved leave and flags contradictory sessions for review.",
+        ],
+      },
+      {
+        title: "Reporting and Notifications",
+        subtitle: "Exports, emails and operational support",
+        details: [
+          "Produces attendance and leave reports for review.",
+          "Sends weekly and transactional attendance emails.",
+          "Supports controlled production changes with backups and validation.",
+        ],
+      },
+    ],
+    technologies: [
+      "Python", "Flask", "SQL Server", "SQLite", "eSSL", "HTML", "JavaScript",
+      "PowerShell", "Windows Server", "NSSM", "SMTP",
+    ],
+    impact: [
+      "Brought employee attendance, requests and manager approvals into one internal portal.",
+      "Connected remote biometric records without requiring changes to the source database.",
+      "Added selected bulk approvals and improved the handling of rotational and night shifts.",
+      "Supported production updates with backups, staged checks and targeted validation.",
+    ],
+    responsibilities: [
+      "Portal development and production support",
+      "Biometric SQL connectivity and employee mapping",
+      "Shift reconciliation and attendance business rules",
+      "Leave and regularization approval workflows",
+      "Attendance exports and email reporting",
+      "Staged deployment and issue resolution",
+    ],
+    story: {
+      challenge:
+        "Attendance records, leave requests and manager approvals needed to work together, including for employees on rotational and overnight shifts.",
+      approach:
+        "I worked on the Flask portal, connected the external eSSL SQL database through read-only access, and refined the rules for punch reconciliation, approved leave and manager approvals. Changes were staged and checked before being applied to the live application.",
+      result:
+        "The portal is in production, with biometric data integration, attendance reporting and employee-manager workflows in place. Shift exceptions and ambiguous punches remain subject to review rather than being silently treated as valid attendance.",
+    },
+    engineeringDecisions: [
+      {
+        title: "Source protection",
+        decision: "Read-only biometric integration",
+        reason: "Use attendance punches without changing the external eSSL database.",
+      },
+      {
+        title: "Attendance accuracy",
+        decision: "Reconcile complete shifts and preserve approved leave",
+        reason: "Handle overnight duty, extended verified hours and leave precedence consistently.",
+      },
+      {
+        title: "Production safety",
+        decision: "Backup, stage and validate changes",
+        reason: "Reduce risk when updating a live employee-facing application.",
+      },
+    ],
+  },
+  {
+    id: "rel-robo",
+    name: "Rel Robo – Enterprise Chatbot",
+    shortName: "Rel Robo",
+    category: "AI Chatbot and Service Integration",
+    status: "Operational",
+    year: "2026",
+    description:
+      "A production enterprise chatbot with configurable extensions and service discovery. I work on extension configuration, keyword triggers, model connectivity and testing service workflows in both UAT and production.",
+    metrics: [
+      { value: "AI", label: "Chatbot workflow" },
+      { value: "Plugin", label: "Extension integration" },
+      { value: "UAT", label: "Test coverage" },
+      { value: "Live", label: "Production status" },
+    ],
+    architecture: [
+      {
+        title: "Chatbot User",
+        subtitle: "Natural-language requests",
+        details: [
+          "Asks questions or requests an available service through the chat interface.",
+          "Uses everyday terms rather than navigating a separate service menu.",
+        ],
+      },
+      {
+        title: "Chatbot Interface",
+        subtitle: "Conversation and response layer",
+        details: [
+          "Receives requests and presents chatbot responses.",
+          "Connects the user interaction to configured extensions.",
+        ],
+      },
+      {
+        title: "Extension Configuration",
+        subtitle: "Service definitions and keywords",
+        details: [
+          "Defines supported service triggers and related keywords.",
+          "Keeps existing extension configuration intact when adding new triggers.",
+        ],
+      },
+      {
+        title: "Model Connectivity",
+        subtitle: "Configured AI provider routing",
+        details: [
+          "Uses the chatbot's configured model-provider integration.",
+          "Requires connectivity and configuration checks when responses fail.",
+        ],
+      },
+      {
+        title: "Testing and Production Support",
+        subtitle: "UAT and production checks",
+        details: [
+          "Defines expected results for service-discovery scenarios.",
+          "Separates test-environment outcomes from production verification.",
+          "Tracks failed scenarios for correction and retesting.",
+        ],
+      },
+    ],
+    technologies: [
+      "AI Chatbots", "OpenRouter", "Extensions", "Keyword Routing",
+      "API Integration", "UAT", "JavaScript",
+    ],
+    impact: [
+      "Worked on making chatbot services discoverable through keyword-based requests.",
+      "Maintained the existing extension setup while planning targeted configuration changes.",
+      "Supported UAT and production checks for chatbot service workflows.",
+    ],
+    responsibilities: [
+      "Chatbot extension configuration",
+      "Keyword and service-trigger mapping",
+      "AI provider integration review",
+      "UAT scenario design and result tracking",
+      "Configuration troubleshooting",
+    ],
+    story: {
+      challenge:
+        "Users need a straightforward way to find chatbot services without knowing the exact extension names or commands.",
+      approach:
+        "I worked with the existing chatbot extension setup, focusing on service keywords, trigger configuration and test cases. The aim was to improve discovery without unnecessarily changing working parts of the plugin.",
+      result:
+        "Rel Robo is live in production. The extension configuration and keyword-based service workflows are part of the ongoing work to maintain and improve the chatbot, alongside UAT and production verification.",
+    },
+    engineeringDecisions: [
+      {
+        title: "Minimal change",
+        decision: "Update triggers without rebuilding the plugin",
+        reason: "Preserve working configuration while extending service discovery.",
+      },
+      {
+        title: "Test visibility",
+        decision: "Separate UAT from production verification",
+        reason: "Make it clear which scenarios were tested and in which environment.",
+      },
+      {
+        title: "Clear routing",
+        decision: "Map user keywords to supported services",
+        reason: "Help users reach the intended workflow through natural requests.",
+      },
+    ],
+  },
   {
     id: "hrms-ai",
     name: "AI-Assisted HRMS",
@@ -391,7 +599,7 @@ export const portfolioProjects: PortfolioProject[] = [
         details: [
           "Presents professional experience and technical capabilities.",
           "Explains project architecture, responsibilities and impact.",
-          "Provides direct access to contact details, LinkedIn and the resume.",
+          "Provides direct access to contact details and professional profiles.",
         ],
       },
     ],
